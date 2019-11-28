@@ -61,6 +61,7 @@ const Topbar = props => {
           <IconButton
             className={classes.signOutButton}
             color="inherit"
+            href={'/sign-in'}
           >
             <InputIcon />
           </IconButton>

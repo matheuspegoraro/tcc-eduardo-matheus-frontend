@@ -135,7 +135,7 @@ const UsersByDevice = props => {
               <Typography variant="body1">{device.title}</Typography>
               <Typography
                 style={{ color: device.color }}
-                variant="h2"
+                variant="h3"
               >
                 {device.value}%
               </Typography>

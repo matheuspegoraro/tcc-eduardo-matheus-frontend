@@ -35,31 +35,37 @@ const Routes = () => {
         component={UserListView}
         exact
         layout={MainLayout}
-        path="/users"
+        path="/chat-online"
       />
       <RouteWithLayout
         component={ProductListView}
         exact
         layout={MainLayout}
-        path="/products"
+        path="/entradas-financeiras"
       />
       <RouteWithLayout
         component={TypographyView}
         exact
         layout={MainLayout}
-        path="/typography"
+        path="/saidas-financeiras"
       />
       <RouteWithLayout
         component={IconsView}
         exact
         layout={MainLayout}
-        path="/icons"
+        path="/fluxo-de-caixa"
       />
       <RouteWithLayout
         component={AccountView}
         exact
         layout={MainLayout}
-        path="/account"
+        path="/contas-bancarias"
+      />
+      <RouteWithLayout
+        component={AccountView}
+        exact
+        layout={MainLayout}
+        path="/cartoes"
       />
       <RouteWithLayout
         component={SettingsView}
