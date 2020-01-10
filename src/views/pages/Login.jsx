@@ -32,6 +32,7 @@ import {
   Row,
   Col
 } from "reactstrap";
+import { Redirect } from "react-router-dom";
 
 const axios = require('axios');
 
@@ -44,7 +45,8 @@ class Login extends React.Component {
   state = {
     email: '',
     password: '',
-    error: ''
+    error: '',
+    loading: false
   };
 
   signIn = async e => {
@@ -54,25 +56,35 @@ class Login extends React.Component {
       this.setState({ error: "Preencha e-mail e senha para continuar!" });
     } else {
       try {
+        this.setState({loading: true});
         
         const response = await api.post('/authenticate', { email, password });
         
         if (response.data.token) {
           localStorage.setItem('api_token', response.data.token);
           this.props.history.push('/dashboard/principal');
+          this.setState({loading: false});
         }
             
       } catch (err) {
         console.log(err);
         this.setState({
           error:
-            "Houve um problema com o login, verifique suas credênciais."
+            "Houve um problema com o login, verifique suas credênciais.",
+          loading: false  
         });
       }
     }
   };
 
+  toPageForgotPassword = () => {
+    this.props.history.push('/autenticar/esqueci-minha-senha');
+  }
+
   render() {
+
+    const { loading } = this.state;
+
     return (
       <>
         <Col lg="5" md="7">
@@ -125,7 +137,7 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" onChange={e => this.setState({ email: e.target.value })}/>
+                    <Input placeholder="E-Mail" type="email" onChange={e => this.setState({ email: e.target.value })}/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -135,7 +147,7 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" onChange={e => this.setState({ password: e.target.value })}/>
+                    <Input placeholder="Senha" type="password" onChange={e => this.setState({ password: e.target.value })}/>
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
@@ -152,7 +164,8 @@ class Login extends React.Component {
                   </label>
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                    {loading &&  <i class="fas fa-spinner fa-pulse mr-2"></i>}
                     Acessar!
                   </Button>
                 </div>
@@ -163,8 +176,8 @@ class Login extends React.Component {
             <Col xs="6">
               <a
                 className="text-light"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
+                onClick={this.toPageForgotPassword}
+                style={{cursor: 'pointer'}}
               >
                 <small>Esqueci minha senha!</small>
               </a>

@@ -22,6 +22,8 @@ import Register from "views/pages/Register.jsx";
 import Login from "views/pages/Login.jsx";
 import Tables from "views/pages/Tables.jsx";
 import Icons from "views/pages/Icons.jsx";
+import ForgotPassword from "./views/pages/ForgotPassword";
+import RecoveryPassword from "./views/pages/RecoveryPassword";
 
 var routes = [
   {
@@ -76,6 +78,20 @@ var routes = [
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
+    layout: "/autenticar"
+  },
+  {
+    path: "/esqueci-minha-senha",
+    name: "Forgot Password",
+    icon: "ni ni-circle-08 text-pink",
+    component: ForgotPassword,
+    layout: "/autenticar"
+  },
+  {
+    path: "/recuperar-senha",
+    name: "Recovery Password",
+    icon: "ni ni-circle-08 text-pink",
+    component: RecoveryPassword,
     layout: "/autenticar"
   }
 ];
