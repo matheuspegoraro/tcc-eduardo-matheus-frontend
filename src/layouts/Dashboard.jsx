@@ -90,6 +90,7 @@ class Dashboard extends React.Component {
           <Switch>{this.getRoutes(routes)}</Switch>
           <Container fluid>
             <DashboardNavbar />
+            <DashboardFooter />
           </Container>
         </div>
       </>

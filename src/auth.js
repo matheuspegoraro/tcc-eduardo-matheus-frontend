@@ -3,7 +3,6 @@ import { Route, Redirect } from 'react-router-dom';
 
 const isAuth = () => {
     //SEM SEGURANÇA AINDA, QUALQUER UM PODE COLOCAR UM TOKEN MANUAL
-    console.log(localStorage.getItem('api-token'));
     if(localStorage.getItem('api_token') !== null){
         return true;
     } 
