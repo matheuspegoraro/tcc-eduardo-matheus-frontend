@@ -1,11 +1,21 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import jwt from 'jsonwebtoken';
 
 const isAuth = () => {
-    //SEM SEGURANÇA AINDA, QUALQUER UM PODE COLOCAR UM TOKEN MANUAL
-    if(localStorage.getItem('api_token') !== null){
-        return true;
-    } 
+    const token = localStorage.getItem('api_token');
+
+    if(token == null)
+        return false;
+
+    const decoded = jwt.decode(token);
+
+    if (decoded){
+        if (decoded.exp >= Date.now() / 1000)
+            return true;
+    }
+
+    localStorage.removeItem('api_token');
     return false;
 }
 
