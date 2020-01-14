@@ -51,6 +51,7 @@ class Login extends React.Component {
 
   signIn = async e => {
     e.preventDefault();
+    
     const { email, password } = this.state;
     if (!email || !password) {
       this.setState({ error: "Preencha e-mail e senha para continuar!" });
@@ -59,15 +60,14 @@ class Login extends React.Component {
         this.setState({loading: true});
         
         const response = await api.post('/authenticate', { email, password });
-        
+
         if (response.data.token) {
           localStorage.setItem('api_token', response.data.token);
           this.props.history.push('/dashboard/principal');
           this.setState({loading: false});
-        }
-            
+        }       
+        
       } catch (err) {
-        console.log(err);
         this.setState({
           error:
             "Houve um problema com o login, verifique suas credênciais.",

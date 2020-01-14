@@ -43,28 +43,39 @@ class ForgotPassword extends React.Component {
 
   state = {
     email: '',
-    error: ''
+    error: '',
+    loading: false
   };
 
   forgotPassword = async e => {
     e.preventDefault();
     const { email } = this.state;
+
     if (!email) {
       this.setState({ error: "Preencha e-mail para continuar!" });
     } else {
       try {
-          this.props.history.push('/autenticar/recuperar-senha');            
+        this.setState({ loading: true });
+
+        await api.post('/forgot_password', { email });
+        this.props.history.push('/autenticar/recuperar-senha', { email_from_forgot_password: this.state.email });
+        this.setState({ loading: false });
+
       } catch (err) {
         console.log(err);
         this.setState({
           error:
-            "Houve um problema na requisição!"
+            "Houve um problema na requisição!",
+          loading: false
         });
       }
     }
   };
 
   render() {
+
+    const { loading } = this.state;
+
     return (
       <>
         <Col lg="5" md="7">
@@ -82,11 +93,12 @@ class ForgotPassword extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" onChange={e => this.setState({ email: e.target.value })}/>
+                    <Input placeholder="Email" type="email" onChange={e => this.setState({ email: e.target.value })} />
                   </InputGroup>
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                    {loading && <i class="fas fa-spinner fa-pulse mr-2"></i>}
                     Enviar!
                   </Button>
                 </div>
