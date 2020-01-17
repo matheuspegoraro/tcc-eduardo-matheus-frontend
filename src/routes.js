@@ -22,6 +22,7 @@ import Register from "views/pages/Register.jsx";
 import Login from "views/pages/Login.jsx";
 import Tables from "views/pages/Tables.jsx";
 import Icons from "views/pages/Icons.jsx";
+import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 
@@ -35,9 +36,17 @@ var routes = [
     private: true
   },
   {
+    path: "/categorias",
+    name: "Categorias",
+    icon: "ni ni-planet text-blue",
+    component: Categories,
+    layout: "/dashboard",
+    private: true
+  },
+  {
     path: "/icons",
     name: "Icons",
-    icon: "ni ni-planet text-blue",
+    icon: "ni ni-books text-info",
     component: Icons,
     layout: "/dashboard",
     private: true

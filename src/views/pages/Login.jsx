@@ -165,7 +165,7 @@ class Login extends React.Component {
                 </div>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                    {loading &&  <i class="fas fa-spinner fa-pulse mr-2"></i>}
+                    {loading &&  <i className="fas fa-spinner fa-pulse mr-2"></i>}
                     Acessar!
                   </Button>
                 </div>
