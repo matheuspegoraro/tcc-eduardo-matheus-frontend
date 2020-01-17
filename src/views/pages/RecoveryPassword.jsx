@@ -45,14 +45,47 @@ class RecoveryPassword extends React.Component {
     email: '',
     token: '',
     password: '',
-    error: ''
+    error: '',
+    loading: false
   };
 
   recoveryPassword = async e => {
     e.preventDefault();
+    const { email, token, password } = this.state;
+
+    if (!email || !token || !password) {
+      this.setState({ error: "Preencha todos os campos para continuar!" });
+    } else {
+      try {
+        this.setState({ loading: true });
+
+        await api.post('/reset_password', { email, token, password });
+        this.props.history.push('/autenticar/login');
+        localStorage.removeItem('api_token');
+        this.setState({ loading: false });
+
+      } catch (err) {
+        console.log(err);
+        this.setState({
+          error:
+            "Houve um problema na requisição!",
+          loading: false
+        });
+      }
+    }
   };
 
+  componentDidMount() {
+    if (this.props.location.state) {
+      const { email_from_forgot_password } = this.props.location.state;
+      this.setState({ email: this.props.location.state.email_from_forgot_password });
+    }
+  }
+
   render() {
+
+    const { email, loading } = this.state;
+
     return (
       <>
         <Col lg="5" md="7">
@@ -66,20 +99,20 @@ class RecoveryPassword extends React.Component {
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="ni ni-tag" />
+                        <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Código" type="input" onChange={e => this.setState({ token: e.target.value })} />
+                    <Input placeholder="E-Mail" type="email" value={email} onChange={e => this.setState({ email: e.target.value })} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="ni ni-email-83" />
+                        <i className="ni ni-tag" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="E-Mail" type="email" onChange={e => this.setState({ email: e.target.value })} />
+                    <Input placeholder="Código" type="input" onChange={e => this.setState({ token: e.target.value })} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -93,7 +126,8 @@ class RecoveryPassword extends React.Component {
                   </InputGroup>
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                    {loading && <i class="fas fa-spinner fa-pulse mr-2"></i>}
                     Redefinir!
                   </Button>
                 </div>
