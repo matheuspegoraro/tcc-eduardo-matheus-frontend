@@ -25,6 +25,7 @@ import Icons from "views/pages/Icons.jsx";
 import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
+import OfxImports from "./views/pages/OfxImports";
 
 var routes = [
   {
@@ -33,7 +34,8 @@ var routes = [
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
   },
   {
     path: "/categorias",
@@ -41,7 +43,8 @@ var routes = [
     icon: "ni ni-planet text-blue",
     component: Categories,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
   },
   {
     path: "/icons",
@@ -49,7 +52,8 @@ var routes = [
     icon: "ni ni-books text-info",
     component: Icons,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
   },
   {
     path: "/maps",
@@ -57,7 +61,8 @@ var routes = [
     icon: "ni ni-pin-3 text-orange",
     component: Maps,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
   },
   {
     path: "/user-profile",
@@ -65,7 +70,8 @@ var routes = [
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
   },
   {
     path: "/tables",
@@ -73,35 +79,49 @@ var routes = [
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
     layout: "/dashboard",
-    private: true
+    private: true,
+    display: true
+  },
+  {
+    path: "/importar-ofx",
+    name: "Importação de OFX",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: OfxImports,
+    layout: "/dashboard",
+    private: true,
+    display: true
   },
   {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
-    layout: "/autenticar"
+    layout: "/autenticar",
+    display: true
   },
   {
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
-    layout: "/autenticar"
+    layout: "/autenticar",
+    display: true
   },
   {
     path: "/esqueci-minha-senha",
     name: "Forgot Password",
     icon: "ni ni-circle-08 text-pink",
     component: ForgotPassword,
-    layout: "/autenticar"
+    layout: "/autenticar",
+    display: true
   },
   {
     path: "/recuperar-senha",
     name: "Recovery Password",
     icon: "ni ni-circle-08 text-pink",
     component: RecoveryPassword,
-    layout: "/autenticar"
+    layout: "/autenticar",
+    display: true
   }
 ];
 export default routes;

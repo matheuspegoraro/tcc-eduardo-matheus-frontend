@@ -39,6 +39,7 @@ const api = axios.create({
   baseURL: "http://localhost:3333"
 });
 
+
 class ForgotPassword extends React.Component {
 
   state = {
@@ -56,11 +57,11 @@ class ForgotPassword extends React.Component {
     } else {
       try {
         this.setState({ loading: true });
-
+        
         await api.post('/forgot_password', { email });
         this.props.history.push('/autenticar/recuperar-senha', { email_from_forgot_password: this.state.email });
-        this.setState({ loading: false });
 
+        this.setState({ loading: false });       
       } catch (err) {
         console.log(err);
         this.setState({
