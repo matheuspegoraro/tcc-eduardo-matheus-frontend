@@ -31,7 +31,7 @@ class UserHeader extends React.Component {
             backgroundImage:
               "url(" + require("assets/img/theme/profile-cover.jpg") + ")",
             backgroundSize: "cover",
-            backgroundPosition: "center top"
+
           }}
         >
           {/* Mask */}
