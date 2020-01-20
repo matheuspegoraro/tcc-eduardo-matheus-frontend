@@ -1,29 +1,9 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-
-// reactstrap components
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   FormGroup,
   Form,
   Input,
@@ -47,7 +27,66 @@ import {
 import SimpleHeader from "components/Headers/SimpleHeader.jsx";
 import Dot from "components/Utils/Dot.jsx";
 
+const axios = require('axios');
+
+const api = axios.create({
+  baseURL: "http://localhost:3333"
+});
+
 class Categories extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      categories: [],
+      name: '',
+      parent_id: null,
+      color: '#000000',
+      error: '',
+      loading: false
+    };
+
+    this.loadAll();
+  }
+
+  loadAll = async e => {
+    const response = await api.get('/categories', {
+      headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
+    });
+
+    if(response) {
+      this.setState({categories: response.data});
+    } 
+  };
+
+  create = async e => {
+    e.preventDefault();
+
+    const { name, parent_id, color } = this.state;
+    if (!name || !color) {
+      this.setState({ error: "Preencha a descrição e selecione uma cor para continuar!" });
+    } else {
+      try {
+        this.setState({loading: true});
+        
+        const response = await api.post('/categories', { name, parent_id, color }, {
+          headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
+        });
+
+        if(response) {
+          alert('Sucesso!');
+          this.loadAll();
+        } 
+      } catch (err) {
+        this.setState({
+          error:
+            "Houve um problema ao cadastrar a categoria.",
+          loading: false  
+        });
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -61,27 +100,54 @@ class Categories extends React.Component {
                   <h3 className="mb-0">Criar Nova Categoria</h3>
                 </CardHeader>
                 <CardBody>
-                  <Form>
+                  <Form role="form" onSubmit={this.create}>
                     <div className="pl-lg-4">
                       <Row>
-                        <Col lg="9">
+                        <Col lg="5">
                           <FormGroup>
                             <label
                               className="form-control-label"
-                              htmlFor="input-description"
+                              htmlFor="input-name"
                             >
                               Descrição
                             </label>
                             <Input
                               className="form-control-alternative"
                               defaultValue=""
-                              id="input-description"
+                              id="input-name"
                               placeholder="Alimentação, transporte..."
                               type="text"
+                              onChange={e => this.setState({ name: e.target.value })}
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="5">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="select-parent"
+                            >
+                              Sub-categoria de
+                            </label>
+                            <Input 
+                              type="select" 
+                              className="form-control-alternative"
+                              name="selectMulti" 
+                              id="exampleSelectMulti"
+                              onChange={e => {
+                                  if(e.target.value !== '')
+                                    this.setState({ parent_id: e.target.value });
+                                  else
+                                    this.setState({ parent_id: null });
+                                }}>
+                                <option value=''>Nenhum</option>
+                                {this.state.categories.map((category, key) =>
+                                  <option value={category.id} key={category.id}>{category.name}</option>
+                                )}
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                        <Col lg="1">
                           <FormGroup>
                             <label
                               className="form-control-label"
@@ -93,14 +159,14 @@ class Categories extends React.Component {
                               className="form-control-alternative"
                               id="input-color"
                               type="color"
+                              onChange={e => this.setState({ color: e.target.value })}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Button
                         color="info"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
+                        type="submit"
                       >
                         Criar
                       </Button>
@@ -117,98 +183,54 @@ class Categories extends React.Component {
                     <tr>
                       <th>Cor</th>
                       <th scope="col">Descrição</th>
+                      <th scope="col">Sub-categoria de</th>
                       <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <Dot size="20" backgroundColor="#f17327"/>
-                      </td>
-                      <th>Transporte</th>
-                      <td className="text-right">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={e => e.preventDefault()}
-                          >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
-                          <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem
-                              href="#"
-                              onClick={e => e.preventDefault()}
-                            >
-                              Editar
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#"
-                              onClick={e => e.preventDefault()}
-                            >
-                              Excluir
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </td>
-                    </tr>                 
+                    {this.state.categories.map((category, key) => {
+                      console.log(category);
+
+                      return (
+                        <tr key={category.id}>
+                          <td>
+                            <Dot size="20" backgroundColor={category.color}/>
+                          </td>
+                          <th>{category.name}</th>
+                          <th>{(category.parent !== null) ? category.parent.name : ''}</th>
+                          <td className="text-right">
+                            <UncontrolledDropdown>
+                              <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={e => e.preventDefault()}
+                              >
+                                <i className="fas fa-ellipsis-v" />
+                              </DropdownToggle>
+                              <DropdownMenu className="dropdown-menu-arrow" right>
+                                <DropdownItem
+                                  href="#"
+                                  onClick={e => e.preventDefault()}
+                                >
+                                  Editar
+                                </DropdownItem>
+                                <DropdownItem
+                                  href="#"
+                                  onClick={e => e.preventDefault()}
+                                >
+                                  Excluir
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr> 
+                      )
+                    })}                
                   </tbody>
                 </Table>
-                <CardFooter className="py-4">
-                  <nav aria-label="...">
-                    <Pagination
-                      className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0"
-                    >
-                      <PaginationItem className="disabled">
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                          tabIndex="-1"
-                        >
-                          <i className="fas fa-angle-left" />
-                          <span className="sr-only">Previous</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem className="active">
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          2 <span className="sr-only">(current)</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          3
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-angle-right" />
-                          <span className="sr-only">Next</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                    </Pagination>
-                  </nav>
-                </CardFooter>
               </Card>
             </Col>
           </Row>
