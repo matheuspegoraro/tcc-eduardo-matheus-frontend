@@ -9,23 +9,12 @@ import {
   Input,
   Container,
   Row,
-  Col,
-  Badge,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Progress,
-  Table,
-  UncontrolledTooltip
+  Col
 } from "reactstrap";
 // core components
 import SimpleHeader from "components/Headers/SimpleHeader.jsx";
 import Dot from "components/Utils/Dot.jsx";
+import Tree from "components/Utils/Tree.jsx";
 
 const axios = require('axios');
 
@@ -39,6 +28,7 @@ class Categories extends React.Component {
 
     this.state = {
       categories: [],
+      options: [],
       name: '',
       parent_id: null,
       color: '#000000',
@@ -56,6 +46,7 @@ class Categories extends React.Component {
 
     if(response) {
       this.setState({categories: response.data});
+      this.listOptions(this.state.categories);
     } 
   };
 
@@ -86,6 +77,17 @@ class Categories extends React.Component {
       }
     }
   };
+
+  listOptions = (categories, lvl = 0) => {
+    categories.map(category => {
+      category.space = "-".repeat(lvl);
+
+      if (category.children.length > 0) 
+        this.listOptions(category.children, lvl + 1);
+
+      this.setState({options: [...this.state.options, category]});
+    });
+  }
 
   render() {
     return (
@@ -139,11 +141,14 @@ class Categories extends React.Component {
                                     this.setState({ parent_id: e.target.value });
                                   else
                                     this.setState({ parent_id: null });
-                                }}>
+                            }}>
                                 <option value=''>Nenhum</option>
-                                {this.state.categories.map((category, key) =>
-                                  <option value={category.id} key={category.id}>{category.name}</option>
-                                )}
+                                {this.state.options !== undefined ? this.state.options.map(category => {
+                                  return <option value={category.id} key={category.id}>
+                                           {category.space} {category.name}
+                                           {/* <Dot size={5} backgroundColor={category.color}/>  */}
+                                         </option>
+                                }) : ''}
                             </Input>
                           </FormGroup>
                         </Col>
@@ -178,59 +183,9 @@ class Categories extends React.Component {
                 <CardHeader className="border-0">
                   <h3 className="mb-0">Lista de Categoias</h3>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th>Cor</th>
-                      <th scope="col">Descrição</th>
-                      <th scope="col">Sub-categoria de</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.categories.map((category, key) => {
-                      console.log(category);
-
-                      return (
-                        <tr key={category.id}>
-                          <td>
-                            <Dot size="20" backgroundColor={category.color}/>
-                          </td>
-                          <th>{category.name}</th>
-                          <th>{(category.parent !== null) ? category.parent.name : ''}</th>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={e => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem
-                                  href="#"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Editar
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Excluir
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr> 
-                      )
-                    })}                
-                  </tbody>
-                </Table>
+                <CardBody>
+                  {this.state.categories.length > 0 ? <Tree data={this.state.categories} listGroup={true} /> : ''}
+                </CardBody>
               </Card>
             </Col>
           </Row>
