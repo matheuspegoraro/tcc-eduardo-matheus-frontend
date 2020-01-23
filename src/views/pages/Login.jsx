@@ -16,6 +16,8 @@
 
 */
 import React from "react";
+import { Redirect } from "react-router-dom";
+import axios from 'axios';
 
 // reactstrap components
 import {
@@ -32,9 +34,8 @@ import {
   Row,
   Col
 } from "reactstrap";
-import { Redirect } from "react-router-dom";
 
-const axios = require('axios');
+import { setToken } from "../../auth"; 
 
 const api = axios.create({
   baseURL: "http://localhost:3333"
@@ -62,7 +63,7 @@ class Login extends React.Component {
         const response = await api.post('/authenticate', { email, password });
 
         if (response.data.token) {
-          localStorage.setItem('api_token', response.data.token);
+          setToken(response.data.token);
           this.props.history.push('/dashboard/principal');
           this.setState({loading: false});
         }       

@@ -13,10 +13,10 @@ import {
   Row,
   Col,
   Table,
-  CardFooter 
+  CardFooter
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.jsx";
+import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import axios from "axios";
 import uniqueId from "lodash.uniqueid";
 
@@ -30,7 +30,7 @@ class OfxImports extends React.Component {
     transactions: [],
     file_ofx: '',
     bank_id: '', //FIXO POR ENQUANTO
-    company_id: '', //FIXO POR ENQUANTO
+    company_id: 1, //FIXO POR ENQUANTO
     error: '',
     file_name: '',
     loading: false
@@ -54,10 +54,12 @@ class OfxImports extends React.Component {
           'Content-Type': 'multpart/form-data'
         }
       });
+      
+      const { transactions, file } = response.data;
 
-      this.setState({ 
-        transactions:  response.data.transactions,
-        file_name: response.data.file.name,
+      this.setState({
+        transactions: transactions,
+        file_name: file.name,
         loading: false
       });
 
@@ -72,7 +74,11 @@ class OfxImports extends React.Component {
 
     return (
       <>
-        <Header />
+        <HeaderWithDescription 
+          title="Importação do Extrato" 
+          description="Com o arquivo OFX (Open Financial Exchange), você realiza a importação do extrato bancário, mantendo suas informações financeiras sempre atualizadas."
+          color="info"
+        />    
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
@@ -96,33 +102,34 @@ class OfxImports extends React.Component {
                       <Col>
                         <FormGroup>
                           <label className="form-control-label" htmlFor="inputBanco">Banco:</label>
-                        <Input
-                          className="form-control-alternative"
-                          id="inputBanco"
-                          placeholder="COLOCAR O ID DO BANCO (POR ENQUANTO)"
-                          type="text"
-                          onChange={e => this.setState({ bank_id: e.target.value })}
-                        />
+                          <Input
+                            className="form-control-alternative"
+                            id="inputBanco"
+                            placeholder="COLOCAR O ID DO BANCO (POR ENQUANTO)"
+                            type="text"
+                            onChange={e => this.setState({ bank_id: e.target.value })}
+                          />
                         </FormGroup>
                         <FormGroup>
-                          <label className="form-control-label" htmlFor="inputEmpresa">Empresa:</label>
-                        <Input
-                          className="form-control-alternative"
-                          id="inputEmpresa"
-                          placeholder="COLOCAR O ID DA EMPRESA (POR ENQUANTO)"
-                          type="text"
-                          onChange={e => this.setState({ company_id: e.target.value })}
-                        />
-                        </FormGroup>
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor="upOFX">OFX:</label>
-                          <Input type="file" name="file" id="upOFX" onChange={e => this.setState({ file_ofx: e.target.files[0] })} />
+                          <label className="form-control-label" htmlFor="upOFX">Arquivo OFX:</label>
+                          <div className="custom-file">
+                            <input
+                              className="custom-file-input"
+                              id="upOFX"
+                              lang="br"
+                              type="file"
+                              onChange={e => this.setState({ file_ofx: e.target.files[0] })}
+                            />
+                            <label className="custom-file-label" htmlFor="upOFX">
+                              Selecione o arquivo...
+                            </label>
+                          </div>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Button className="my-4" color="success" type="submit" disabled={loading}>
-                    {loading && <i class="fas fa-spinner fa-pulse mr-2"></i>}
-                    Importar!
+                      {loading && <i class="fas fa-spinner fa-pulse mr-2"></i>}
+                      Importar!
                   </Button>
                   </Form>
                 </CardBody>
@@ -169,14 +176,14 @@ class OfxImports extends React.Component {
                       <tr key={uniqueId()}>
                         <td>
                           <label className="custom-toggle">
-                            <input defaultChecked type="checkbox" />
+                            <input type="checkbox" />
                             <span className="custom-toggle-slider rounded-circle" />
                           </label>
                         </td>
                         <td>10/01/2020</td>
                         <td>{transaction.MEMO}</td>
                         <td>Transferências</td>
-                        <td style={{color: transaction.TRNTYPE == 'CREDIT' ? '#2dce89' : '#f5365c'}}>R$ {transaction.TRNAMT}</td>
+                        <td style={{ color: transaction.TRNTYPE == 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
                         <td className="text-right">
                           <i className="ni ni-ruler-pencil text-primary mr-3" />
                           <i className="ni ni-check-bold text-success" />

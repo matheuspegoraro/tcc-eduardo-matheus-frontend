@@ -23,7 +23,7 @@ import { Container } from "reactstrap";
 import DashboardNavbar from "components/Navbars/DashboardNavbar.jsx";
 import DashboardFooter from "components/Footers/DashboardFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-import PrivateRoute from '../auth';
+import { PrivateRoute } from '../auth';
 
 import routes from "routes.js";
 

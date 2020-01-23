@@ -2,38 +2,57 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 
-const isAuth = () => {
-    const token = localStorage.getItem('api_token');
+const TOKEN_STORAGE = 'api_token';
 
-    if(token == null)
+const setToken = (token) => {
+    localStorage.setItem(TOKEN_STORAGE, token);
+}
+
+const getToken = () => {
+    return localStorage.getItem(TOKEN_STORAGE);
+}
+
+const removeToken = () => {
+    localStorage.removeItem(TOKEN_STORAGE);  
+}
+
+const isAuth = () => {
+    const token = getToken();
+
+    if (token == null)
         return false;
 
     const decoded = jwt.decode(token);
 
-    if (decoded){
+    if (decoded) {
         if (decoded.exp >= Date.now() / 1000)
             return true;
     }
 
-    localStorage.removeItem('api_token');
+    localStorage.removeToken();
     return false;
 }
 
-const PrivateRoute = ({component: Component, ...rest}) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
     return (
-        <Route {...rest} render={props => 
+        <Route {...rest} render={props =>
             isAuth() ? (
                 <Component {...props} />
             ) : (
-                <Redirect 
-                    to={{pathname: '/autenticar/login',
-                        state: {from: props.location}
-                        }} 
-                />
-            )
+                    <Redirect
+                        to={{
+                            pathname: '/autenticar/login',
+                            state: { from: props.location }
+                        }}
+                    />
+                )
         }
         />
     );
 }
 
-export default PrivateRoute;
+export {PrivateRoute,
+        setToken,
+        getToken,
+        removeToken
+        };
