@@ -13,41 +13,30 @@ import {
 } from "reactstrap";
 // core components
 import SimpleHeader from "components/Headers/SimpleHeader.jsx";
-import Dot from "components/Utils/Dot.jsx";
 import Tree from "components/Utils/Tree.jsx";
-
-const axios = require('axios');
-
-const api = axios.create({
-  baseURL: "http://localhost:3333"
-});
+import api from '../../axios';
 
 class Categories extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      categories: [],
-      options: [],
-      name: '',
-      parent_id: null,
-      color: '#000000',
-      error: '',
-      loading: false
-    };
-
-    this.loadAll();
-  }
+  state = {
+    categories: [],
+    options: [],
+    name: '',
+    parent_id: null,
+    color: '#000000',
+    error: '',
+    loading: false
+  };
 
   loadAll = async e => {
     const response = await api.get('/categories', {
       headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
     });
 
-    if(response) {
-      this.setState({categories: response.data});
+    if (response) {
+      this.setState({ categories: response.data });
       this.listOptions(this.state.categories);
-    } 
+    }
   };
 
   create = async e => {
@@ -58,36 +47,41 @@ class Categories extends React.Component {
       this.setState({ error: "Preencha a descrição e selecione uma cor para continuar!" });
     } else {
       try {
-        this.setState({loading: true});
-        
+        this.setState({ loading: true });
+
         const response = await api.post('/categories', { name, parent_id, color }, {
           headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
         });
 
-        if(response) {
+        if (response) {
           alert('Sucesso!');
           this.loadAll();
-        } 
+        }
       } catch (err) {
         this.setState({
           error:
             "Houve um problema ao cadastrar a categoria.",
-          loading: false  
+          loading: false
         });
       }
     }
   };
 
   listOptions = (categories, lvl = 0) => {
-    categories.map(category => {
+    categories.forEach(category => {
+
       category.space = "-".repeat(lvl);
 
-      if (category.children.length > 0) 
+      if (category.children.length > 0)
         this.listOptions(category.children, lvl + 1);
 
-      this.setState({options: [...this.state.options, category]});
+      this.setState({ options: [...this.state.options, category] });
     });
   }
+
+  componentDidMount() {
+    this.loadAll();
+  };
 
   render() {
     return (
@@ -131,24 +125,24 @@ class Categories extends React.Component {
                             >
                               Sub-categoria de
                             </label>
-                            <Input 
-                              type="select" 
+                            <Input
+                              type="select"
                               className="form-control-alternative"
-                              name="selectMulti" 
+                              name="selectMulti"
                               id="exampleSelectMulti"
                               onChange={e => {
-                                  if(e.target.value !== '')
-                                    this.setState({ parent_id: e.target.value });
-                                  else
-                                    this.setState({ parent_id: null });
-                            }}>
-                                <option value=''>Nenhum</option>
-                                {this.state.options !== undefined ? this.state.options.map(category => {
-                                  return <option value={category.id} key={category.id}>
-                                           {category.space} {category.name}
-                                           {/* <Dot size={5} backgroundColor={category.color}/>  */}
-                                         </option>
-                                }) : ''}
+                                if (e.target.value !== '')
+                                  this.setState({ parent_id: e.target.value });
+                                else
+                                  this.setState({ parent_id: null });
+                              }}>
+                              <option value=''>Nenhum</option>
+                              {this.state.options !== undefined ? this.state.options.map(category => {
+                                return <option value={category.id} key={category.id}>
+                                  {category.space} {category.name}
+                                  {/* <Dot size={5} backgroundColor={category.color}/>  */}
+                                </option>
+                              }) : ''}
                             </Input>
                           </FormGroup>
                         </Col>

@@ -30,7 +30,7 @@ import OfxImports from "./views/pages/OfxImports";
 var routes = [
   {
     path: "/principal",
-    name: "Dashboard",
+    name: "Principal",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/dashboard",
@@ -53,7 +53,7 @@ var routes = [
     component: Icons,
     layout: "/dashboard",
     private: true,
-    display: true
+    display: false
   },
   {
     path: "/maps",
@@ -62,7 +62,7 @@ var routes = [
     component: Maps,
     layout: "/dashboard",
     private: true,
-    display: true
+    display: false
   },
   {
     path: "/user-profile",
@@ -71,7 +71,7 @@ var routes = [
     component: Profile,
     layout: "/dashboard",
     private: true,
-    display: true
+    display: false
   },
   {
     path: "/tables",
@@ -80,12 +80,12 @@ var routes = [
     component: Tables,
     layout: "/dashboard",
     private: true,
-    display: true
+    display: false
   },
   {
     path: "/importar-ofx",
     name: "Importação de OFX",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "fa fa-file-upload text-red",
     component: OfxImports,
     layout: "/dashboard",
     private: true,
@@ -97,7 +97,7 @@ var routes = [
     icon: "ni ni-key-25 text-info",
     component: Login,
     layout: "/autenticar",
-    display: true
+    display: false
   },
   {
     path: "/register",
@@ -105,7 +105,7 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/autenticar",
-    display: true
+    display: false
   },
   {
     path: "/esqueci-minha-senha",
@@ -113,7 +113,7 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: ForgotPassword,
     layout: "/autenticar",
-    display: true
+    display: false
   },
   {
     path: "/recuperar-senha",
@@ -121,7 +121,7 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: RecoveryPassword,
     layout: "/autenticar",
-    display: true
+    display: false
   }
 ];
 export default routes;

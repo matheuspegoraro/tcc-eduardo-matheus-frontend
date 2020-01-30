@@ -28,8 +28,7 @@ import {
   Input,
   Container,
   Row,
-  Col,
-  Login
+  Col
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";

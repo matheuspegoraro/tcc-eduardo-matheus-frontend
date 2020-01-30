@@ -1,25 +1,6 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-import { Redirect } from "react-router-dom";
-import axios from 'axios';
+import { connect } from 'react-redux';
 
-// reactstrap components
 import {
   Button,
   Card,
@@ -35,11 +16,8 @@ import {
   Col
 } from "reactstrap";
 
-import { setToken } from "../../auth"; 
-
-const api = axios.create({
-  baseURL: "http://localhost:3333"
-});
+import { setToken } from "../../auth";
+import api from '../../axios';
 
 class Login extends React.Component {
 
@@ -52,27 +30,34 @@ class Login extends React.Component {
 
   signIn = async e => {
     e.preventDefault();
-    
+
     const { email, password } = this.state;
+    const { dispatch } = this.props;
+
     if (!email || !password) {
       this.setState({ error: "Preencha e-mail e senha para continuar!" });
     } else {
       try {
-        this.setState({loading: true});
-        
-        const response = await api.post('/authenticate', { email, password });
+        this.setState({ loading: true });
 
-        if (response.data.token) {
-          setToken(response.data.token);
-          this.props.history.push('/dashboard/principal');
-          this.setState({loading: false});
-        }       
+        const response = await api.post('/authenticate', { email, password });
+        const { token, user } = response.data;
         
+        dispatch({
+          type: 'ADD_TO_USER',
+          user,
+        });
+
+        setToken(token);
+        this.props.history.push('/dashboard/principal');
+        this.setState({ loading: false });
+
+
       } catch (err) {
         this.setState({
           error:
             "Houve um problema com o login, verifique suas credênciais.",
-          loading: false  
+          loading: false
         });
       }
     }
@@ -138,7 +123,7 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="E-Mail" type="email" onChange={e => this.setState({ email: e.target.value })}/>
+                    <Input placeholder="E-Mail" type="email" onChange={e => this.setState({ email: e.target.value })} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -148,7 +133,7 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Senha" type="password" onChange={e => this.setState({ password: e.target.value })}/>
+                    <Input placeholder="Senha" type="password" onChange={e => this.setState({ password: e.target.value })} />
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
@@ -166,7 +151,7 @@ class Login extends React.Component {
                 </div>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                    {loading &&  <i className="fas fa-spinner fa-pulse mr-2"></i>}
+                    {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
                     Acessar!
                   </Button>
                 </div>
@@ -175,22 +160,22 @@ class Login extends React.Component {
           </Card>
           <Row className="mt-3">
             <Col xs="6">
-              <a
+              <div
                 className="text-light"
                 onClick={this.toPageForgotPassword}
-                style={{cursor: 'pointer'}}
+                style={{ cursor: 'pointer' }}
               >
                 <small>Esqueci minha senha!</small>
-              </a>
+              </div>
             </Col>
             <Col className="text-right" xs="6">
-              <a
+              <div
                 className="text-light"
-                href="#pablo"
                 onClick={e => e.preventDefault()}
+                style={{ cursor: 'pointer' }}
               >
                 <small>Criar uma conta!</small>
-              </a>
+              </div>
             </Col>
           </Row>
         </Col>
@@ -199,4 +184,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default connect()(Login);

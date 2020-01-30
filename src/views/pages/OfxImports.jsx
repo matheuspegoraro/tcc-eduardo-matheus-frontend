@@ -1,6 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux';
 
-// reactstrap components
 import {
   Button,
   Card,
@@ -15,14 +15,10 @@ import {
   Table,
   CardFooter
 } from "reactstrap";
-// core components
-import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
-import axios from "axios";
-import uniqueId from "lodash.uniqueid";
 
-const api = axios.create({
-  baseURL: "http://localhost:3333"
-});
+import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
+import uniqueId from "lodash.uniqueid";
+import api from '../../axios';
 
 class OfxImports extends React.Component {
 
@@ -30,7 +26,6 @@ class OfxImports extends React.Component {
     transactions: [],
     file_ofx: '',
     bank_id: '', //FIXO POR ENQUANTO
-    company_id: 1, //FIXO POR ENQUANTO
     error: '',
     file_name: '',
     loading: false
@@ -39,8 +34,12 @@ class OfxImports extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { file_ofx, bank_id } = this.state;
+    const { company_id } = this.props.user.user;
+
+    console.log(this.props.user)
+
     let formData = new FormData();
-    const { file_ofx, bank_id, company_id } = this.state;
 
     formData.append('file_ofx', file_ofx);
     formData.append('bank_id', bank_id);
@@ -128,7 +127,7 @@ class OfxImports extends React.Component {
                       </Col>
                     </Row>
                     <Button className="my-4" color="success" type="submit" disabled={loading}>
-                      {loading && <i class="fas fa-spinner fa-pulse mr-2"></i>}
+                      {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
                       Importar!
                   </Button>
                   </Form>
@@ -183,7 +182,7 @@ class OfxImports extends React.Component {
                         <td>10/01/2020</td>
                         <td>{transaction.MEMO}</td>
                         <td>Transferências</td>
-                        <td style={{ color: transaction.TRNTYPE == 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
+                        <td style={{ color: transaction.TRNTYPE === 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
                         <td className="text-right">
                           <i className="ni ni-ruler-pencil text-primary mr-3" />
                           <i className="ni ni-check-bold text-success" />
@@ -204,4 +203,6 @@ class OfxImports extends React.Component {
   }
 }
 
-export default OfxImports;
+export default connect(state => ({
+    user: state.user
+}))(OfxImports);

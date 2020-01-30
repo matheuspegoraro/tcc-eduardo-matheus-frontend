@@ -1,27 +1,8 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
-// reactstrap components
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -29,15 +10,10 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Row,
   Col
 } from "reactstrap";
 
-const axios = require('axios');
-
-const api = axios.create({
-  baseURL: "http://localhost:3333"
-});
+import api from '../../axios';
 
 class RecoveryPassword extends React.Component {
 
@@ -78,7 +54,7 @@ class RecoveryPassword extends React.Component {
   componentDidMount() {
     if (this.props.location.state) {
       const { email_from_forgot_password } = this.props.location.state;
-      this.setState({ email: this.props.location.state.email_from_forgot_password });
+      this.setState({ email: email_from_forgot_password });
     }
   }
 
