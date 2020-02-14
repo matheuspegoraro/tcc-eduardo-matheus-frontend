@@ -4,6 +4,7 @@ module.exports = {
       name: 'FRONTEND',
       script: 'npm',
       args: '-- start',
+      watch: true,
       env: {
         NODE_ENV: "development",
       },
