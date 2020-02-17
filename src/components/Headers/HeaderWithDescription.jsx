@@ -27,7 +27,7 @@ class HeaderWithDescription extends React.Component {
       <>
         <div className={'header pb-8 pt-5 pt-md-8 bg-gradient-' + this.props.color}>
           <Container className="d-flex align-items-center" fluid>
-            <Row>
+            <Row className="w-100">
               <Col lg="7" md="10">
                 <h1 className="display-2 text-white">{this.props.title}</h1>
                 <p className="text-white mt-0 mb-5">
