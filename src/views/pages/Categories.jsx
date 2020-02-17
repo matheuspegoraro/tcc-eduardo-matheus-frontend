@@ -11,8 +11,8 @@ import {
   Row,
   Col
 } from "reactstrap";
-// core components
-import SimpleHeader from "components/Headers/SimpleHeader.jsx";
+
+import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import Tree from "components/Utils/Tree.jsx";
 import api from '../../axios';
 
@@ -86,7 +86,11 @@ class Categories extends React.Component {
   render() {
     return (
       <>
-        <SimpleHeader />
+        <HeaderWithDescription 
+          title="Categorias de Contas" 
+          description="Utilize as categorias para separar, filtrar e gerenciar seu fluxo de caixa."
+          color="info"
+        /> 
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
