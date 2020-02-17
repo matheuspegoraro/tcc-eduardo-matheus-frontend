@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 import api from '../../axios';
+import { toast } from 'react-toastify';
 
 class RecoveryPassword extends React.Component {
 
@@ -27,7 +28,7 @@ class RecoveryPassword extends React.Component {
 
   recoveryPassword = async e => {
     e.preventDefault();
-    const { email, token, password } = this.state;
+    const { email, token, password, error } = this.state;
 
     if (!email || !token || !password) {
       this.setState({ error: "Preencha todos os campos para continuar!" });
@@ -41,12 +42,15 @@ class RecoveryPassword extends React.Component {
         this.setState({ loading: false });
 
       } catch (err) {
-        console.log(err);
+
         this.setState({
           error:
             "Houve um problema na requisição!",
           loading: false
         });
+
+        toast.error(error);
+
       }
     }
   };

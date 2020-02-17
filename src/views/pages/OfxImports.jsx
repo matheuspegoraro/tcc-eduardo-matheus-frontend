@@ -19,6 +19,7 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import uniqueId from "lodash.uniqueid";
 import api from '../../axios';
+import { toast } from 'react-toastify';
 
 class OfxImports extends React.Component {
 
@@ -26,6 +27,7 @@ class OfxImports extends React.Component {
     transactions: [],
     file_ofx: '',
     bank_id: '', //FIXO POR ENQUANTO
+    company_id: 1,
     error: '',
     file_name: '',
     loading: false
@@ -34,10 +36,7 @@ class OfxImports extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { file_ofx, bank_id } = this.state;
-    const { company_id } = this.props.user.user;
-
-    console.log(this.props.user)
+    const { file_ofx, bank_id, company_id } = this.state;
 
     let formData = new FormData();
 
@@ -49,9 +48,9 @@ class OfxImports extends React.Component {
 
     try {
       const response = await api.post('/upload/ofx', formData, {
-        header: {
-          'Content-Type': 'multpart/form-data'
-        }
+        headers: { 
+          'Content-Type': 'multpart/form-data',
+          authorization: `Bearer ${localStorage.getItem('api_token')}` }
       });
       
       const { transactions, file } = response.data;
@@ -62,8 +61,14 @@ class OfxImports extends React.Component {
         loading: false
       });
 
+      toast.success('Ofx importado com sucesso!');
+
     } catch (error) {
-      this.setState({ loading: false });
+      console.log(error);
+      this.setState({ 
+        loading: false 
+      });
+      toast.error('Ocorreu um erro na requisição!');
     }
   };
 
