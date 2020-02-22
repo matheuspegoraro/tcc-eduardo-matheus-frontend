@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
@@ -35,7 +18,15 @@ import {
   Media
 } from "reactstrap";
 
+import { removeToken } from "../../auth";
+
 class DashboardNavbar extends React.Component {
+
+  logout = async (e) => {
+    e.preventDefault();
+    removeToken();
+  }
+
   render() {
     return (
       <>
@@ -78,28 +69,24 @@ class DashboardNavbar extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem className="noti-title" header tag="div">
-                    <h6 className="text-overflow m-0">Welcome!</h6>
+                    <h6 className="text-overflow m-0">Bem vindo!</h6>
                   </DropdownItem>
                   <DropdownItem to="/dashboard/user-profile" tag={Link}>
                     <i className="ni ni-single-02" />
-                    <span>My profile</span>
+                    <span>Perfil</span>
                   </DropdownItem>
                   <DropdownItem to="/dashboard/user-profile" tag={Link}>
                     <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
+                    <span>Configurações</span>
                   </DropdownItem>
                   <DropdownItem to="/dashboard/user-profile" tag={Link}>
                     <i className="ni ni-calendar-grid-58" />
-                    <span>Activity</span>
-                  </DropdownItem>
-                  <DropdownItem to="/dashboard/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Support</span>
+                    <span>Atividades</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="#" onClick={this.logout}>
                     <i className="ni ni-user-run" />
-                    <span>Logout</span>
+                    <span>Sair</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

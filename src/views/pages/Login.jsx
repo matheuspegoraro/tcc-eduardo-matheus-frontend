@@ -51,7 +51,9 @@ class Login extends React.Component {
         setToken(token);
         this.props.history.push('/dashboard/principal');
         this.setState({ loading: false });
-        
+
+        toast.success('Autenticação realizada com sucesso.');
+
       } catch (err) {
         this.setState({loading: false});
         toast.error('Houve um problema com o login, verifique suas credênciais.');
