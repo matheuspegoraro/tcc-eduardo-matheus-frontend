@@ -28,29 +28,28 @@ class OfxImports extends React.Component {
     bank_id: '', //FIXO POR ENQUANTO
     error: '',
     file_name: '',
-    loading: false
+    loading: false,
+    company_id: 1
   };
 
   handleSubmit = async (e) => {
     e.preventDefault();
 
     const { file_ofx, bank_id } = this.state;
-    const { company_id } = this.props.user.user;
-
-    console.log(this.props.user)
 
     let formData = new FormData();
 
     formData.append('file_ofx', file_ofx);
     formData.append('bank_id', bank_id);
-    formData.append('company_id', company_id);
+    formData.append('company_id', this.state.company_id);
 
     this.setState({ loading: true });
 
     try {
       const response = await api.post('/upload/ofx', formData, {
-        header: {
-          'Content-Type': 'multpart/form-data'
+        headers: { 
+          'Content-Type': 'multpart/form-data',
+          authorization: `Bearer ${localStorage.getItem('api_token')}` 
         }
       });
       
