@@ -14,12 +14,12 @@ import {
 } from "reactstrap";
 
 import api from '../../axios';
+import { toast } from 'react-toastify';
 
 class ForgotPassword extends React.Component {
 
   state = {
     email: '',
-    error: '',
     loading: false
   };
 
@@ -38,12 +38,13 @@ class ForgotPassword extends React.Component {
 
         this.setState({ loading: false });       
       } catch (err) {
-        console.log(err);
+
         this.setState({
-          error:
-            "Houve um problema na requisição!",
           loading: false
         });
+
+        toast.error('Houve um problema na requisição!');
+
       }
     }
   };
@@ -59,7 +60,6 @@ class ForgotPassword extends React.Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
                 <small>Será enviado para seu e-mail um código de recuperação para redefinir sua senha.</small>
-                {this.state.error && <p>{this.state.error}</p>}
               </div>
               <Form role="form" onSubmit={this.forgotPassword}>
                 <FormGroup className="mb-3">

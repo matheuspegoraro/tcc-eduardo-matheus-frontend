@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import {
   Button,
@@ -24,7 +25,6 @@ class Login extends React.Component {
   state = {
     email: '',
     password: '',
-    error: '',
     loading: false
   };
 
@@ -52,13 +52,11 @@ class Login extends React.Component {
         this.props.history.push('/dashboard/principal');
         this.setState({ loading: false });
 
+        toast.success('Autenticação realizada com sucesso.');
 
       } catch (err) {
-        this.setState({
-          error:
-            "Houve um problema com o login, verifique suas credênciais.",
-          loading: false
-        });
+        this.setState({loading: false});
+        toast.error('Houve um problema com o login, verifique suas credênciais.');
       }
     }
   };
@@ -113,7 +111,6 @@ class Login extends React.Component {
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
                 <small>Ou acessar com minhas credênciais</small>
-                {this.state.error && <p>{this.state.error}</p>}
               </div>
               <Form role="form" onSubmit={this.signIn}>
                 <FormGroup className="mb-3">
