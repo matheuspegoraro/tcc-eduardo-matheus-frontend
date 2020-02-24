@@ -31,6 +31,22 @@ class Tree extends Component {
                     {node.children && <Button className="pl-0" color="link" id={id} onClick={this.toggle}>{this.state[id] ? '-' : '+'}</Button>}
                     <Dot size={20} backgroundColor={node.color}/>
                     <span className='mb-4'>{node.name}</span>
+                    <Button
+                      color="danger"
+                      onClick={() => this.props.handleDelete(node.id)}
+                      size="sm"
+                      className="float-right ml-2 mt-1"
+                    >
+                      Remover
+                    </Button>
+                    <Button
+                      color="info"
+                      onClick={() => this.props.handleLoadEdit(node)}
+                      size="sm"
+                      className="float-right mt-1"
+                    >
+                      Alterar
+                    </Button>
                 </div>}
             </ListGroupItem>
             {node.children &&
