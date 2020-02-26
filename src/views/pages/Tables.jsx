@@ -300,16 +300,11 @@ class Tables extends React.Component {
                             Alexander Smith
                           </UncontrolledTooltip>
                           <a
-                            className="avatar avatar-sm"
+                            className="fas fa-user-edit"
                             href="#pablo"
                             id="tooltip476840018"
                             onClick={e => e.preventDefault()}
                           >
-                            <img
-                              alt="..."
-                              className="rounded-circle"
-                              src={require("assets/img/theme/team-4-800x800.jpg")}
-                            />
                           </a>
                           <UncontrolledTooltip
                             delay={0}

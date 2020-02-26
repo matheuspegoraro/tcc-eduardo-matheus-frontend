@@ -26,6 +26,7 @@ import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
+import Banks from "./views/pages/Banks";
 
 var routes = [
   {
@@ -122,6 +123,15 @@ var routes = [
     component: RecoveryPassword,
     layout: "/autenticar",
     display: false
+  },
+  {
+    path: "/bancos",
+    name: "Bancos",
+    icon: "ni ni-building text-green",
+    component: Banks,
+    layout: "/dashboard",
+    private: true,
+    display: true
   }
 ];
 export default routes;
