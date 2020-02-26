@@ -23,6 +23,10 @@ import { toast } from 'react-toastify';
 
 function Banks() {
 
+  //bancos padrões
+  const [banksDefauts, setBanksDefauts] = useState([]);
+
+  //bancos do usuario
   const [banks, setBanks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalBank, setModalBank] = useState(false);
@@ -40,6 +44,22 @@ function Banks() {
   useEffect(() => {
 
     async function fetchData() {
+      const response = await api.get('/banks-default', {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      setBanksDefauts(response.data);
+    }
+
+    fetchData();
+
+  }, []);
+
+  useEffect(() => {
+
+    async function fetchData() {
       const response = await api.get('/banks', {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
@@ -51,7 +71,7 @@ function Banks() {
 
     fetchData();
 
-  }, [])
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -92,7 +112,7 @@ function Banks() {
     toggleModal('modalBank');
 
     const bankEditable = banks.filter(bank => {
-         return bank.id === id;
+      return bank.id === id;
     });
 
     setName(bankEditable[0].name);
@@ -207,7 +227,53 @@ function Banks() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Bancos</h3>
+                    <h3 className="mb-0">Bancos Padrões</h3>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">Icone</th>
+                    <th scope="col">Nome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {banksDefauts.map(bank => (
+                    <tr key={bank.id}>
+                      <td>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                            onClick={e => e.preventDefault()}
+                          >
+                            <img
+                              alt="..."
+                              src={bank.imgPath}
+                            />
+                          </a>
+                        </Media>
+                      </td>
+                      <td>{bank.name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <CardFooter>
+                <p className="h5">Encontramos {banks.length} banco(s) padrão(ões).</p>
+              </CardFooter>
+            </Card>
+          </Col>
+        </Row>
+
+        <Row className="mt-5">
+          <Col>
+            <Card className="bg-secondary shadow">
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xs="8">
+                    <h3 className="mb-0">Bancos Cadastrados</h3>
                   </Col>
                   <Col className="text-right" xs="4">
                     <Button
@@ -256,14 +322,14 @@ function Banks() {
                         <div
                           className="fas fa-user-edit mr-3"
                           id="editarBtn"
-                          style={{color: '#5e72e4', cursor: 'pointer'}}
+                          style={{ color: '#5e72e4', cursor: 'pointer' }}
                           onClick={() => handleEditBank(bank.id)}
                         >
                         </div>
                         <div
                           className="fas fa-trash"
                           id="excluirBtn"
-                          style={{color: '#f5365c', cursor: 'pointer'}}
+                          style={{ color: '#f5365c', cursor: 'pointer' }}
                           onClick={() => handleDeleteBank(bank.id)}
                         >
                         </div>
@@ -273,7 +339,7 @@ function Banks() {
                 </tbody>
               </Table>
               <CardFooter>
-                <p className="h5">Encontramos {banks.length} banco(s) cadastrados.</p>
+                <p className="h5">Encontramos {banksDefauts.length} banco(s) cadastrado(s).</p>
               </CardFooter>
             </Card>
           </Col>
