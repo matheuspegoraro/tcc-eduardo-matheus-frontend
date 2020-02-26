@@ -84,18 +84,38 @@ var routes = [
     display: false
   },
   {
-    path: "/importar-ofx",
-    name: "Importação de OFX",
-    icon: "fa fa-file-upload text-red",
-    component: OfxImports,
-    layout: "/dashboard",
+    path: null,
+    name: "Financeiro",
+    icon: "ni ni-money-coins text-info",
+    component: null,
+    layout: null,
     private: true,
-    display: true
+    display: true,
+    children: [
+      {
+        path: "/importar-ofx",
+        name: "Importação de OFX",
+        icon: "fa fa-file-upload text-red",
+        component: OfxImports,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/bancos",
+        name: "Bancos",
+        icon: "ni ni-building text-green",
+        component: Banks,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      }
+    ]
   },
   {
     path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
+    name: "Entrar no Sistema",
+    icon: "ni ni-circle-08 text-pink",
     component: Login,
     layout: "/autenticar",
     display: false
@@ -124,14 +144,5 @@ var routes = [
     layout: "/autenticar",
     display: false
   },
-  {
-    path: "/bancos",
-    name: "Bancos",
-    icon: "ni ni-building text-green",
-    component: Banks,
-    layout: "/dashboard",
-    private: true,
-    display: true
-  }
 ];
 export default routes;

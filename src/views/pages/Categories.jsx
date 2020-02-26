@@ -410,7 +410,7 @@ function Categories() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Lista de Categoias</h3>
+                    <h3 className="mb-0">Lista de Categorias</h3>
                   </Col>
                   <Col className="text-right" xs="4">
                     <Button
@@ -424,7 +424,7 @@ function Categories() {
                 </Row>
               </CardHeader>
               <CardBody>
-                {categories.length > 0 ? <Tree data={categories} listGroup={true} handleLoadEdit={handleLoadEdit} handleDelete={handleDelete} /> : ''}
+                {categories.length > 0 ? <Tree data={categories} listGroup={true} handleLoadEdit={handleLoadEdit} handleDelete={handleDelete} /> : <p className="h5">Encontramos 0 categoria(s) cadastradas.</p>}
               </CardBody>
             </Card>
           </Col>

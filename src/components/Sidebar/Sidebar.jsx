@@ -82,22 +82,60 @@ class Sidebar extends React.Component {
   createLinks = routes => {
     return routes.map((prop, key) => {
       if (prop.display) {
-        return (
-          <NavItem key={key}>
+        if (prop.path !== null) {
+          return (
+            <NavItem key={key}>
+              <NavLink
+                to={prop.layout + prop.path}
+                tag={NavLinkRRD}
+                onClick={this.closeCollapse}
+                activeClassName="active"
+              >
+                <i className={prop.icon} />
+                {prop.name}
+              </NavLink>
+            </NavItem>
+          );
+        } else {
+          return (
+            <UncontrolledDropdown key={key} nav>
+              <DropdownToggle nav className="nav-link-icon">
+                <i className={prop.icon} />
+                {prop.name}
+              </DropdownToggle>
+              <DropdownMenu right>
+                {this.createDropdownItem(prop.children)}
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          );
+        }
+      }
+    });
+  };
+
+  createDropdownItem = routes => {
+    return routes.map((prop, key) => {
+      if (prop.display) {
+        if (prop.path !== null) {
+          return (
             <NavLink
+              key={key}
               to={prop.layout + prop.path}
               tag={NavLinkRRD}
               onClick={this.closeCollapse}
               activeClassName="active"
-            >
-              <i className={prop.icon} />
-              {prop.name}
+              >
+                <i className={prop.icon} />
+                {prop.name}
             </NavLink>
-          </NavItem>
-        );
+          );
+        } else {
+          return this.createLinks([prop]);
+        }
       }
     });
   };
+
   render() {
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
@@ -238,7 +276,9 @@ class Sidebar extends React.Component {
             </Form>
             {/* Navigation */}
             <h6 className="navbar-heading text-muted">Menu</h6>
-            <Nav navbar>{this.createLinks(routes)}</Nav>
+            <Nav navbar>
+              {this.createLinks(routes)}
+            </Nav>
           </Collapse>
         </Container>
       </Navbar>

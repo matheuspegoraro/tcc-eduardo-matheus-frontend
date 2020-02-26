@@ -53,8 +53,10 @@ class Dashboard extends React.Component {
             />
           )
         }
-      } else {
+      } else if (prop.layout !== null) {
         return null;
+      } else {
+        return this.getRoutes(prop.children)
       }
     });
   };
