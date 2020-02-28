@@ -60,6 +60,7 @@
     "react-datetime": "2.16.3",
     "react-dom": "16.8.4",
     "react-google-maps": "9.4.5",
+    "react-input-mask": "^2.0.4",
     "react-moment": "^0.9.7",
     "react-notification-alert": "0.0.12",
     "react-perfect-scrollbar": "^1.5.8",
