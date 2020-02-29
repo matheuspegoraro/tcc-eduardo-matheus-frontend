@@ -27,6 +27,7 @@ import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
 import Banks from "./views/pages/Banks";
+import CreditCards from "./views/pages/CreditCards";
 
 var routes = [
   {
@@ -115,6 +116,15 @@ var routes = [
         name: "Bancos",
         icon: "ni ni-building text-blue",
         component: Banks,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/cartoes-credito",
+        name: "Cartões",
+        icon: "ni ni-credit-card text-info",
+        component: CreditCards,
         layout: "/dashboard",
         private: true,
         display: true
