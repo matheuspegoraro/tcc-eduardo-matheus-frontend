@@ -23,19 +23,19 @@ function Categories() {
   const [categories, setCategories] = useState([]);
   const [options, setOptions] = useState([]);
   
+  // form inputs
+  const [modalCategory, setModalCategory] = useState(false);
+  const [editIdCategory, setEditIdCategory] = useState(0);
   const [name, setName] = useState('');
   const [parentId, setParentId] = useState(null);
   const [color, setColor] = useState('#000000');
 
-  const [editIdCategory, setEditIdCategory] = useState(0);
-  const [editName, setEditName] = useState('');
-  const [editParentId, setEditParentId] = useState(null);
-  const [editColor, setEditColor] = useState('#000000');
-
   const [message, setMessage] = useState({type: '', message: ''});
   const [loading, setLoading] = useState(false);
-  const [createModal, setCreateModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
+
+  useEffect(() => {
+    loadAll();
+  }, [message]);
 
   async function loadAll() {
     setCategories([]);
@@ -48,8 +48,35 @@ function Categories() {
     });
   };
 
-  async function handleCreate(e) {
+  function toggleModal() {
+    setEditIdCategory(null);
+    setName('');
+    setParentId(null);
+    setColor('#000000');
+    
+    setModalCategory(!modalCategory);
+  }
+
+  function toggleEditModal(category) {
+    setEditIdCategory(category.id);
+    setName(category.name);
+    setColor(category.color);
+    setParentId(category.parentId);
+
+    setModalCategory(!modalCategory);
+  };
+
+  function handleSubmit(e) {
     e.preventDefault();
+
+    if (editIdCategory) {
+      handleEdit();
+    } else {
+      handleCreate();
+    }
+  };
+
+  async function handleCreate() {
 
     if (!name || !color) {
       setMessage({type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!"});
@@ -62,7 +89,8 @@ function Categories() {
         });
 
         if (response) {
-          resetFormCreate();
+          setMessage({type: 'success', message: "Categoria criada com suceso!"});
+          toggleModal();
         }
       } catch (err) {
         setMessage({type: 'error', message: "Houve um problema ao cadastrar a categoria."});
@@ -71,40 +99,21 @@ function Categories() {
     }
   };
 
-  function resetFormCreate() {
-    setMessage({type: 'success', message: "Categoria criada com suceso!"});
-    setCreateModal(!createModal);
-    setName('');
-    setParentId(null);
-    setColor('#000000');
-    loadAll();
-  }
+  async function handleEdit() {
 
-  function resetFormEdit() {
-    setMessage({type: 'success', message: "Categoria alterada com suceso!"});
-    setEditModal(!editModal);
-    setEditParentId(0);
-    setEditName('');
-    setEditIdCategory(null);
-    setEditColor('#000000');
-    loadAll();
-  }
-
-  async function handleEdit(e) {
-    e.preventDefault();
-
-    if (!editName || !editColor) {
+    if (!name || !color) {
       setMessage({type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!"});
     } else {
       try {
         setLoading(true);
 
-        const response = await api.put(`/categories/${editIdCategory}`, { name: editName, parentId: editParentId, color: editColor }, {
+        const response = await api.put(`/categories/${editIdCategory}`, { name, parentId, color }, {
           headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
         });
 
         if (response) {
-          resetFormEdit();
+          setMessage({type: 'success', message: "Categoria alterada com suceso!"});
+          toggleModal();
         }
       } catch (err) {
         setMessage({type: 'error', message: "Houve um problema ao editar a categoria."});
@@ -131,15 +140,6 @@ function Categories() {
         setLoading(false);
       }
     }
-  };
-
-  function handleLoadEdit(node) {
-    setEditName(node.name);
-    setEditParentId(node.parentId);
-    setEditColor(node.color);
-    setEditIdCategory(node.id);
-
-    setEditModal(!editModal);
   };
 
   async function listOptions(tempCategories, lvl = 0, tempOptions) {   
@@ -187,20 +187,20 @@ function Categories() {
       <Container className="mt--7" fluid>
       <Modal
           className="modal-dialog-centered"
-          isOpen={createModal}
-          toggle={() => createModal}
+          isOpen={modalCategory}
+          toggle={() => modalCategory}
         >
-          <Form role="form" onSubmit={handleCreate}>
+          <Form role="form" onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalCategoryCreateLabel">
-                Criar Nova Categoria
+                {!editIdCategory ? 'Criar Nova Categoria': `Editar Categoria - ${name}`}
               </h5>
               <button
                 aria-label="Close"
                 className="close"
                 data-dismiss="modal"
                 type="button"
-                onClick={() => setCreateModal(!createModal)}
+                onClick={() => setModalCategory(!modalCategory)}
               >
                 <span aria-hidden={true}>×</span>
               </button>
@@ -218,7 +218,7 @@ function Categories() {
                       </label>
                       <Input
                         className="form-control-alternative"
-                        defaultValue=""
+                        value={name}
                         id="input-name"
                         placeholder="Alimentação, transporte..."
                         type="text"
@@ -239,6 +239,7 @@ function Categories() {
                         className="form-control-alternative"
                         name="selectMulti"
                         id="exampleSelectMulti"
+                        defaultValue={parentId}
                         onChange={e => {
                           if (e.target.value !== '')
                             setParentId(e.target.value);
@@ -249,7 +250,6 @@ function Categories() {
                         {options !== undefined ? options.map(category => {
                           return <option value={category.id} key={category.id}>
                             {category.space} {category.name}
-                            {/* <Dot size={5} backgroundColor={category.color}/>  */}
                           </option>
                         }) : ''}
                       </Input>
@@ -267,6 +267,7 @@ function Categories() {
                         className="form-control-alternative"
                         id="input-color"
                         type="color"
+                        name={color}
                         onChange={e => setColor(e.target.value)}
                       />
                     </FormGroup>
@@ -279,7 +280,7 @@ function Categories() {
                 color="secondary"
                 data-dismiss="modal"
                 type="button"
-                onClick={() => setCreateModal(!createModal)}
+                onClick={() => setModalCategory(!modalCategory)}
               >
                 Fechar
               </Button>
@@ -287,123 +288,12 @@ function Categories() {
                 color="info"
                 type="submit"
               >
-                Criar
+                {!editIdCategory ? 'Criar!': 'Editar!'}
               </Button>
             </div>
           </Form>
         </Modal>
 
-        <Modal
-          className="modal-dialog-centered"
-          isOpen={editModal}
-          toggle={() => editModal}
-        >
-          <Form role="form" onSubmit={handleEdit}>
-            <div className="modal-header">
-              <h5 className="modal-title" id="modalCategoryEditLabel">
-                Editar Categoria
-              </h5>
-              <button
-                aria-label="Close"
-                className="close"
-                data-dismiss="modal"
-                type="button"
-                onClick={() => setEditModal(!editModal)}
-              >
-                <span aria-hidden={true}>×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="pl-lg-4">
-                <Row>
-                  <Col lg="12">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-name"
-                      >
-                        Descrição
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        defaultValue=""
-                        id="input-edit-name"
-                        placeholder="Alimentação, transporte..."
-                        type="text"
-                        onChange={e => setEditName(e.target.value)}
-                        defaultValue={editName}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg="12">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="select-parent"
-                      >
-                        Sub-categoria de
-                      </label>
-                      <Input
-                        type="select"
-                        className="form-control-alternative"
-                        name="selectMulti"
-                        id="exampleSelectMulti"
-                        defaultValue={editParentId}
-                        onChange={e => {
-                          if (e.target.value !== '')
-                            setEditParentId(e.target.value);
-                          else
-                            setEditParentId(null);
-                        }}>
-                        <option value=''>Nenhum</option>
-                        {options !== undefined ? options.map(category => {
-                          return <option value={category.id} key={category.id}>
-                            {category.space} {category.name}
-                            {/* <Dot size={5} backgroundColor={category.color}/>  */}
-                          </option>
-                        }) : ''}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col lg="12">
-                    <FormGroup>
-                      <label
-                        className="form-control-label"
-                        htmlFor="input-color"
-                      >
-                        Cor
-                      </label>
-                      <Input
-                        className="form-control-alternative"
-                        id="input-color"
-                        type="color"
-                        defaultValue={editColor}
-                        onChange={e => setEditColor(e.target.value)}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <Button
-                color="secondary"
-                data-dismiss="modal"
-                type="button"
-                onClick={() => setEditModal(!editModal)}
-              >
-                Fechar
-              </Button>
-              <Button
-                color="info"
-                type="submit"
-              >
-                Alterar
-              </Button>
-            </div>
-          </Form>
-        </Modal>
-        
         <Row>
           <Col className="order-xl-1">
             <Card className="shadow mt-4 mb-4">
@@ -415,7 +305,7 @@ function Categories() {
                   <Col className="text-right" xs="4">
                     <Button
                       color="primary"
-                      onClick={() => setCreateModal(!createModal)}
+                      onClick={() => setModalCategory(!modalCategory)}
                       size="sm"
                     >
                       Criar
@@ -424,7 +314,7 @@ function Categories() {
                 </Row>
               </CardHeader>
               <CardBody>
-                {categories.length > 0 ? <Tree data={categories} listGroup={true} handleLoadEdit={handleLoadEdit} handleDelete={handleDelete} /> : <p className="h5">Encontramos 0 categoria(s) cadastradas.</p>}
+                {categories.length > 0 ? <Tree data={categories} listGroup={true} toggleEditModal={toggleEditModal} handleDelete={handleDelete} /> : <p className="h5">Encontramos 0 categoria(s) cadastradas.</p>}
               </CardBody>
             </Card>
           </Col>

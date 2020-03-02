@@ -41,7 +41,7 @@ class Tree extends Component {
                     </Button>
                     <Button
                       color="info"
-                      onClick={() => this.props.handleLoadEdit(node)}
+                      onClick={() => this.props.toggleEditModal(node)}
                       size="sm"
                       className="float-right mt-1"
                     >

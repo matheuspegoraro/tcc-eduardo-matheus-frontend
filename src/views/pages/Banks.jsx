@@ -320,19 +320,22 @@ function Banks() {
                             </Moment>
                           </td>
                           <td>
-                            <div
-                              className="fas fa-user-edit mr-3"
-                              id="editarBtn"
-                              style={{ color: '#5e72e4', cursor: 'pointer' }}
-                              onClick={() => handleEditBank(bank.id)}
+                            <Button
+                              color="danger"
+                              onClick={() => handleDeleteBank(bank.id)}
+                              size="sm"
+                              className="float-right ml-2 mt-1"
                             >
-                            </div>
-                            <div
-                              className="fas fa-trash"
-                              id="excluirBtn"
-                              style={{ color: '#f5365c', cursor: 'pointer' }}
-                              onClick={() =>handleDeleteBank(bank.id)}
-                            />
+                              Remover
+                        </Button>
+                            <Button
+                              color="info"
+                              onClick={() => handleEditBank(bank.id)}
+                              size="sm"
+                              className="float-right mt-1"
+                            >
+                              Alterar
+                        </Button>
                           </td>
                         </tr>
                       )
