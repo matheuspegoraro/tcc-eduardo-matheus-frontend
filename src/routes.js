@@ -94,10 +94,19 @@ var routes = [
     display: true,
     children: [
       {
-        path: "/importar-ofx",
-        name: "Importação de OFX",
-        icon: "fa fa-file-upload text-red",
-        component: OfxImports,
+        path: "/receitas",
+        name: "Receitas",
+        icon: "fa fa-arrow-up text-green",
+        component: null,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/despesas",
+        name: "Despesas",
+        icon: "fa fa-arrow-down text-red",
+        component: null,
         layout: "/dashboard",
         private: true,
         display: true
@@ -105,7 +114,7 @@ var routes = [
       {
         path: "/bancos",
         name: "Bancos",
-        icon: "ni ni-building text-green",
+        icon: "ni ni-building text-blue",
         component: Banks,
         layout: "/dashboard",
         private: true,
@@ -120,6 +129,35 @@ var routes = [
         private: true,
         display: true
       }
+    ]
+  },
+  {
+    path: null,
+    name: "Arquivos O.F.X.",
+    icon: "fa fa-archive text-green",
+    component: null,
+    layout: null,
+    private: true,
+    display: true,
+    children: [
+      {
+        path: "/importar-ofx",
+        name: "Importar",
+        icon: "fa fa-file-upload text-green",
+        component: OfxImports,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/historico-ofx",
+        name: "Históricos",
+        icon: "fa fa-history text-blue",
+        component: null,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
     ]
   },
   {
