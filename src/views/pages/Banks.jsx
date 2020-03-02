@@ -151,7 +151,6 @@ function Banks() {
       />
       {/* Page content */}
       <Container className="mt--7" fluid>
-
         <Modal
           className="modal-dialog-centered"
           isOpen={modalBank}
@@ -261,7 +260,7 @@ function Banks() {
                 </tbody>
               </Table>
               <CardFooter>
-                <p className="h5">Encontramos {banks.length} banco(s) padrão(ões).</p>
+                <p className="h5">Encontramos {banksDefauts.length} banco(s) padrão(ões).</p>
               </CardFooter>
             </Card>
           </Col>
@@ -296,50 +295,53 @@ function Banks() {
                   </tr>
                 </thead>
                 <tbody>
-                  {banks.map(bank => (
-                    <tr key={bank.id}>
-                      <td>
-                        <Media className="align-items-center">
-                          <a
-                            className="avatar rounded-circle mr-3"
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            <img
-                              alt="..."
-                              src={bank.imgPath}
+                  {banks.map(bank => {
+                    if (bank.companyId !== null) {
+                      return (
+                        <tr key={bank.id}>
+                          <td>
+                            <Media className="align-items-center">
+                              <a
+                                className="avatar rounded-circle mr-3"
+                                href="#pablo"
+                                onClick={e => e.preventDefault()}
+                              >
+                                <img
+                                  alt="..."
+                                  src={bank.imgPath}
+                                />
+                              </a>
+                            </Media>
+                          </td>
+                          <td>{bank.name}</td>
+                          <td>
+                            <Moment format="DD/MM/YYYY HH:mm">
+                              {bank.createdAt}
+                            </Moment>
+                          </td>
+                          <td>
+                            <div
+                              className="fas fa-user-edit mr-3"
+                              id="editarBtn"
+                              style={{ color: '#5e72e4', cursor: 'pointer' }}
+                              onClick={() => handleEditBank(bank.id)}
+                            >
+                            </div>
+                            <div
+                              className="fas fa-trash"
+                              id="excluirBtn"
+                              style={{ color: '#f5365c', cursor: 'pointer' }}
+                              onClick={() =>handleDeleteBank(bank.id)}
                             />
-                          </a>
-                        </Media>
-                      </td>
-                      <td>{bank.name}</td>
-                      <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
-                          {bank.createdAt}
-                        </Moment>
-                      </td>
-                      <td>
-                        <div
-                          className="fas fa-user-edit mr-3"
-                          id="editarBtn"
-                          style={{ color: '#5e72e4', cursor: 'pointer' }}
-                          onClick={() => handleEditBank(bank.id)}
-                        >
-                        </div>
-                        <div
-                          className="fas fa-trash"
-                          id="excluirBtn"
-                          style={{ color: '#f5365c', cursor: 'pointer' }}
-                          onClick={() => handleDeleteBank(bank.id)}
-                        >
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                          </td>
+                        </tr>
+                      )
+                    }
+                  })}
                 </tbody>
               </Table>
               <CardFooter>
-                <p className="h5">Encontramos {banksDefauts.length} banco(s) cadastrado(s).</p>
+                <p className="h5">Encontramos {banks.length} banco(s) cadastrado(s).</p>
               </CardFooter>
             </Card>
           </Col>

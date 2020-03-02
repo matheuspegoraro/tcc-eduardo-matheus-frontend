@@ -71,6 +71,7 @@
     "react-toastify": "^5.5.0",
     "reactstrap": "7.1.0",
     "redux": "^4.0.5",
+    "sweetalert2-react": "^0.8.3",
     "toastr": "^2.1.4"
   },
   "devDependencies": {
