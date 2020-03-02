@@ -24,6 +24,7 @@ import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx"
 import api from '../../axios';
 import { toast } from 'react-toastify';
 import { months } from "moment";
+import { getAllDays, formatSaveMoney, formatShowMoney } from '../../utils';
 
 function Cards() {
 
@@ -32,41 +33,42 @@ function Cards() {
 
   const [banks, setBanks] = useState([]);
   
-  //form create inputs
-  const [modalCreateCreditCard, setModalCreateCreditCard] = useState(false);
+  //form inputs
+  const [modalCreditCard, setModalCreditCard] = useState(false);
   const [bankId, setBankId] = useState('');
   const [name, setName] = useState('');
   const [closingDay, setClosingDay] = useState(1);
   const [deadlineDay, setDeadlineDay] = useState(1);
   const [limit, setLimit] = useState(0);
-  
-  //form edit inputs
-  const [modalEditCreditCard, setModalEditCreditCard] = useState(false);
-  const [editIdCreditCard, setEditIdCreditCard] = useState(0);
-  const [editBankId, setEditBankId] = useState('');
-  const [editName, setEditName] = useState('');
-  const [editClosingDay, setEditClosingDay] = useState(1);
-  const [editDeadlineDay, setEditDeadlineDay] = useState(1);
-  const [editLimit, setEditLimit] = useState(0);
+
+  const [editIdCreditCard, setEditIdCreditCard] = useState(null);
 
   function toggleModal() {
+    setEditIdCreditCard(null);
     setBankId('');
     setName('');
     setClosingDay(1);
     setDeadlineDay(1);
     setLimit(0);
 
-    setModalCreateCreditCard(!modalCreateCreditCard);
+    setModalCreditCard(!modalCreditCard);
   };
 
-  function toggleEditModal() {
-    setEditBankId('');
-    setEditName('');
-    setEditClosingDay(1);
-    setEditDeadlineDay(1);
-    setEditLimit(0);
+  function toggleEditModal(id) {
 
-    setModalEditCreditCard(!modalEditCreditCard);
+    const creditCardEditable = creditCards.filter(creditCard => {
+      return creditCard.id === id;
+    });
+    
+    setEditIdCreditCard(creditCardEditable[0].id);
+    setBankId(creditCardEditable[0].bank.id);
+    setName(creditCardEditable[0].name);
+    setClosingDay(creditCardEditable[0].closingDay);
+    setDeadlineDay(creditCardEditable[0].deadlineDay);
+    setLimit(formatShowMoney(creditCardEditable[0].limit));
+    
+    setModalCreditCard(!modalCreditCard);
+
   };
 
   useEffect(() => {
@@ -104,6 +106,15 @@ function Cards() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    if (editIdCreditCard) {
+      handleEdit();
+    } else {
+      handleCreate();
+    }
+  };
+
+  async function handleCreate() {
+
     setLoading(true);
 
     try {
@@ -131,25 +142,24 @@ function Cards() {
     }
   };
 
-  async function handleEditSubmit(e) {
-    e.preventDefault();
+  async function handleEdit() {
 
     setLoading(true);
 
     try {
       await api.put(`/credit-cards/${editIdCreditCard}`, {
-        bankId: editBankId,
-        name: editName,
-        closingDay: editClosingDay,
-        deadlineDay: editDeadlineDay,
-        limit: formatSaveMoney(editLimit)
+        bankId,
+        name,
+        closingDay,
+        deadlineDay,
+        limit: formatSaveMoney(limit)
       }, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
 
-      toggleEditModal();
+      toggleModal();
       toast.success('Cartão alterado com sucesso!');
       setLoading(false);
 
@@ -159,23 +169,6 @@ function Cards() {
       toast.error('Ocorreu um erro na requisição!');
 
     }
-  };
-
-  function handleEditCreditCard(id) {
-
-    const creditCardEditable = creditCards.filter(creditCard => {
-      return creditCard.id === id;
-    });
-    
-    setEditIdCreditCard(creditCardEditable[0].id);
-    setEditBankId(creditCardEditable[0].bank.id);
-    setEditName(creditCardEditable[0].name);
-    setEditClosingDay(creditCardEditable[0].closingDay);
-    setEditDeadlineDay(creditCardEditable[0].deadlineDay);
-    setEditLimit(formatShowMoney(creditCardEditable[0].limit));
-    
-    setModalEditCreditCard(!modalEditCreditCard);
-
   };
 
   async function handleDeleteBank(id) {
@@ -200,32 +193,6 @@ function Cards() {
     setLoading(false);
   };
 
-  function getAllDays() {
-    let days = [];
-
-    for (let i = 1; i <= 31; i++) {
-      days[i] = i;
-    }
-
-    return days;
-  }
-
-  function formatSaveMoney(tempMoney) {
-    tempMoney = tempMoney.split(".");
-    tempMoney = tempMoney.join("");
-    tempMoney = tempMoney.split(",");
-    tempMoney = tempMoney.join(".");
-
-    return tempMoney;
-  }
-
-  function formatShowMoney(tempMoney) {
-    if (!tempMoney)
-      tempMoney = 0;
-
-    return tempMoney.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
   return (
     <>
       <HeaderWithDescription
@@ -238,13 +205,13 @@ function Cards() {
 
         <Modal
           className="modal-dialog-centered"
-          isOpen={modalCreateCreditCard}
+          isOpen={modalCreditCard}
           toggle={() => toggleModal()}
         >
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                Adição de Cartões
+                {!editIdCreditCard ? 'Adição de Cartões': `Editar Cartão - ${name}`}
             </h5>
               <button
                 aria-label="Close"
@@ -342,119 +309,7 @@ function Cards() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                Criar!
-                </Button>
-            </div>
-          </Form>
-        </Modal>
-
-        <Modal
-          className="modal-dialog-centered"
-          isOpen={modalEditCreditCard}
-          toggle={() => toggleEditModal()}
-        >
-          <Form onSubmit={handleEditSubmit}>
-            <div className="modal-header">
-              <h5 className="modal-title" id="modalOfxLabel">
-                Adição de Cartões
-            </h5>
-              <button
-                aria-label="Close"
-                className="close"
-                data-dismiss="modal"
-                type="button"
-                onClick={() => toggleEditModal()}
-              >
-                <span aria-hidden={true}>×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <FormGroup>
-                <label className="form-control-label" htmlFor="bank-id">Banco:</label>
-                <Input
-                  type="select"
-                  className="form-control-alternative"
-                  name="bank-id"
-                  id="bank-id"
-                  defaultValue={editBankId}
-                  onChange={e => {
-                    if (e.target.value !== '')
-                      setEditBankId(e.target.value);
-                    else
-                      setEditBankId('');
-                  }}>
-                  <option value=''>Nenhum</option>
-                  {banks !== undefined ? banks.map(bank => {
-                    return <option value={bank.id} key={bank.id}>{bank.name}</option>
-                  }) : ''}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="card-bank">Nome do Cartão:</label>
-                <Input
-                  className="form-control-alternative"
-                  id="card-name"
-                  placeholder="Ex: Cartão Platinum..."
-                  type="text"
-                  value={editName}
-                  onChange={e => setEditName(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="closing-day">Dia de fechamento:</label>
-                <Input
-                  type="select"
-                  className="form-control-alternative"
-                  id="closing-day"
-                  defaultValue={editClosingDay}
-                  onChange={e => setEditClosingDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="deadline-day">Dia de vencimento:</label>
-                <Input
-                  type="select"
-                  className="form-control-alternative"
-                  id="deadline-day"
-                  defaultValue={editDeadlineDay}
-                  onChange={e => setEditDeadlineDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="limit">Limite de Crédito:</label>
-                <InputGroup className="form-control-alternative">
-                  <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
-                  <Input
-                    type="text"
-                    decimalSeparator=","
-                    thousandSeparator="."
-                    precision="2"
-                    tag={CurrencyInput}
-                    id="editLimit"
-                    value={editLimit}
-                    onChangeEvent={e => setEditLimit(e.target.value)}
-                  />
-                </InputGroup>
-              </FormGroup>
-            </div>
-            <div className="modal-footer">
-              <Button
-                color="secondary"
-                data-dismiss="modal"
-                type="button"
-                onClick={() => toggleEditModal()}
-              >
-                Fechar
-                </Button>
-              <Button className="my-4" color="success" type="submit" disabled={loading}>
-                {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                Editar!
+                {!editIdCreditCard ? 'Criar!': 'Editar!'}
                 </Button>
             </div>
           </Form>
@@ -520,7 +375,7 @@ function Cards() {
                           className="fas fa-user-edit mr-3"
                           id="editarBtn"
                           style={{ color: '#5e72e4', cursor: 'pointer' }}
-                          onClick={() => handleEditCreditCard(creditCard.id)}
+                          onClick={() => toggleEditModal(creditCard.id)}
                         >
                         </div>
                         <div
