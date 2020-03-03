@@ -35,8 +35,10 @@ function Banks() {
   //form inputs
   const [iconFile, setIconFile] = useState(null);
   const [name, setName] = useState('');
+  const [bankId, setBankId] = useState(null);
 
   function toggleModal() {
+    setBankId(null);
     setName('');
     setModalBank(!modalBank);
   };
@@ -73,8 +75,7 @@ function Banks() {
 
   }, []);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleCreate() {
 
     /*let data = new FormData();
 
@@ -105,9 +106,43 @@ function Banks() {
       toast.error('Ocorreu um erro na requisição!');
 
     }
+
+  }
+  async function handleEdit() {
+    setLoading(true);
+
+    try {
+      await api.put(`/banks/${bankId}`, {
+        name
+      }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      toggleModal();
+      toast.success('Banco alterado com sucesso!');
+      setLoading(false);
+
+    } catch (error) {
+
+      setLoading(false);
+      toast.error('Ocorreu um erro na requisição!');
+
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (bankId)
+      handleEdit();
+    else
+      handleCreate();
+
   };
 
-  function handleEditBank(id) {
+  function toogleModalEditBank(id) {
 
     toggleModal('modalBank');
 
@@ -116,6 +151,7 @@ function Banks() {
     });
 
     setName(bankEditable[0].name);
+    setBankId(id);
 
   };
 
@@ -159,8 +195,8 @@ function Banks() {
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                Adição de Bancos
-            </h5>
+                {bankId ? 'Edição de Bancos' : 'Adição de Bancos'}
+              </h5>
               <button
                 aria-label="Close"
                 className="close"
@@ -214,8 +250,8 @@ function Banks() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                Criar!
-                </Button>
+                {bankId ? 'Editar!' : 'Criar!'}
+              </Button>
             </div>
           </Form>
         </Modal>
@@ -327,15 +363,15 @@ function Banks() {
                               className="float-right ml-2 mt-1"
                             >
                               Remover
-                        </Button>
+                            </Button>
                             <Button
                               color="info"
-                              onClick={() => handleEditBank(bank.id)}
+                              onClick={() => toogleModalEditBank(bank.id)}
                               size="sm"
                               className="float-right mt-1"
                             >
                               Alterar
-                        </Button>
+                            </Button>
                           </td>
                         </tr>
                       )
@@ -344,7 +380,7 @@ function Banks() {
                 </tbody>
               </Table>
               <CardFooter>
-                <p className="h5">Encontramos {banks.length} banco(s) cadastrado(s).</p>
+                <p className="h5">Encontramos {banks.filter( bank => ( bank.companyId !== null )).length} banco(s) cadastrado(s).</p>
               </CardFooter>
             </Card>
           </Col>
