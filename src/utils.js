@@ -9,6 +9,8 @@ export const getAllDays = () => {
 }
 
 export const formatSaveMoney = tempMoney => {
+  if(Number.isInteger(tempMoney)) return tempMoney;
+
   tempMoney = tempMoney.split(".");
   tempMoney = tempMoney.join("");
   tempMoney = tempMoney.split(",");

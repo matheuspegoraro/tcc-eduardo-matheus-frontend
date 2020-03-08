@@ -28,6 +28,8 @@ import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
 import Banks from "./views/pages/Banks";
 import CreditCards from "./views/pages/CreditCards";
+import Bills from "./views/pages/Bills";
+import BillTypes from "./views/pages/BillTypes";
 
 var routes = [
   {
@@ -125,6 +127,24 @@ var routes = [
         name: "Cartões",
         icon: "ni ni-credit-card text-info",
         component: CreditCards,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/tipos-contas-bancaria",
+        name: "Tipos de Conta Bancária",
+        icon: "ni ni-bag-17 text-orange",
+        component: BillTypes,
+        layout: "/dashboard",
+        private: true,
+        display: true
+      },
+      {
+        path: "/contas-bancarias",
+        name: "Contas Bancárias",
+        icon: "ni ni-bag-17 text-orange",
+        component: Bills,
         layout: "/dashboard",
         private: true,
         display: true
