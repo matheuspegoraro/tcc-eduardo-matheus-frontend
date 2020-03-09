@@ -356,20 +356,20 @@ function Banks() {
                           </td>
                           <td>
                             <Button
-                              color="danger"
-                              onClick={() => handleDeleteBank(bank.id)}
-                              size="sm"
-                              className="float-right ml-2 mt-1"
-                            >
-                              Remover
-                            </Button>
-                            <Button
                               color="info"
                               onClick={() => toogleModalEditBank(bank.id)}
                               size="sm"
-                              className="float-right mt-1"
+                              className="mt-1"
                             >
                               Alterar
+                            </Button>
+                            <Button
+                              color="danger"
+                              onClick={() => handleDeleteBank(bank.id)}
+                              size="sm"
+                              className="ml-2 mt-1"
+                            >
+                              Remover
                             </Button>
                           </td>
                         </tr>
