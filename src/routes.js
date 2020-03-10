@@ -51,42 +51,6 @@ var routes = [
     display: true
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-books text-info",
-    component: Icons,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: Profile,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
     path: null,
     name: "Financeiro",
     icon: "ni ni-money-coins text-info",

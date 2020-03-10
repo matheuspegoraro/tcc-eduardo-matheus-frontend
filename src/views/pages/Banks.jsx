@@ -73,7 +73,7 @@ function Banks() {
 
     fetchData();
 
-  }, []);
+  }, [loading]);
 
   async function handleCreate() {
 
@@ -97,21 +97,19 @@ function Banks() {
       setBanks([...banks, response.data]);
 
       toast.success('Banco criado com sucesso!');
-      setLoading(false);
 
     } catch (error) {
-
-      setLoading(false);
       toast.error('Ocorreu um erro na requisição!');
-
+    } finally {
+      setLoading(false);
     }
 
   }
   async function handleEdit() {
     setLoading(true);
-
+  
     try {
-      await api.put(`/banks/${bankId}`, {
+      const newBank = await api.put(`/banks/${bankId}`, {
         name
       }, {
         headers: {
@@ -119,15 +117,15 @@ function Banks() {
         }
       });
 
+      console.log(newBank);
+
       toggleModal();
       toast.success('Banco alterado com sucesso!');
-      setLoading(false);
 
     } catch (error) {
-
-      setLoading(false);
       toast.error('Ocorreu um erro na requisição!');
-
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -169,12 +167,13 @@ function Banks() {
         }
       });
     } catch (error) {
+      toast.error('Ocorreu um erro na requisição!');
+    } finally{
       setLoading(false);
     };
 
     setBanks(newBanks);
     toast.success('O banco foi removido com sucesso!');
-    setLoading(false);
   };
 
   return (
