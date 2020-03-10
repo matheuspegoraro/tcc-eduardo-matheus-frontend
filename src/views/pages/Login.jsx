@@ -49,7 +49,7 @@ class Login extends React.Component {
         });
 
         setToken(token);
-        this.props.history.push('/dashboard/principal');
+        this.props.history.push('/app/principal');
         this.setState({ loading: false });
 
         toast.success('Autenticação realizada com sucesso.');
