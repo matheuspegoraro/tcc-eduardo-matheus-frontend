@@ -37,7 +37,7 @@ var routes = [
     name: "Principal",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/dashboard",
+    layout: "/app",
     private: true,
     display: true
   },
@@ -46,11 +46,50 @@ var routes = [
     name: "Categorias",
     icon: "ni ni-planet text-blue",
     component: Categories,
-    layout: "/dashboard",
+    layout: "/app",
     private: true,
     display: true
   },
   {
+<<<<<<< HEAD
+=======
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-books text-info",
+    component: Icons,
+    layout: "/app",
+    private: true,
+    display: false
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: "ni ni-pin-3 text-orange",
+    component: Maps,
+    layout: "/app",
+    private: true,
+    display: false
+  },
+  {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: Profile,
+    layout: "/app",
+    private: true,
+    display: false
+  },
+  {
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tables,
+    layout: "/app",
+    private: true,
+    display: false
+  },
+  {
+>>>>>>> 560e2d84563665d2c2a3e6d998e44476dcf33f40
     path: null,
     name: "Financeiro",
     icon: "ni ni-money-coins text-info",
@@ -64,7 +103,7 @@ var routes = [
         name: "Receitas",
         icon: "fa fa-arrow-up text-green",
         component: null,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -73,7 +112,7 @@ var routes = [
         name: "Despesas",
         icon: "fa fa-arrow-down text-red",
         component: null,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -82,7 +121,7 @@ var routes = [
         name: "Bancos",
         icon: "ni ni-building text-blue",
         component: Banks,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -91,7 +130,7 @@ var routes = [
         name: "Cartões",
         icon: "ni ni-credit-card text-info",
         component: CreditCards,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -100,7 +139,7 @@ var routes = [
         name: "Tipos de Conta Bancária",
         icon: "ni ni-bag-17 text-orange",
         component: BillTypes,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -109,7 +148,7 @@ var routes = [
         name: "Contas Bancárias",
         icon: "ni ni-bag-17 text-orange",
         component: Bills,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       }
@@ -129,7 +168,7 @@ var routes = [
         name: "Importar",
         icon: "fa fa-file-upload text-green",
         component: OfxImports,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -138,7 +177,7 @@ var routes = [
         name: "Históricos",
         icon: "fa fa-history text-blue",
         component: null,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
