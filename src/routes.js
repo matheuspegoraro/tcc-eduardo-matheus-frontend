@@ -30,6 +30,8 @@ import Banks from "./views/pages/Banks";
 import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
+import Expenses from "./views/pages/Expenses";
+import Revenues from "./views/pages/Revenues";
 
 var routes = [
   {
@@ -63,7 +65,7 @@ var routes = [
         path: "/receitas",
         name: "Receitas",
         icon: "fa fa-arrow-up text-green",
-        component: null,
+        component: Revenues,
         layout: "/app",
         private: true,
         display: true
@@ -72,7 +74,7 @@ var routes = [
         path: "/despesas",
         name: "Despesas",
         icon: "fa fa-arrow-down text-red",
-        component: null,
+        component: Expenses,
         layout: "/app",
         private: true,
         display: true

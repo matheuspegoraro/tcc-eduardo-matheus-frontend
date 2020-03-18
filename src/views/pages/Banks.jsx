@@ -139,7 +139,7 @@ function Banks() {
 
   };
 
-  function toogleModalEditBank(id) {
+  function toggleModalEditBank(id) {
 
     toggleModal('modalBank');
 
@@ -356,7 +356,7 @@ function Banks() {
                           <td>
                             <Button
                               color="info"
-                              onClick={() => toogleModalEditBank(bank.id)}
+                              onClick={() => toggleModalEditBank(bank.id)}
                               size="sm"
                               className="mt-1"
                             >
