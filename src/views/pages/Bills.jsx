@@ -26,61 +26,62 @@ import { toast } from 'react-toastify';
 import { months } from "moment";
 import { getAllDays, formatSaveMoney, formatShowMoney } from '../../utils';
 
-function Cards() {
+function Bills() {
 
-  const [creditCards, setCreditCards] = useState([]);
+  const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [banks, setBanks] = useState([]);
+  const [billTypes, setBillTypes] = useState([]);
   
   //form inputs
-  const [modalCreditCard, setModalCreditCard] = useState(false);
+  const [modalBill, setModalBill] = useState(false);
   const [bankId, setBankId] = useState('');
+  const [billTypeId, setBillTypeId] = useState('');
   const [name, setName] = useState('');
-  const [closingDay, setClosingDay] = useState(1);
-  const [deadlineDay, setDeadlineDay] = useState(1);
-  const [limit, setLimit] = useState(0);
+  const [currentValue, setCurrentValue] = useState(0);
 
-  const [editIdCreditCard, setEditIdCreditCard] = useState(null);
+  const [editIdBill, setEditIdBill] = useState(null);
 
   function toggleModal() {
-    setEditIdCreditCard(null);
+    setEditIdBill(null);
     setBankId('');
-    setName('');
-    setClosingDay(1);
-    setDeadlineDay(1);
-    setLimit(0);
+    
+    if(billTypes[0]) 
+      setBillTypeId(billTypes[0].id);
 
-    setModalCreditCard(!modalCreditCard);
+    setName('');
+    setCurrentValue(0);
+
+    setModalBill(!modalBill);
   };
 
   function toggleEditModal(id) {
 
-    const creditCardEditable = creditCards.filter(creditCard => {
-      return creditCard.id === id;
+    const billEditable = bills.filter(bill => {
+      return bill.id === id;
     });
     
-    setEditIdCreditCard(creditCardEditable[0].id);
-    setBankId(creditCardEditable[0].bank.id);
-    setName(creditCardEditable[0].name);
-    setClosingDay(creditCardEditable[0].closingDay);
-    setDeadlineDay(creditCardEditable[0].deadlineDay);
-    setLimit(formatShowMoney(creditCardEditable[0].limit));
+    setEditIdBill(billEditable[0].id);
+    setBankId(billEditable[0].bank.id);
+    setBillTypeId(billEditable[0].billType.id);
+    setName(billEditable[0].name);
+    setCurrentValue(billEditable[0].currentValue);
     
-    setModalCreditCard(!modalCreditCard);
+    setModalBill(!modalBill);
 
   };
 
   useEffect(() => {
 
     async function fetchData() {
-      const response = await api.get('/credit-cards', {
+      const response = await api.get('/bills', {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
 
-      setCreditCards(response.data);
+      setBills(response.data);
     }
 
     fetchData();
@@ -103,10 +104,26 @@ function Cards() {
 
   }, []);
 
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await api.get('/bill-types', {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      setBillTypes(response.data);
+    }
+
+    fetchData();
+
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (editIdCreditCard) {
+    if (editIdBill) {
       handleEdit();
     } else {
       handleCreate();
@@ -118,12 +135,11 @@ function Cards() {
     setLoading(true);
 
     try {
-      await api.post('/credit-cards', {
+      await api.post('/bills', {
         bankId,
+        billTypeId,
         name,
-        closingDay,
-        deadlineDay,
-        limit: formatSaveMoney(limit)
+        currentValue: formatSaveMoney(currentValue)
       }, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
@@ -131,7 +147,7 @@ function Cards() {
       });
 
       toggleModal();
-      toast.success('Cartão criado com sucesso!');
+      toast.success('Conta criada com sucesso!');
       setLoading(false);
 
     } catch (error) {
@@ -147,12 +163,11 @@ function Cards() {
     setLoading(true);
 
     try {
-      await api.put(`/credit-cards/${editIdCreditCard}`, {
+      await api.put(`/bills/${editIdBill}`, {
         bankId,
+        billTypeId,
         name,
-        closingDay,
-        deadlineDay,
-        limit: formatSaveMoney(limit)
+        currentValue: formatSaveMoney(currentValue)
       }, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
@@ -160,44 +175,52 @@ function Cards() {
       });
 
       toggleModal();
-      toast.success('Cartão alterado com sucesso!');
+      toast.success('Conta alterada com sucesso!');
       setLoading(false);
 
     } catch (error) {
+
+      console.log(error);
 
       setLoading(false);
       toast.error('Ocorreu um erro na requisição!');
 
     }
+
   };
 
-  async function handleDeleteBank(id) {
+  async function handleDelete(id) {
 
     setLoading(true);
 
-    const creditCard = creditCards.filter(creditCard => {
-      return creditCard.id !== id;
+    const bill = bills.filter(bill => {
+      return bill.id !== id;
     });
 
-    try {
-      await api.delete(`/credit-cards/${id}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('api_token')}`
-        }
-      });
-    } catch (error) {
+    if(bill) {
+      try {
+        await api.delete(`/bills/${id}`, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('api_token')}`
+          }
+        });
+      } catch (error) {
+        setLoading(false);
+      };
+  
+      toast.success('A conta foi removida com sucesso!');
       setLoading(false);
-    };
+    } else {
+      toast.error('Ocorreu um erro na requisição!');
+    }
 
-    toast.success('O cartão foi removido com sucesso!');
-    setLoading(false);
   };
 
   return (
     <>
       <HeaderWithDescription
-        title="Cartões"
-        description="Permite a manutenção dos cartões de créditos. Utilizá-los fará com que você possua uma simulação de sua fatura do cartão de crédito, simulação de seu saldo disponível e muito mais!"
+        title="Contas Bancárias"
+        description="Permite a manutenção de suas contas bancárias. Ao utilizar o controle de despesas e receitas, quando uma movimentação tiver selecionado a conta bancária em que houve, automaticamente atualizará o saldo de suas contas."
         color="info"
       />
       {/* Page content */}
@@ -205,13 +228,13 @@ function Cards() {
 
         <Modal
           className="modal-dialog-centered"
-          isOpen={modalCreditCard}
+          isOpen={modalBill}
           toggle={() => toggleModal()}
         >
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                {!editIdCreditCard ? 'Adição de Cartões': `Editar Cartão - ${name}`}
+                {!editIdBill ? 'Adição de Contas': `Alterar Conta - ${name}`}
             </h5>
               <button
                 aria-label="Close"
@@ -245,10 +268,27 @@ function Cards() {
                 </Input>
               </FormGroup>
               <FormGroup>
-                <label className="form-control-label" htmlFor="name-bank">Nome do Cartão:</label>
+                <label className="form-control-label" htmlFor="bill-type-id">Tipo de Conta:</label>
+                <Input
+                  type="select"
+                  className="form-control-alternative"
+                  name="bill-type-id"
+                  id="bill-type-id"
+                  defaultValue={billTypeId}
+                  onChange={e => {
+                    if (e.target.value !== '')
+                      setBillTypeId(e.target.value);
+                  }}>
+                  {billTypes !== undefined ? billTypes.map(billType => {
+                    return <option value={billType.id} key={billType.id}>{billType.name}</option>
+                  }) : ''}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <label className="form-control-label" htmlFor="bill-name">Nome da Conta:</label>
                 <Input
                   className="form-control-alternative"
-                  id="card-name"
+                  id="bill-name"
                   placeholder="Ex: Cartão Platinum..."
                   type="text"
                   value={name}
@@ -256,33 +296,7 @@ function Cards() {
                 />
               </FormGroup>
               <FormGroup>
-                <label className="form-control-label" htmlFor="name-bank">Dia de fechamento:</label>
-                <Input
-                  type="select"
-                  className="form-control-alternative"
-                  id="closing-day"
-                  defaultValue={closingDay}
-                  onChange={e => setClosingDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="name-bank">Dia de vencimento:</label>
-                <Input
-                  type="select"
-                  className="form-control-alternative"
-                  id="deadline-day"
-                  defaultValue={deadlineDay}
-                  onChange={e => setDeadlineDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <label className="form-control-label" htmlFor="name-bank">Limite de Crédito:</label>
+                <label className="form-control-label" htmlFor="current-value">Valor Corrente/Inicial:</label>
                 <InputGroup className="form-control-alternative">
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
@@ -291,9 +305,9 @@ function Cards() {
                     thousandSeparator="."
                     precision="2"
                     tag={CurrencyInput}
-                    id="limit"
-                    value={limit}
-                    onChangeEvent={e => setLimit(e.target.value)}
+                    id="current-value"
+                    value={currentValue}
+                    onChangeEvent={e => setCurrentValue(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -309,8 +323,8 @@ function Cards() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                {!editIdCreditCard ? 'Criar!': 'Editar!'}
-                </Button>
+                {!editIdBill ? 'Criar!': 'Editar!'}
+              </Button>
             </div>
           </Form>
         </Modal>
@@ -321,7 +335,7 @@ function Cards() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Cartões de Crédito</h3>
+                    <h3 className="mb-0">Contas Bancárias</h3>
                   </Col>
                   <Col className="text-right" xs="4">
                     <Button
@@ -339,15 +353,14 @@ function Cards() {
                   <tr>
                     <th scope="col">Banco</th>
                     <th scope="col">Nome</th>
-                    <th scope="col">Fechamento em</th>
-                    <th scope="col">Vencimento em</th>
+                    <th scope="col">Valor Corrente</th>
                     <th scope="col">Cadastrado em</th>
                     <th scope="col">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {creditCards.map(creditCard => (
-                    <tr key={creditCard.id}>
+                  {bills.map(bill => (
+                    <tr key={bill.id}>
                       <td>
                         <Media className="align-items-center">
                           <a
@@ -357,23 +370,22 @@ function Cards() {
                           >
                             <img
                               alt="..."
-                              src={creditCard.bank.imgPath}
+                              src={bill.bank.imgPath}
                             />
                           </a>
                         </Media>
                       </td>
-                      <td>{creditCard.name}</td>
-                      <td>{creditCard.closingDay}</td>
-                      <td>{creditCard.deadlineDay}</td>
+                      <td>{bill.name}</td>
+                      <td>R$ {formatShowMoney(bill.currentValue)}</td>
                       <td>
                         <Moment format="DD/MM/YYYY HH:mm">
-                          {creditCard.createdAt}
+                          {bill.createdAt}
                         </Moment>
                       </td>
                       <td>
                         <Button
                           color="info"
-                          onClick={() => toggleEditModal(creditCard.id)}
+                          onClick={() => toggleEditModal(bill.id)}
                           size="sm"
                           className="mt-1"
                         >
@@ -381,7 +393,7 @@ function Cards() {
                         </Button>
                         <Button
                           color="danger"
-                          onClick={() => handleDeleteBank(creditCard.id)}
+                          onClick={() => handleDelete(bill.id)}
                           size="sm"
                           className="ml-2 mt-1"
                         >
@@ -403,4 +415,4 @@ function Cards() {
   );
 }
 
-export default Cards;
+export default Bills;

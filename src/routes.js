@@ -28,6 +28,10 @@ import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
 import Banks from "./views/pages/Banks";
 import CreditCards from "./views/pages/CreditCards";
+import Bills from "./views/pages/Bills";
+import BillTypes from "./views/pages/BillTypes";
+import Expenses from "./views/pages/Expenses";
+import Revenues from "./views/pages/Revenues";
 
 var routes = [
   {
@@ -35,7 +39,7 @@ var routes = [
     name: "Principal",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/dashboard",
+    layout: "/app",
     private: true,
     display: true
   },
@@ -44,45 +48,9 @@ var routes = [
     name: "Categorias",
     icon: "ni ni-planet text-blue",
     component: Categories,
-    layout: "/dashboard",
+    layout: "/app",
     private: true,
     display: true
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-books text-info",
-    component: Icons,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: Profile,
-    layout: "/dashboard",
-    private: true,
-    display: false
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/dashboard",
-    private: true,
-    display: false
   },
   {
     path: null,
@@ -97,8 +65,8 @@ var routes = [
         path: "/receitas",
         name: "Receitas",
         icon: "fa fa-arrow-up text-green",
-        component: null,
-        layout: "/dashboard",
+        component: Revenues,
+        layout: "/app",
         private: true,
         display: true
       },
@@ -106,8 +74,8 @@ var routes = [
         path: "/despesas",
         name: "Despesas",
         icon: "fa fa-arrow-down text-red",
-        component: null,
-        layout: "/dashboard",
+        component: Expenses,
+        layout: "/app",
         private: true,
         display: true
       },
@@ -116,7 +84,7 @@ var routes = [
         name: "Bancos",
         icon: "ni ni-building text-blue",
         component: Banks,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -125,7 +93,25 @@ var routes = [
         name: "Cartões",
         icon: "ni ni-credit-card text-info",
         component: CreditCards,
-        layout: "/dashboard",
+        layout: "/app",
+        private: true,
+        display: true
+      },
+      {
+        path: "/tipos-contas-bancaria",
+        name: "Tipos de Conta Bancária",
+        icon: "ni ni-bag-17 text-orange",
+        component: BillTypes,
+        layout: "/app",
+        private: true,
+        display: true
+      },
+      {
+        path: "/contas-bancarias",
+        name: "Contas Bancárias",
+        icon: "ni ni-bag-17 text-orange",
+        component: Bills,
+        layout: "/app",
         private: true,
         display: true
       }
@@ -145,7 +131,7 @@ var routes = [
         name: "Importar",
         icon: "fa fa-file-upload text-green",
         component: OfxImports,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },
@@ -154,7 +140,7 @@ var routes = [
         name: "Históricos",
         icon: "fa fa-history text-blue",
         component: null,
-        layout: "/dashboard",
+        layout: "/app",
         private: true,
         display: true
       },

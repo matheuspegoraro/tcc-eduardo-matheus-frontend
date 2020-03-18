@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/dashboard") {
+      if (prop.layout === "/app") {
         if (prop.private) {
           return (
             <PrivateRoute

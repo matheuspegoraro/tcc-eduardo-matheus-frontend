@@ -21,11 +21,11 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
         <Route
-          path="/dashboard"
+          path="/app"
           render={props => <DashboardLayout {...props} />}
         />
         <Route path="/autenticar" render={props => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/dashboard/principal" />
+        <Redirect from="/" to="/app/principal" />
       </Switch>
       <ToastContainer autoClose={5000} />
     </BrowserRouter>

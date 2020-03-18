@@ -97,7 +97,7 @@ class DashboardNavbar extends React.Component {
                 <NavItem>
                   <NavLink
                     className="nav-link-icon"
-                    to="/dashboard/user-profile"
+                    to="/app/user-profile"
                     tag={Link}
                   >
                     <i className="ni ni-single-02" />

@@ -208,15 +208,15 @@ class Sidebar extends React.Component {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Bem vindo!</h6>
                 </DropdownItem>
-                <DropdownItem to="/dashboard/user-profile" tag={Link}>
+                <DropdownItem to="/app/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
                   <span>Meu perfil</span>
                 </DropdownItem>
-                <DropdownItem to="/dashboard/user-profile" tag={Link}>
+                <DropdownItem to="/app/user-profile" tag={Link}>
                   <i className="ni ni-settings-gear-65" />
                   <span>Configurações</span>
                 </DropdownItem>
-                <DropdownItem to="/dashboard/user-profile" tag={Link}>
+                <DropdownItem to="/app/user-profile" tag={Link}>
                   <i className="ni ni-calendar-grid-58" />
                   <span>Logs</span>
                 </DropdownItem>
