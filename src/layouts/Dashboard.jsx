@@ -61,6 +61,8 @@ class Dashboard extends React.Component {
     });
   };
   getBrandText = path => {
+    // Consertar para pegar o brandText dos submenus
+
     for (let i = 0; i < routes.length; i++) {
       if (
         this.props.location.pathname.indexOf(
