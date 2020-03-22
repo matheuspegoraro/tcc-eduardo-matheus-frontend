@@ -100,7 +100,7 @@ function Expenses() {
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/movements', {
+            const response = await api.get('/movements/expenses', {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
@@ -119,7 +119,7 @@ function Expenses() {
         setLoading(true);
 
         try {
-            const response = await api.post('/movements', {
+            const response = await api.post('/movements/expenses', {
                 billId: bill,
                 movementTypeId: EXPENSE,
                 categoryId: category,
@@ -153,7 +153,7 @@ function Expenses() {
         setLoading(true);
 
         try {
-            await api.put(`/movements/${expenseId}`, {
+            await api.put(`/movements/expenses/${expenseId}`, {
                 billId: bill,
                 movementTypeId: 1,
                 categoryId: category,
@@ -228,7 +228,7 @@ function Expenses() {
             });
 
             try {
-                await api.delete(`/movements/${id}`, {
+                await api.delete(`/movements/expenses/${id}`, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem('api_token')}`
                     }
@@ -261,7 +261,7 @@ function Expenses() {
             setLoading(true);
 
             try {
-                await api.put(`/movements/undo-payment/${id}`, {
+                await api.put(`/movements/expenses/undo-payment/${id}`, {
                 }, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem('api_token')}`
@@ -288,7 +288,7 @@ function Expenses() {
         setLoading(true);
 
         try {
-            await api.post('/movements/make-payment', {
+            await api.post('/movements/expenses/make-payment', {
                 movementId: expenseId,
                 dischargeDate,
                 value: formatSaveMoney(value)
@@ -435,7 +435,7 @@ function Expenses() {
                                         onChange={e => setDone(!done)}
                                     />
                                     <label className="custom-control-label" htmlFor="doneExpense">
-                                        Pago ?
+                                        Você já pagou o valor ?
                                     </label>
                                 </div>
                                 <div hidden={!done}>
