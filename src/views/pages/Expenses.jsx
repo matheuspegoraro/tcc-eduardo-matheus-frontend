@@ -50,18 +50,6 @@ function Expenses() {
     const [categories, setCategories] = useState([]);
     const [bills, setBills] = useState([]);
 
-    //tooltips
-    const [tooltipMakePayment, setTooltipMakePayment] = useState(false);
-    const [tooltipUndoPayment, setTooltipUndoPayment] = useState(false);
-
-    function toggleTooltipUndoPayment() {
-        setTooltipUndoPayment(!tooltipUndoPayment);
-    }
-
-    function toggleTooltipMakePayment() {
-        setTooltipMakePayment(!tooltipMakePayment);
-    }
-
     function toggleModalPay() {
         setModalPay(!modalPay);
     }
@@ -568,15 +556,9 @@ function Expenses() {
                                                     {expense.done ?
                                                         <div>
                                                             <span id="tpUndoPayment" onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span>
-                                                            <Tooltip placement="top" isOpen={tooltipUndoPayment} target="tpUndoPayment" toggle={toggleTooltipUndoPayment}>
-                                                                Cancelar o Pagamento
-                                                            </Tooltip>
                                                         </div> :
                                                         <div>
                                                             <span id="tpMakePayment" onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
-                                                            <Tooltip placement="top" isOpen={tooltipMakePayment} target="tpMakePayment" toggle={toggleTooltipMakePayment}>
-                                                                Baixar Pagamento
-                                                            </Tooltip>
                                                         </div>
                                                     }
                                                 </td>
