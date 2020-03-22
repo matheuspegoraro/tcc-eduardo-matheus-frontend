@@ -15,6 +15,7 @@ import {
     CardFooter,
     Modal,
     Alert,
+    Tooltip
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -23,6 +24,7 @@ import { toast } from 'react-toastify';
 import { formatSaveMoney, formatShowMoney } from '../../utils';
 import moment from "moment";
 import CurrencyInput from 'react-currency-input';
+import { confirm } from "../../components/Confirmations/Confirmation";
 
 function Expenses() {
 
@@ -47,6 +49,18 @@ function Expenses() {
     //selects
     const [categories, setCategories] = useState([]);
     const [bills, setBills] = useState([]);
+
+    //tooltips
+    const [tooltipMakePayment, setTooltipMakePayment] = useState(false);
+    const [tooltipUndoPayment, setTooltipUndoPayment] = useState(false);
+
+    function toggleTooltipUndoPayment() {
+        setTooltipUndoPayment(!tooltipUndoPayment);
+    }
+
+    function toggleTooltipMakePayment() {
+        setTooltipMakePayment(!tooltipMakePayment);
+    }
 
     function toggleModalPay() {
         setModalPay(!modalPay);
@@ -211,55 +225,70 @@ function Expenses() {
 
     async function handleDelete(id) {
 
-        setLoading(true);
+        if (await confirm("Você tem certeza que deseja excluir ? O lançamento será excluído permanentemente.",
+            "Excluir",
+            "Cancelar",
+            "Confimar a exlusão ?",
+            "danger")) {
 
-        const newExpenses = expenses.filter(expense => {
-            return expense.id !== id;
-        });
+            setLoading(true);
 
-        try {
-            await api.delete(`/movements/${id}`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
-                }
+            const newExpenses = expenses.filter(expense => {
+                return expense.id !== id;
             });
 
-            setExpenses(newExpenses);
+            try {
+                await api.delete(`/movements/${id}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
 
-            toast.success('A movimentação foi removida com sucesso!');
+                setExpenses(newExpenses);
 
-        } catch (e) {
-            if (e.response) {
-                const { error } = e.response.data;
-                toast.error(error);
+                toast.success('A movimentação foi removida com sucesso!');
+
+            } catch (e) {
+                if (e.response) {
+                    const { error } = e.response.data;
+                    toast.error(error);
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        };
+        }
+
     };
 
     async function undoPayment(id) {
 
-        setLoading(true);
+        if (await confirm("Você tem certeza que deseja cancelar o pagamento ? O valor do lançamento será retornado à conta bancária.",
+            "Confirmar",
+            "Cancelar",
+            "Cancelar Pagamento",
+            "danger")) {
 
-        try {
-            await api.put(`/movements/undo-payment/${id}`, {
-            }, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
+            setLoading(true);
+
+            try {
+                await api.put(`/movements/undo-payment/${id}`, {
+                }, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+                toast.success('O pagamento foi desfeito com sucesso!');
+
+            } catch (e) {
+                if (e.response) {
+                    const { error } = e.response.data;
+                    toast.error(error);
                 }
-            });
-
-            toast.success('O pagamento foi desfeito com sucesso!');
-
-        } catch (e) {
-            if (e.response) {
-                const { error } = e.response.data;
-                toast.error(error);
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        };
+        }
     };
 
     async function makePayment(e) {
@@ -282,7 +311,6 @@ function Expenses() {
             toggleModalPay();
 
             toast.success('Pagamento realizado com sucesso!');
-
 
         } catch (e) {
             if (e.response) {
@@ -538,8 +566,18 @@ function Expenses() {
                                                 </td>
                                                 <td>
                                                     {expense.done ?
-                                                        <span onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span> :
-                                                        <span onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
+                                                        <div>
+                                                            <span id="tpUndoPayment" onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span>
+                                                            <Tooltip placement="top" isOpen={tooltipUndoPayment} target="tpUndoPayment" toggle={toggleTooltipUndoPayment}>
+                                                                Cancelar o Pagamento
+                                                            </Tooltip>
+                                                        </div> :
+                                                        <div>
+                                                            <span id="tpMakePayment" onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
+                                                            <Tooltip placement="top" isOpen={tooltipMakePayment} target="tpMakePayment" toggle={toggleTooltipMakePayment}>
+                                                                Baixar Pagamento
+                                                            </Tooltip>
+                                                        </div>
                                                     }
                                                 </td>
                                                 <td>

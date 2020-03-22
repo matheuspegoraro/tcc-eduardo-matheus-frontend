@@ -32,6 +32,7 @@ import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
 import Expenses from "./views/pages/Expenses";
 import Revenues from "./views/pages/Revenues";
+import Transfers from "./views/pages/Transfers";
 
 var routes = [
   {
@@ -75,6 +76,15 @@ var routes = [
         name: "Despesas",
         icon: "fa fa-arrow-down text-red",
         component: Expenses,
+        layout: "/app",
+        private: true,
+        display: true
+      },
+      {
+        path: "/transferencias",
+        name: "Transferências",
+        icon: "fa fa-exchange-alt text-primary",
+        component: Transfers,
         layout: "/app",
         private: true,
         display: true
