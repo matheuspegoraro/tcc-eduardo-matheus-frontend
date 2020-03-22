@@ -249,7 +249,7 @@ function BillTypes() {
                     <tr key={billType.id}>
                       <td>{billType.name}</td>
                       <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
+                        <Moment format="DD/MM/YYYY">
                           {billType.createdAt}
                         </Moment>
                       </td>

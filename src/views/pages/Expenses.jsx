@@ -124,6 +124,8 @@ function Expenses() {
                 movementTypeId: EXPENSE,
                 categoryId: category,
                 name: description,
+                done,
+                dischargeDate,
                 value: formatSaveMoney(value),
                 date
             }, {
@@ -424,6 +426,29 @@ function Expenses() {
                                     onChange={e => setDate(e.target.value)}
                                 />
                             </FormGroup>
+                            <FormGroup hidden={expenseId}>
+                                <div className="custom-control custom-control-alternative custom-checkbox mb-3">
+                                    <input
+                                        className="custom-control-input"
+                                        id="doneExpense"
+                                        type="checkbox"
+                                        onChange={e => setDone(!done)}
+                                    />
+                                    <label className="custom-control-label" htmlFor="doneExpense">
+                                        Pago ?
+                                    </label>
+                                </div>
+                                <div hidden={!done}>
+                                    <label className="form-control-label" htmlFor="dischargeDate">Pagamento em:</label>
+                                    <Input
+                                        required={done}
+                                        type="date"
+                                        id="dischargeDate"
+                                        value={moment(dischargeDate).format('YYYY-MM-DD')}
+                                        onChange={e => setDischargeDate(e.target.value)}
+                                    />
+                                </div>
+                            </FormGroup>
                         </div>
                         <div className="modal-footer">
                             <Button
@@ -555,10 +580,10 @@ function Expenses() {
                                                 <td>
                                                     {expense.done ?
                                                         <div>
-                                                            <span id="tpUndoPayment" onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span>
+                                                            <span onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span>
                                                         </div> :
                                                         <div>
-                                                            <span id="tpMakePayment" onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
+                                                            <span onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
                                                         </div>
                                                     }
                                                 </td>

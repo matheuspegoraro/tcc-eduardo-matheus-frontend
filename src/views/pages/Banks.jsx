@@ -349,7 +349,7 @@ function Banks() {
                           </td>
                           <td>{bank.name}</td>
                           <td>
-                            <Moment format="DD/MM/YYYY HH:mm">
+                            <Moment format="DD/MM/YYYY">
                               {bank.createdAt}
                             </Moment>
                           </td>
