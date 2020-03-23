@@ -30,6 +30,7 @@ import Banks from "./views/pages/Banks";
 import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
+import ChatSupport from "./views/pages/ChatSupport";
 
 var routes = [
   {
@@ -142,6 +143,26 @@ var routes = [
         private: true,
         display: true
       },
+    ]
+  },
+  {
+    path: null,
+    name: "Suporte",
+    icon: "ni ni-single-02 text-orange",
+    component: null,
+    layout: null,
+    private: true,
+    display: true,
+    children: [
+      {
+        path: "/chat-suporte",
+        name: "Chat Suporte",
+        icon: "fa fa-comments text-green",
+        component: ChatSupport,
+        layout: "/app",
+        private: true,
+        display: true
+      }
     ]
   },
   {
