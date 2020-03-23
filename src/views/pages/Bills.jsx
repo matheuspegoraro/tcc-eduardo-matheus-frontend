@@ -378,7 +378,7 @@ function Bills() {
                       <td>{bill.name}</td>
                       <td>R$ {formatShowMoney(bill.currentValue)}</td>
                       <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
+                        <Moment format="DD/MM/YYYY">
                           {bill.createdAt}
                         </Moment>
                       </td>

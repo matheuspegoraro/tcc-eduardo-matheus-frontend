@@ -139,7 +139,7 @@ function Banks() {
 
   };
 
-  function toogleModalEditBank(id) {
+  function toggleModalEditBank(id) {
 
     toggleModal('modalBank');
 
@@ -349,14 +349,14 @@ function Banks() {
                           </td>
                           <td>{bank.name}</td>
                           <td>
-                            <Moment format="DD/MM/YYYY HH:mm">
+                            <Moment format="DD/MM/YYYY">
                               {bank.createdAt}
                             </Moment>
                           </td>
                           <td>
                             <Button
                               color="info"
-                              onClick={() => toogleModalEditBank(bank.id)}
+                              onClick={() => toggleModalEditBank(bank.id)}
                               size="sm"
                               className="mt-1"
                             >

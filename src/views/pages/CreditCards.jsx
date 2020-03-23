@@ -366,7 +366,7 @@ function Cards() {
                       <td>{creditCard.closingDay}</td>
                       <td>{creditCard.deadlineDay}</td>
                       <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
+                        <Moment format="DD/MM/YYYY">
                           {creditCard.createdAt}
                         </Moment>
                       </td>
