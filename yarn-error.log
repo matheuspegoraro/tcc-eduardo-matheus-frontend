@@ -1,0 +1,109 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-chat-ui
+
+PATH: 
+  C:\Users\MatheusPegoraro\bin;D:\Program Files\Git\mingw64\bin;D:\Program Files\Git\usr\local\bin;D:\Program Files\Git\usr\bin;D:\Program Files\Git\usr\bin;D:\Program Files\Git\mingw64\bin;D:\Program Files\Git\usr\bin;C:\Users\MatheusPegoraro\bin;C:\Program Files\Python38\Scripts;C:\Program Files\Python38;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;D:\Program Files\Microsoft VS Code\bin;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn;C:\Program Files\Microsoft SQL Server\100\Tools\Binn;C:\Program Files\Microsoft SQL Server\100\DTS\Binn;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE;C:\Program Files (x86)\Microsoft SQL Server\100\DTS\Binn;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\PrivateAssemblies;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;D:\Program Files\MongoDB\Server\4.2\bin;C:\Users\MatheusPegoraro\AppData\Roaming\npm\node_modules\pm2\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_221\bin;C:\Program Files (x86)\Yarn\bin;C:\Users\MatheusPegoraro\AppData\Local\Android\Sdk\platform-tools;C:\src\flutter\bin;C:\Program Files\node;C:\Program Files\nodejs;D:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;D:\Program Files\PuTTY;D:\Program Files\Git\cmd;D:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\MatheusPegoraro\AppData\Local\Microsoft\WindowsApps;C:\Users\MatheusPegoraro\AppData\Local\Yarn\bin;C:\Users\MatheusPegoraro\AppData\Roaming\npm;C:\Users\MatheusPegoraro\AppData\Roaming\Composer\vendor\bin;D:\Program Files\JetBrains\PyCharm Edu 2019.3.2\bin;D:\Program Files\heroku\bin;D:\Program Files\JetBrains\DataGrip 2019.3.3\bin;D:\Program Files\Git\usr\bin\vendor_perl;D:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.19.1
+
+Node version: 
+  10.16.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'D:\MatheusPegoraro\Documents\TCC\tcc-eduardo-matheus-frontend\node_modules\node-sass\vendor\win32-x64-64\binding.node'
+
+npm manifest: 
+  {
+    "name": "argon-dashboard-react",
+    "version": "1.0.0",
+    "description": "React version of Argon Dashboard by Creative Tim",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
+    },
+    "keywords": [
+      "react",
+      "reactjs",
+      "argon",
+      "argon-react",
+      "dashboard",
+      "dashboard-react",
+      "argon-dashboard",
+      "argon-dashboard-react"
+    ],
+    "author": "Creative Tim",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
+    },
+    "homepage": "https://demos.creative-tim.com/argon-dashboard-react/",
+    "scripts": {
+      "dev": "set PORT=80 && react-scripts start",
+      "start": "PORT=5000 react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject",
+      "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+      "compile-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css",
+      "minify-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.min.css --output-style compressed",
+      "map-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css --source-map true"
+    },
+    "eslintConfig": {
+      "extends": "react-app"
+    },
+    "browserslist": [
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
+    ],
+    "dependencies": {
+      "axios": "^0.19.1",
+      "chart.js": "2.7.3",
+      "classnames": "2.2.6",
+      "dropzone": "^5.5.1",
+      "jsonwebtoken": "^8.5.1",
+      "lodash.uniqueid": "^4.0.1",
+      "moment": "^2.24.0",
+      "node-sass": "^4.13.1",
+      "nouislider": "13.1.1",
+      "pm2": "^4.2.3",
+      "react": "16.8.4",
+      "react-chartjs-2": "2.7.4",
+      "react-confirm": "^0.1.20",
+      "react-copy-to-clipboard": "5.0.1",
+      "react-currency-input": "^1.3.6",
+      "react-datetime": "2.16.3",
+      "react-dom": "16.8.4",
+      "react-google-maps": "9.4.5",
+      "react-moment": "^0.9.7",
+      "react-notification-alert": "0.0.12",
+      "react-perfect-scrollbar": "^1.5.8",
+      "react-redux": "^7.1.3",
+      "react-router-dom": "^5.1.2",
+      "react-scripts": "^3.3.1",
+      "react-select2-wrapper": "^1.0.4-beta6",
+      "react-toastify": "^5.5.0",
+      "reactstrap": "7.1.0",
+      "redux": "^4.0.5",
+      "sweetalert2-react": "^0.8.3",
+      "toastr": "^2.1.4"
+    },
+    "devDependencies": {
+      "@types/googlemaps": "3.30.18",
+      "@types/markerclustererplus": "2.1.33",
+      "@types/react": "16.8.7",
+      "typescript": "3.3.3333"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
