@@ -33,7 +33,7 @@ import BillTypes from "./views/pages/BillTypes";
 import Expenses from "./views/pages/Expenses";
 import Revenues from "./views/pages/Revenues";
 import Transfers from "./views/pages/Transfers";
-import ChatSupport from "./views/pages/ChatSupport";
+import Chat from "./views/pages/Chat/Chat";
 
 var routes = [
   {
@@ -170,7 +170,7 @@ var routes = [
         path: "/chat-suporte",
         name: "Chat Suporte",
         icon: "fa fa-comments text-green",
-        component: ChatSupport,
+        component: Chat,
         layout: "/app",
         private: true,
         display: true
