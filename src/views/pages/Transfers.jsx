@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { formatSaveMoney, formatShowMoney } from '../../utils';
 import moment from "moment";
 import CurrencyInput from 'react-currency-input';
+import { confirm } from "../../components/Confirmations/Confirmation";
 
 function Transfers() {
 
@@ -35,24 +36,20 @@ function Transfers() {
     //form inputs
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
-    const [billInput, setBillInput] = useState('');
-    const [billOutput, setBillOutput] = useState('');
+    const [bill, setBill] = useState('');
+    const [billOut, setBillOut] = useState('');
     const [value, setValue] = useState('');
     const [date, setDate] = useState('');
 
-    const [transferId, setTransferId] = useState(null);
-
     //selects
-    const [billsInput, setBillsInput] = useState([]);
-    const [billsOutput, setBillsOutput] = useState([]);
+    const [bills, setBills] = useState([]);
     const [categories, setCategories] = useState([]);
 
     function toggleModal() {
-        setTransferId(null);
         setDescription('');
         setCategory('');
-        setBillInput('');
-        setBillOutput('');
+        setBill('');
+        setBillOut('');
         setValue('');
         setDate('');
         setModalTransfer(!modalTransfer);
@@ -83,8 +80,7 @@ function Transfers() {
                 }
             });
 
-            setBillsInput(response.data);
-            setBillsOutput(response.data);
+            setBills(response.data);
         }
 
         fetchData();
@@ -94,7 +90,7 @@ function Transfers() {
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/transfers', {
+            const response = await api.get('/movements/transfers', {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
@@ -109,24 +105,22 @@ function Transfers() {
 
     async function handleCreate() {
 
-        const transfer = 1;
         setLoading(true);
 
         try {
-            const response = await api.post('/transfers', {
+            await api.post('/movements/transfers', {
                 categoryId: category,
-                billInput,
-                billOutput,
-                description,
+                billId: bill,
+                billOutId: billOut,
+                name: description,
                 value: formatSaveMoney(value),
-                date
+                date,
+                dischargeDate: date
             }, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
             });
-
-            //setTransfers([...transfers, response.data]);
 
             toggleModal();
             toast.success('A transferência foi realizada com sucesso!');
@@ -144,66 +138,50 @@ function Transfers() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
-        if (transferId)
         handleCreate();
-        else
-            handleCreate();
-
-    };
-
-    function toggleModalEditBank(transferId) {
-
-        toggleModal();
-
-        const transfers = transfers.filter(transfer => {
-            return transfer.id === transferId;
-        })[0];
-
-        setTransferId(transferId);
-        setDescription(transfers.name);
-        setCategory(transfers.category.id);
-        setBillInput(transfers.bill.id);
-        setBillOutput(transfers.bill.id);
-        setValue(transfers.value);
-        setDate(transfers.date);
-
     };
 
     async function handleDelete(transferId) {
 
-        setLoading(true);
+        if (await confirm("Você tem certeza que deseja excluir ? Os valores de transferência retornaram para as contas bancárias.",
+            "Excluir",
+            "Cancelar",
+            "Confimar a exlusão ?",
+            "danger")) {
 
-        const transfers = transfers.filter(transfer => {
-            return transfer.id !== transferId;
-        });
+            setLoading(true);
 
-        try {
-            await api.delete(`/transfers/${transferId}`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
-                }
+            const newTransfers = transfers.filter(transfer => {
+                return transfer.id !== transferId;
             });
 
-            setTransfers(transfers);
+            try {
+                await api.delete(`/movements/transfers/${transferId}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
 
-            toast.success('A transferência foi removida com sucesso!');
+                setTransfers(newTransfers);
 
-        } catch (e) {
-            if (e.response) {
-                const { error } = e.response.data;
-                toast.error(error);
+                toast.success('A transferência foi removida com sucesso!');
+
+            } catch (e) {
+                if (e.response) {
+                    const { error } = e.response.data;
+                    toast.error(error);
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        };
+        }
     };
 
     return (
         <>
             <HeaderWithDescription
                 title="Transferências"
-                description="BPDKPOSAKDOPKASDOSODKPOASD"
+                description="Permite a transferências de qualquer valor entre contas de bancárias internas diferentes."
                 color="primary"
             />
             {/* Page content */}
@@ -216,7 +194,7 @@ function Transfers() {
                     <Form onSubmit={handleSubmit}>
                         <div className="modal-header">
                             <h5 className="modal-title" id="modalOfxLabel">
-                                {transferId ? 'Editar Transferência' : 'Realizar Transferência'}
+                                Realizar Transferência
                             </h5>
                             <button
                                 aria-label="Close"
@@ -247,7 +225,6 @@ function Transfers() {
                                     type="select"
                                     name="category"
                                     id="category"
-                                    defaultValue={category}
                                     onChange={e => {
                                         if (e.target.value !== '')
                                             setCategory(e.target.value);
@@ -263,16 +240,15 @@ function Transfers() {
                                 <Input
                                     required
                                     type="select"
-                                    name="bill"
-                                    id="bill"
-                                    defaultValue={billOutput}
+                                    name="billOut"
+                                    id="billOut"
                                     onChange={e => {
                                         if (e.target.value !== '')
-                                            setBillInput(e.target.value);
+                                            setBillOut(e.target.value);
                                     }}>
                                     <option value="">Selecione uma conta bancária...</option>
-                                    {billsOutput !== undefined ? billsOutput.map(billOutput => {
-                                        return <option value={billOutput.id} key={billOutput.id}>{billOutput.name}</option>
+                                    {bills !== undefined ? bills.map(bill => {
+                                        return <option value={bill.id} key={bill.id}>{bill.name}</option>
                                     }) : ''}
                                 </Input>
                             </FormGroup>
@@ -283,14 +259,13 @@ function Transfers() {
                                     type="select"
                                     name="bill"
                                     id="bill"
-                                    defaultValue={billInput}
                                     onChange={e => {
                                         if (e.target.value !== '')
-                                            setBillInput(e.target.value);
+                                            setBill(e.target.value);
                                     }}>
                                     <option value="">Selecione uma conta bancária...</option>
-                                    {billsInput !== undefined ? billsInput.map(billInput => {
-                                        return <option value={billInput.id} key={billInput.id}>{billInput.name}</option>
+                                    {bills !== undefined ? bills.map(bill => {
+                                        return <option value={bill.id} key={bill.id}>{bill.name}</option>
                                     }) : ''}
                                 </Input>
                             </FormGroup>
@@ -332,7 +307,7 @@ function Transfers() {
                              </Button>
                             <Button className="my-4" color="success" type="submit" disabled={loading}>
                                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                                {transferId ? 'Editar!' : 'Criar!'}
+                                Transferir!
                             </Button>
                         </div>
                     </Form>
@@ -375,7 +350,7 @@ function Transfers() {
                                             <tr key={transfer.id}>
                                                 <td>{transfer.name}</td>
                                                 <td>{transfer.bill.name}</td>
-                                                <td>{transfer.bill.name}</td>
+                                                <td>{transfer.billOut.name}</td>
                                                 <td>R$ {formatShowMoney(transfer.value)}</td>
                                                 <td>
                                                     <Moment format="DD/MM/YYYY">
@@ -388,14 +363,6 @@ function Transfers() {
                                                     </Moment>
                                                 </td>
                                                 <td>
-                                                    <Button
-                                                        color="info"
-                                                        onClick={() => toggleModalEditBank(transfer.id)}
-                                                        size="sm"
-                                                        className="mt-1"
-                                                    >
-                                                        Alterar
-                                                         </Button>
                                                     <Button
                                                         color="danger"
                                                         onClick={() => handleDelete(transfer.id)}
