@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Tooltip,
   Button,
   Card,
   CardHeader,
@@ -32,6 +33,9 @@ function Categories() {
 
   const [message, setMessage] = useState({type: '', message: ''});
   const [loading, setLoading] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const toggle = () => setTooltipOpen(!tooltipOpen);
 
   useEffect(() => {
     loadAll();
@@ -231,14 +235,18 @@ function Categories() {
                       <label
                         className="form-control-label"
                         htmlFor="select-parent"
+                        id="select-parent"
                       >
                         Sub-categoria de
                       </label>
+                      <Tooltip placement="top" isOpen={tooltipOpen} target="select-parent" toggle={toggle}>
+                        Selecione a categoria "pai" desta nova categoria.
+                      </Tooltip>
                       <Input
                         type="select"
                         className="form-control-alternative"
-                        name="selectMulti"
-                        id="exampleSelectMulti"
+                        name="select-parent"
+                        id="select-parent"
                         defaultValue={parentId}
                         onChange={e => {
                           if (e.target.value !== '')

@@ -1,0 +1,20 @@
+.chat-container {
+  max-height: 80vh;
+  flex-wrap: unset;
+}
+
+.chat-list-container {
+  max-height: 80%;
+  overflow-y: scroll;
+}
+
+.chat-history {
+  max-height: 72vh !important;
+}
+
+@media (min-width: 1800px) {
+  .chat-history {
+    min-height: 75vh !important;
+    max-height: 75vh !important;
+  }
+}
