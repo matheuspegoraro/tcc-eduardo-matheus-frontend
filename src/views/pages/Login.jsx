@@ -65,6 +65,10 @@ class Login extends React.Component {
     this.props.history.push('/autenticar/esqueci-minha-senha');
   }
 
+  toPageRegister = () => {
+    this.props.history.push('/autenticar/registre-se');
+  }
+
   render() {
 
     const { loading } = this.state;
@@ -73,45 +77,7 @@ class Login extends React.Component {
       <>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <small>Acessar com</small>
-              </div>
-              <div className="btn-wrapper text-center">
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/github.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Github</span>
-                </Button>
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/google.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Google</span>
-                </Button>
-              </div>
-            </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
-              <div className="text-center text-muted mb-4">
-                <small>Ou acessar com minhas credênciais</small>
-              </div>
               <Form role="form" onSubmit={this.signIn}>
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
@@ -168,7 +134,7 @@ class Login extends React.Component {
             <Col className="text-right" xs="6">
               <div
                 className="text-light"
-                onClick={e => e.preventDefault()}
+                onClick={this.toPageRegister}
                 style={{ cursor: 'pointer' }}
               >
                 <small>Criar uma conta!</small>

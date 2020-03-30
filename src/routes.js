@@ -186,8 +186,8 @@ var routes = [
     display: false
   },
   {
-    path: "/register",
-    name: "Register",
+    path: "/registre-se",
+    name: "Registre-se em nosso sistema",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/autenticar",
