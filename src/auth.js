@@ -12,6 +12,14 @@ const getToken = () => {
   return localStorage.getItem(TOKEN_STORAGE);
 };
 
+const getTokenDecoded = () => {
+  const token = getToken();
+
+  if (token == null) return false;
+
+  return jwt.decode(token);
+};
+
 const removeToken = () => {
   localStorage.removeItem(TOKEN_STORAGE);
 };
@@ -51,4 +59,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export { PrivateRoute, setToken, getToken, removeToken };
+export { PrivateRoute, setToken, getToken, getTokenDecoded, removeToken };

@@ -18,12 +18,11 @@ import Revenues from "./views/pages/Revenues";
 import Transfers from "./views/pages/Transfers";
 import Chat from "./views/pages/Chat/Chat";
 
+import { getTokenDecoded } from "./auth";
+
 function routes() {
 
-  const userType = 1;
-  /*
-  Código para pegar o user do redux
-  */
+  const userType = getTokenDecoded().type;
 
   const defaultRoutes = [
     {
@@ -213,7 +212,7 @@ function routes() {
       break;
 
     case 2:
-      return [...defaultRoutes, ...clientRoutes];
+      return [...defaultRoutes, ...advisoryRoutes];
       break;
   
     default:

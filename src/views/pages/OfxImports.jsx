@@ -21,7 +21,9 @@ import uniqueId from "lodash.uniqueid";
 import api from '../../axios';
 import { toast } from 'react-toastify';
 
-function OfxImports() {
+function OfxImports(props) {
+
+  console.log(props);
 
   const [transactions, setTransactions] = useState([]);
   
