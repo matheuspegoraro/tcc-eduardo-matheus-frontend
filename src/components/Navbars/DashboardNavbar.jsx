@@ -62,11 +62,7 @@ class DashboardNavbar extends React.Component {
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-<<<<<<< HEAD
-                        Administrador
-=======
                         Matheus Pegoraro
->>>>>>> c71908a396204bbfc5ae3825e72c4b963d31ae57
                       </span>
                     </Media>
                   </Media>
