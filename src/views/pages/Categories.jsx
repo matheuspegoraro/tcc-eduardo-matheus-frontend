@@ -188,7 +188,7 @@ function Categories() {
         color="info"
       /> 
       {/* Page content */}
-      <Container className="mt--7" fluid>
+      <Container className="mt-3 mb-4" fluid>
       <Modal
           className="modal-dialog-centered"
           isOpen={modalCategory}
@@ -304,7 +304,7 @@ function Categories() {
 
         <Row>
           <Col className="order-xl-1">
-            <Card className="shadow mt-4 mb-4">
+            <Card className="shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">

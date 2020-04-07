@@ -46,7 +46,7 @@ class Tables extends React.Component {
       <>
         <Header />
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container  fluid>
           {/* Table */}
           <Row>
             <div className="col">

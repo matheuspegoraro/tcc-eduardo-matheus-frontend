@@ -184,7 +184,7 @@ function Banks() {
         color="info"
       />
       {/* Page content */}
-      <Container className="mt--7" fluid>
+      <Container className="mt-3 mb-4" fluid>
         <Modal
           className="modal-dialog-centered"
           isOpen={modalBank}

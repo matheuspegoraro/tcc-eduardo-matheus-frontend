@@ -320,7 +320,7 @@ function Expenses() {
                 color="danger"
             />
             {/* Page content */}
-            <Container className="mt--7" fluid>
+            <Container className="mt-3 mb-4" fluid>
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={modalExpenses}
@@ -530,8 +530,7 @@ function Expenses() {
                         </div>
                     </Form>
                 </Modal>
-
-                <Row className="mt-5">
+                <Row>
                     <Col>
                         <Card className="bg-secondary shadow">
                             <CardHeader className="bg-white border-0">

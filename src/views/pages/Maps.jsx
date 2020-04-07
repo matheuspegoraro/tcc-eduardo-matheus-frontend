@@ -92,7 +92,7 @@ class Maps extends React.Component {
       <>
         <Header />
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container  fluid>
           <Row>
             <div className="col">
               <Card className="shadow border-0">

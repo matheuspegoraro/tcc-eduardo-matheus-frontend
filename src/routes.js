@@ -3,8 +3,6 @@ import Profile from "views/pages/Profile.jsx";
 import Maps from "views/pages/Maps.jsx";
 import Register from "views/pages/Register.jsx";
 import Login from "views/pages/Login.jsx";
-import Tables from "views/pages/Tables.jsx";
-import Icons from "views/pages/Icons.jsx";
 import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
