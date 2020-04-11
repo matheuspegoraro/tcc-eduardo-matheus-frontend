@@ -27,6 +27,7 @@ function DashboardNavbar() {
   const logout = async (e) => {
     e.preventDefault();
     removeToken();
+    window.location.replace('/autenticar/login');
   }
 
   return (

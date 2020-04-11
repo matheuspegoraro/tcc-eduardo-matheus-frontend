@@ -1,39 +1,28 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Route, Switch } from "react-router-dom";
-// reactstrap components
+
 import { Container } from "reactstrap";
-// core components
+
 import DashboardNavbar from "components/Navbars/DashboardNavbar.jsx";
 import DashboardFooter from "components/Footers/DashboardFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import { PrivateRoute } from '../auth';
 
-import routes from "routes.js";
+import routesList from "routes.js";
 
-class Dashboard extends React.Component {
-  componentDidUpdate(e) {
+function Dashboard(props) {
+  const mainContent = useRef(null);
+  const [routes, setRoutes] = useState([]);
+
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
-  }
-  getRoutes = routes => {
+    mainContent.current.scrollTop = 0;
+
+    setRoutes(routesList);
+  }, []);
+
+  const getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.layout === "/app") {
         if (prop.private) {
@@ -56,16 +45,17 @@ class Dashboard extends React.Component {
       } else if (prop.layout !== null) {
         return null;
       } else {
-        return this.getRoutes(prop.children)
+        return getRoutes(prop.children)
       }
     });
   };
-  getBrandText = path => {
+
+  const getBrandText = path => {
     // Consertar para pegar o brandText dos submenus
 
     for (let i = 0; i < routes.length; i++) {
       if (
-        this.props.location.pathname.indexOf(
+        props.location.pathname.indexOf(
           routes[i].layout + routes[i].path
         ) !== -1
       ) {
@@ -74,32 +64,31 @@ class Dashboard extends React.Component {
     }
     return "Brand";
   };
-  render() {
-    return (
-      <>
-        <Sidebar
-          {...this.props}
-          routes={routes}
-          logo={{
-            innerLink: "/dashboard/principal",
-            imgSrc: require("assets/img/brand/argon-react.png"),
-            imgAlt: "..."
-          }}
+
+  return (
+    <>
+      <Sidebar
+        {...props}
+        routes={routes}
+        logo={{
+          innerLink: "/dashboard/principal",
+          imgSrc: require("assets/img/brand/argon-react.png"),
+          imgAlt: "..."
+        }}
+      />
+      <div className="main-content" ref={mainContent}>
+        <DashboardNavbar
+          {...props}
+          brandText={getBrandText(props.location.pathname)}
         />
-        <div className="main-content" ref="mainContent">
-          <DashboardNavbar
-            {...this.props}
-            brandText={this.getBrandText(this.props.location.pathname)}
-          />
-          <Switch>{this.getRoutes(routes)}</Switch>
-          <Container fluid>
-            <DashboardNavbar />
-            <DashboardFooter />
-          </Container>
-        </div>
-      </>
-    );
-  }
+        <Switch>{getRoutes(routes)}</Switch>
+        <Container fluid>
+          <DashboardNavbar />
+          <DashboardFooter />
+        </Container>
+      </div>
+    </>
+  );
 }
 
 export default Dashboard;

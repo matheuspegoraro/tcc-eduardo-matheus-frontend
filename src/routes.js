@@ -33,26 +33,6 @@ function routes() {
       display: true
     },
     {
-      path: null,
-      name: "Suporte",
-      icon: "ni ni-single-02 text-orange",
-      component: null,
-      layout: null,
-      private: true,
-      display: true,
-      children: [
-        {
-          path: "/chat-suporte",
-          name: "Chat Suporte",
-          icon: "fa fa-comments text-green",
-          component: Chat,
-          layout: "/app",
-          private: true,
-          display: true
-        }
-      ]
-    },
-    {
       path: "/login",
       name: "Entrar no Sistema",
       icon: "ni ni-circle-08 text-pink",
@@ -198,11 +178,41 @@ function routes() {
           display: true
         },
       ]
+    },
+    {
+      path: null,
+      name: "Suporte",
+      icon: "ni ni-single-02 text-orange",
+      component: null,
+      layout: null,
+      private: true,
+      display: true,
+      children: [
+        {
+          path: "/chat-suporte",
+          name: "Chat Suporte",
+          icon: "fa fa-comments text-green",
+          component: Chat,
+          layout: "/app",
+          private: true,
+          display: true
+        }
+      ]
     }
   ];
 
   const advisoryRoutes = [];
-  const adminRoutes = [];
+  const adminRoutes = [
+    {
+      path: "/cliente-x-consultoria",
+      name: "Cliente X Consultoria",
+      icon: "fas fa-users text-green",
+      component: null,
+      layout: "/app",
+      private: true,
+      display: true
+    }
+  ];
 
   switch (userType) {
     case 1:
@@ -211,6 +221,10 @@ function routes() {
 
     case 2:
       return [...defaultRoutes, ...advisoryRoutes];
+      break;
+
+    case 3:
+      return [...defaultRoutes, ...adminRoutes];
       break;
   
     default:

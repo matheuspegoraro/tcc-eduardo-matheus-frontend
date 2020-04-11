@@ -69,7 +69,8 @@ function Register(props) {
 
         setToken(token);
 
-        props.history.push('/app/principal');
+        // this.props.history.push('/app/principal');
+        window.location.replace('/app/principal');
         setLoading(false);
 
         toast.success('Autenticação realizada com sucesso.');
