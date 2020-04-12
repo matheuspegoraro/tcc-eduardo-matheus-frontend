@@ -1,4 +1,6 @@
 import Index from "views/Index.jsx";
+import AdvisoryDashboard from "views/pages/AdvisoryDashboard.jsx";
+import AdminDashboard from "views/pages/AdminDashboard.jsx";
 import Profile from "views/pages/Profile.jsx";
 import Maps from "views/pages/Maps.jsx";
 import Register from "views/pages/Register.jsx";
@@ -15,23 +17,15 @@ import Expenses from "./views/pages/Expenses";
 import Revenues from "./views/pages/Revenues";
 import Transfers from "./views/pages/Transfers";
 import Chat from "./views/pages/Chat/Chat";
+import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 
 import { getTokenDecoded } from "./auth";
 
 function routes() {
 
-  const userType = getTokenDecoded().type;
+  const companyType = getTokenDecoded().type;
 
   const defaultRoutes = [
-    {
-      path: "/principal",
-      name: "Principal",
-      icon: "ni ni-tv-2 text-primary",
-      component: Index,
-      layout: "/app",
-      private: true,
-      display: true
-    },
     {
       path: "/login",
       name: "Entrar no Sistema",
@@ -67,6 +61,15 @@ function routes() {
   ];
   
   const clientRoutes = [
+    {
+      path: "/principal",
+      name: "Principal",
+      icon: "ni ni-tv-2 text-primary",
+      component: Index,
+      layout: "/app",
+      private: true,
+      display: true
+    },
     {
       path: "/categorias",
       name: "Categorias",
@@ -201,20 +204,40 @@ function routes() {
     }
   ];
 
-  const advisoryRoutes = [];
+  const advisoryRoutes = [
+    {
+      path: "/principal",
+      name: "Principal",
+      icon: "ni ni-tv-2 text-primary",
+      component: AdvisoryDashboard,
+      layout: "/app",
+      private: true,
+      display: true
+    },
+  ];
+
   const adminRoutes = [
+    {
+      path: "/principal",
+      name: "Principal",
+      icon: "ni ni-tv-2 text-primary",
+      component: AdminDashboard,
+      layout: "/app",
+      private: true,
+      display: true
+    },
     {
       path: "/cliente-x-consultoria",
       name: "Cliente X Consultoria",
       icon: "fas fa-users text-green",
-      component: null,
+      component: ClientPerAdvisory,
       layout: "/app",
       private: true,
       display: true
     }
   ];
 
-  switch (userType) {
+  switch (companyType) {
     case 1:
       return [...defaultRoutes, ...clientRoutes];
       break;

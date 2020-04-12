@@ -47,7 +47,8 @@ function Register(props) {
         setLoading(true);
 
         const companyResponse = await api.post('/companies', { 
-          name: companyName
+          name: companyName,
+          type
         });
 
         const companyId = companyResponse.data.id;
