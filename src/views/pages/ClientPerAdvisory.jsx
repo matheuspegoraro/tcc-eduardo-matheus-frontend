@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import Moment from 'react-moment';
 import CurrencyInput from 'react-currency-input';
 
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-
 import {
   Button,
   Card,
@@ -39,13 +36,14 @@ function ClientPerAdvisory() {
   const [clientId, setClientId] = useState(0);
   const [advisoryId, setAdvisoryId] = useState(0);
 
-  const [selectedClients, setSelectedClients] = useState([]);
-  const [preSelectedClients, setPreSelectedClients] = useState([]);
-
-  const animatedComponents = makeAnimated();
+  const [selectedAdvisories, setSelectedAdvisories] = useState([]);
+  const [preSelectedAdvisories, setPreSelectedAdvisories] = useState([]);
 
   function toggleModal(id) {
-    setAdvisoryId(id);
+    if(id === undefined) 
+      setClientId(null);
+    else  
+      setClientId(id);
 
     setModalLink(!modalLink);
   };
@@ -83,47 +81,52 @@ function ClientPerAdvisory() {
   }, []);
 
   useEffect(() => {
-
-    async function fetchData(advisoryId) {
-      const response = await api.get(`/relationship-company/${advisoryId}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('api_token')}`
-        }
-      });
-
-      console.log(response.data);
-
-      setPreSelectedClients(response.data.map(client => {
-        return client.clientId
-      }));
-    }
-
-    if (advisoryId > 0) fetchData(advisoryId);
-
-  }, [advisoryId]);
-
-  const handleChange = selectedOptions => {
-    let tempOptions = [];
-
-    selectedOptions.map(option => {
-      tempOptions.push(option.value);
-    });
     
-    setSelectedClients(tempOptions);
+    if (clientId > 0) handleLoadAdvisories(clientId);
+
+  }, [clientId, loading]);
+
+  const handleLoadAdvisories = async clientId => {
+    const response = await api.get(`/relationship-company/${clientId}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('api_token')}`
+      }
+    });
+
+    setPreSelectedAdvisories(response.data.map(relationship => {
+      return relationship;
+    }));
+  }
+
+  const handleChange = e => {
+    if (e.target.value !== '')
+      setAdvisoryId(e.target.value);
+    else
+      setAdvisoryId(null);
   }
 
   const handleClick = async () => {
+
+    const advisory = preSelectedAdvisories.filter(advisory => {
+      return advisory.advisories.id == advisoryId;
+    });
+
+    if(advisory.length > 0) {
+      toast.error('Relacionamento já existente!');
+      return;
+    }
+
     try {
       await api.post('/relationship-company', {
-        advisoryId,
-        selectedClients
+        clientId,
+        advisoryId
       }, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
 
-      toggleModal();
+      handleLoadAdvisories(clientId);
       toast.success('Vínculo criado com sucesso!');
       setLoading(false);
 
@@ -133,6 +136,30 @@ function ClientPerAdvisory() {
       toast.error('Ocorreu um erro na requisição!');
 
     }
+  };
+
+  async function handleDelete(relationshipId) {
+
+    setLoading(true);
+
+    if(relationshipId) {
+      try {
+        await api.delete(`/relationship-company/${relationshipId}`, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('api_token')}`
+          }
+        });
+
+        toast.success('Vínculo desfeito com sucesso!');
+        setLoading(false);
+      } catch (error) {
+        toast.error('Ocorreu um erro na requisição!');
+        setLoading(false);
+      };      
+    } else {
+      toast.error('Ocorreu um erro na requisição!');
+    }
+
   };
 
   return (
@@ -164,34 +191,76 @@ function ClientPerAdvisory() {
             </button>
           </div>
           <div className="modal-body">
-            <FormGroup>
-              <label className="form-control-label" htmlFor="advisories">Consultorias:</label>
-              <Select
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                name="advisories"
-                id="advisories"
-                defaultValue={
-                  advisories.map(advisory => {
-                    if(preSelectedClients.includes(advisory.id)) {
+            <Row>
+              <Col sm={12}>
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="advisories">Consultorias:</label>
+                  <Input
+                    type="select"
+                    className="form-control-alternative"
+                    name="advisories"
+                    id="advisories"
+                    options={ advisories !== undefined ? advisories.map(advisory => {
                       return {
-                        label: advisory.name,
-                        value: advisory.id
-                      }
+                          label: advisory.name,
+                          value: advisory.id
+                        }
+                      }) : ''
                     }
-                  })
-                }
-                isMulti
-                options={ advisories !== undefined ? advisories.map(advisory => {
-                  return {
-                      label: advisory.name,
-                      value: advisory.id
+                    onChange={handleChange}>
+                    <option value=''>Nenhum</option>
+                    { 
+                      advisories !== undefined ? advisories.map(advisory =>
+                        (<option key={advisory.id} value={advisory.id}>{advisory.name}</option>)  
+                      ) : ''
                     }
-                  }) : ''
-                }
-                onChange={handleChange}
-              />
-            </FormGroup>
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col sm={12}>
+                <Button
+                  color="success"
+                  onClick={() => handleClick()}
+                  className="mb-2 btn-block"
+                >
+                  Adicionar
+                </Button>
+              </Col>
+              <hr/>
+            </Row>
+            <Row>
+              <Col lg={12}>
+                <Table className="align-items-center table-flush" responsive>
+                  <thead className="thead-light">
+                    <tr>
+                      <th scope="col">Nome Consultoria</th>
+                      <th scope="col">Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {advisories !== undefined ? 
+                      preSelectedAdvisories.map(advisory => {
+                        return (
+                          <tr key={advisory.advisories.id}>
+                            <td>{advisory.advisories.name}</td>
+                            <td>
+                              <Button
+                                color="danger"
+                                onClick={() => handleDelete(advisory.id)}
+                                size="sm"
+                                className="ml-2 mt-1"
+                              >
+                                Remover
+                              </Button>
+                            </td>
+                          </tr>
+                        )
+                      }) : ''
+                    }
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
           </div>
           <div className="modal-footer">
             <Button
@@ -201,11 +270,7 @@ function ClientPerAdvisory() {
               onClick={() => toggleModal()}
             >
               Fechar
-              </Button>
-            <Button className="my-4" color="success" type="button" disabled={loading} onClick={handleClick}>
-              {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-              {'Vincular!'}
-              </Button>
+            </Button>
           </div>
         </Modal>
         <Row>
