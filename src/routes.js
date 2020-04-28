@@ -1,4 +1,4 @@
-import Index from "views/Index.jsx";
+import ClientDashboard from "views/pages/ClientDashboard.jsx";
 import AdvisoryDashboard from "views/pages/AdvisoryDashboard.jsx";
 import AdminDashboard from "views/pages/AdminDashboard.jsx";
 import Profile from "views/pages/Profile.jsx";
@@ -65,7 +65,7 @@ function routes() {
       path: "/principal",
       name: "Principal",
       icon: "ni ni-tv-2 text-primary",
-      component: Index,
+      component: ClientDashboard,
       layout: "/app",
       private: true,
       display: true
