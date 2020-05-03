@@ -9,6 +9,9 @@ import {
 
 import api from '../../axios';
 
+import { formatShowMoney } from '../../utils';
+import moment from "moment";
+
 function MovimentsValues() {
 
     const [revenues, setRevenues] = useState(null);
@@ -39,7 +42,7 @@ function MovimentsValues() {
                 if (data.datasets.length > 1) {
                   content += label;
                 }
-                content += yLabel;
+                content += " R$ " + formatShowMoney(yLabel);
                 return content;
               }
             }
@@ -70,20 +73,14 @@ function MovimentsValues() {
     }, []);
 
     useEffect(() => {
-        console.log(revenues);
-    }, [revenues]);
-
-    useEffect(() => {
 
         async function fetchData(type) {
-          const response = await api.get(`http://localhost:3333/client-dashboard/${type}/2020`, {
+          const response = await api.get(`http://localhost:3333/client-dashboard/${type}`, {
             headers: {
               authorization: `Bearer ${localStorage.getItem('api_token')}`
             }
           });
 
-          console.log(response.data);
-    
           return response.data;
         }
 

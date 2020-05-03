@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-function Header() {
+import api from '../../axios';
+
+import { formatShowMoney } from '../../utils';
+
+function AdvisoryHeader() {
+  
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await api.get(`http://localhost:3333/client-dashboard/monthly-increase`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      console.log(response.data);
+
+      return response.data;
+    }
+
+    fetchData();
+
+  }, []);
+
   return (
     <>
       <div className="header bg-gradient-info pb-4 pt-6">
@@ -136,4 +159,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default AdvisoryHeader;

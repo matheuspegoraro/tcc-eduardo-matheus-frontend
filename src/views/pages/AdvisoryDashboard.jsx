@@ -24,7 +24,7 @@ import {
   chartExample2
 } from "variables/charts.jsx";
 
-import Header from "components/Headers/Header.jsx";
+import AdvisoryHeader from "components/Headers/AdvisoryHeader.jsx";
 
 function AdvisoryDashboard() {
   const [activeNav, setActiveNav] = useState(1);
@@ -53,7 +53,7 @@ function AdvisoryDashboard() {
 
   return (
     <>
-      <Header />
+      <AdvisoryHeader />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
         <Row className="mt-5">
