@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Chart from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 import {
   chartOptions,
@@ -10,7 +10,6 @@ import {
 import api from '../../axios';
 
 import { formatShowMoney } from '../../utils';
-import moment from "moment";
 
 function MovimentsValues() {
 

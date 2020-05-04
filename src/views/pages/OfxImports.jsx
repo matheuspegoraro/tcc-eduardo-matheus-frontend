@@ -33,7 +33,6 @@ function OfxImports(props) {
   const [fileOfx, setFileOfx] = useState('');
   const [fileName, setFileName] = useState('');
   const [labelFile, setLabelFile] = useState('Aguardando a importação do arquivo...');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [modalOfx, setModalOfx] = useState(false);
 

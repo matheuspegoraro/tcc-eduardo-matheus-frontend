@@ -117,7 +117,7 @@ function Revenues() {
         setLoading(true);
 
         try {
-            const response = await api.post('/movements/revenues', {
+            await api.post('/movements/revenues', {
                 billId: bill,
                 movementTypeId: REVENUES,
                 categoryId: category,
@@ -131,8 +131,6 @@ function Revenues() {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
             });
-
-            //setRevenues([...revenues, response.data]);
 
             toggleModal();
             toast.success('A movimentação foi adicionada com sucesso!');
@@ -577,10 +575,10 @@ function Revenues() {
                                                 <td>
                                                     {revenue.done ?
                                                         <div>
-                                                            <span onClick={() => undoPayment(revenue.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Realizado</span>
+                                                            <span onClick={() => undoPayment(revenue.id)} style={{ cursor: 'pointer' }} className="badge badge-success">Realizado</span>
                                                         </div> :
                                                         <div>
-                                                            <span onClick={() => handleMakePayment(revenue.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
+                                                            <span onClick={() => handleMakePayment(revenue.id)} style={{ cursor: 'pointer' }} className="badge badge-danger">Pendente</span>
                                                         </div>
                                                     }
                                                 </td>

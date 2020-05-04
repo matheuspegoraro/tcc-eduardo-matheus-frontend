@@ -23,8 +23,7 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../axios';
 import { toast } from 'react-toastify';
-import { months } from "moment";
-import { getAllDays, formatSaveMoney, formatShowMoney } from '../../utils';
+import { formatSaveMoney, formatShowMoney } from '../../utils';
 
 function Bills() {
 

@@ -23,7 +23,6 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../axios';
 import { toast } from 'react-toastify';
-import { months } from "moment";
 import { getAllDays, formatSaveMoney, formatShowMoney } from '../../utils';
 
 function Cards() {
@@ -175,7 +174,7 @@ function Cards() {
 
     setLoading(true);
 
-    const creditCard = creditCards.filter(creditCard => {
+    creditCards.filter(creditCard => {
       return creditCard.id !== id;
     });
 

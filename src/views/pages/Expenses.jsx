@@ -14,8 +14,7 @@ import {
     Table,
     CardFooter,
     Modal,
-    Alert,
-    Tooltip
+    Alert
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -27,8 +26,6 @@ import CurrencyInput from 'react-currency-input';
 import { confirm } from "../../components/Confirmations/Confirmation";
 
 function Expenses() {
-
-    const EXPENSES = 1;
 
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -119,7 +116,7 @@ function Expenses() {
         setLoading(true);
 
         try {
-            const response = await api.post('/movements/expenses', {
+            await api.post('/movements/expenses', {
                 billId: bill,
                 movementTypeId: EXPENSE,
                 categoryId: category,
@@ -133,8 +130,6 @@ function Expenses() {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
             });
-
-            //setExpenses([...expenses, response.data]);
 
             toggleModal();
             toast.success('A movimentação foi adicionada com sucesso!');
@@ -579,10 +574,10 @@ function Expenses() {
                                                 <td>
                                                     {expense.done ?
                                                         <div>
-                                                            <span onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-success">Pago</span>
+                                                            <span onClick={() => undoPayment(expense.id)} style={{ cursor: 'pointer' }} className="badge badge-success">Pago</span>
                                                         </div> :
                                                         <div>
-                                                            <span onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} class="badge badge-danger">Pendente</span>
+                                                            <span onClick={() => handleMakePayment(expense.id)} style={{ cursor: 'pointer' }} className="badge badge-danger">Pendente</span>
                                                         </div>
                                                     }
                                                 </td>

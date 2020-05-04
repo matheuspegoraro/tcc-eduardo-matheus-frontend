@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -49,7 +48,6 @@ class Login extends React.Component {
         });
 
         setToken(token);
-        // this.props.history.push('/app/principal');
         window.location.replace('/app/principal');
         this.setState({ loading: false });
 
