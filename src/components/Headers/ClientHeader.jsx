@@ -7,20 +7,40 @@ import api from '../../axios';
 import { formatShowMoney } from '../../utils';
 
 function ClientHeader() {
-  const [percentBalancesheet, setPercentBalancesheet] = useState(0);
-  const [balancesheet, setBalancesheet] = useState(0);
+  const [percentCurrentLiquidity, setPercentCurrentLiquidity] = useState(0);
+  const [currentLiquidity, setCurrentLiquidity] = useState(0);
+
+  const [percentProjectedLiquidity, setPercentProjectedLiquidity] = useState(0);
+  const [projectedLiquidity, setProjectedLiquidity] = useState(0);
 
   useEffect(() => {
 
     async function fetchData() {
-      const response = await api.get(`http://localhost:3333/client-dashboard/monthly-increase`, {
+      const response = await api.get(`http://localhost:3333/client-dashboard/current-liquidity`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
 
-      setPercentBalancesheet(response.data.percentbalancesheet);
-      setBalancesheet(response.data.balancesheet);
+      setPercentCurrentLiquidity(response.data.percentcurrentliquidity);
+      setCurrentLiquidity(response.data.currentliquidity);
+    }
+
+    fetchData();
+
+  }, []);
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await api.get(`http://localhost:3333/client-dashboard/projected-liquidity`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      setPercentProjectedLiquidity(response.data.percentprojectedliquidity);
+      setProjectedLiquidity(response.data.projectedliquidity);
     }
 
     fetchData();
@@ -34,7 +54,7 @@ function ClientHeader() {
           <div className="header-body">
             {/* Card stats */}
             <Row>
-              <Col lg="6" xl="4">
+              <Col lg="6" xl="6">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -43,10 +63,10 @@ function ClientHeader() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Balanço de Caixa
+                          LIQUIDEZ ATUAL
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          R$ {formatShowMoney(balancesheet)}
+                          R$ {formatShowMoney(currentLiquidity)}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -56,15 +76,15 @@ function ClientHeader() {
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      <span className={`text-${percentBalancesheet > 0 ? "success" : percentBalancesheet < 0 ? "danger" : "info"} mr-2`}>
-                        <i className={`fa fa-${percentBalancesheet > 0 ? "arrow-up" : percentBalancesheet < 0 ? "arrow-down" : "equals"}`} /> {formatShowMoney(percentBalancesheet)}%
+                      <span className={`text-${percentCurrentLiquidity > 0 ? "success" : percentCurrentLiquidity < 0 ? "danger" : "info"} mr-2`}>
+                        <i className={`fa fa-${percentCurrentLiquidity > 0 ? "arrow-up" : percentCurrentLiquidity < 0 ? "arrow-down" : "equals"}`} /> {formatShowMoney(percentCurrentLiquidity)}%
                       </span>{" "}
                       <span className="text-nowrap">Comparado ao mês passado</span>
                     </p>
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="4">
+              <Col lg="6" xl="6">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -73,10 +93,10 @@ function ClientHeader() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          New users
+                          LIQUIDEZ PROJETADA
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          2,356
+                          R$ {formatShowMoney(projectedLiquidity)}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -86,38 +106,10 @@ function ClientHeader() {
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-muted text-sm">
-                      <span className="text-danger mr-2">
-                        <i className="fas fa-arrow-down" /> 3.48%
+                      <span className={`text-${percentProjectedLiquidity > 0 ? "success" : percentProjectedLiquidity < 0 ? "danger" : "info"} mr-2`}>
+                        <i className={`fa fa-${percentProjectedLiquidity > 0 ? "arrow-up" : percentProjectedLiquidity < 0 ? "arrow-down" : "equals"}`} /> {formatShowMoney(percentProjectedLiquidity)}%
                       </span>{" "}
-                      <span className="text-nowrap">Since last week</span>
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col lg="6" xl="4">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Sales
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">924</span>
-                      </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                          <i className="fas fa-users" />
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      <span className="text-warning mr-2">
-                        <i className="fas fa-arrow-down" /> 1.10%
-                      </span>{" "}
-                      <span className="text-nowrap">Since yesterday</span>
+                      <span className="text-nowrap">Comparado ao mês passado</span>
                     </p>
                   </CardBody>
                 </Card>
