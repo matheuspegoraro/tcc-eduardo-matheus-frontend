@@ -14,7 +14,6 @@ import {
     Table,
     CardFooter,
     Modal,
-    Alert,
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -26,8 +25,6 @@ import CurrencyInput from 'react-currency-input';
 import { confirm } from "../../components/Confirmations/Confirmation";
 
 function Transfers() {
-
-    const TRANSFERS = 3;
 
     const [transfers, setTransfers] = useState([]);
     const [loading, setLoading] = useState(false);

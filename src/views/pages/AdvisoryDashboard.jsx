@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import classnames from "classnames";
+import React, { useEffect } from "react";
 import Chart from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
 import {
   Button,
   Card,
   CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
   Progress,
   Table,
   Container,
@@ -19,16 +13,12 @@ import {
 
 import {
   chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
+  parseOptions
 } from "variables/charts.jsx";
 
-import Header from "components/Headers/Header.jsx";
+import AdvisoryHeader from "components/Headers/AdvisoryHeader.jsx";
 
 function AdvisoryDashboard() {
-  const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState('data1');
 
   useEffect(() => {
     if (window.Chart) {
@@ -36,24 +26,9 @@ function AdvisoryDashboard() {
     }
   }, []);
 
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    this.setState({
-      activeNav: index,
-      chartExample1Data:
-        this.state.chartExample1Data === "data1" ? "data2" : "data1"
-    });
-    let wow = () => {
-      console.log(this.state);
-    };
-    wow.bind(this);
-    setTimeout(() => wow(), 1000);
-    // this.chartReference.update();
-  };
-
   return (
     <>
-      <Header />
+      <AdvisoryHeader />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
         <Row className="mt-5">

@@ -171,7 +171,7 @@ function Register(props) {
                 </Col>
               </Row>
               <div className="text-center">
-                <Button className="mt-4" color="primary" type="submit">
+                <Button className="mt-4" color="primary" type="submit" disabled={loading ? true : false}>
                   Cadastrar!
                 </Button>
               </div>

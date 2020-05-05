@@ -315,6 +315,7 @@ function Categories() {
                       color="primary"
                       onClick={() => setModalCategory(!modalCategory)}
                       size="sm"
+                      disabled={loading ? true : false}
                     >
                       Criar
                     </Button>

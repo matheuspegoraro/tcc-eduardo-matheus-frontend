@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Moment from 'react-moment';
-import CurrencyInput from 'react-currency-input';
 
 import {
   Button,
   Card,
   CardHeader,
   FormGroup,
-  Form,
   Input,
   Container,
   Row,
@@ -15,16 +13,11 @@ import {
   Table,
   CardFooter,
   Modal,
-  Media,
-  InputGroup,
-  InputGroupAddon
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../axios';
 import { toast } from 'react-toastify';
-
-import { getAllDays, formatSaveMoney, formatShowMoney } from '../../utils';
 
 function ClientPerAdvisory() {
 
@@ -36,7 +29,6 @@ function ClientPerAdvisory() {
   const [clientId, setClientId] = useState(0);
   const [advisoryId, setAdvisoryId] = useState(0);
 
-  const [selectedAdvisories, setSelectedAdvisories] = useState([]);
   const [preSelectedAdvisories, setPreSelectedAdvisories] = useState([]);
 
   function toggleModal(id) {
@@ -108,7 +100,7 @@ function ClientPerAdvisory() {
   const handleClick = async () => {
 
     const advisory = preSelectedAdvisories.filter(advisory => {
-      return advisory.advisories.id == advisoryId;
+      return advisory.advisories.id === advisoryId;
     });
 
     if(advisory.length > 0) {
