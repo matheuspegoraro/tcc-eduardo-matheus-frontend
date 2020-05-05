@@ -221,7 +221,7 @@ function Categories() {
                         Descrição
                       </label>
                       <Input
-                        className="form-control-alternative"
+                        className="form-control"
                         value={name}
                         id="input-name"
                         placeholder="Alimentação, transporte..."
@@ -244,7 +244,7 @@ function Categories() {
                       </Tooltip>
                       <Input
                         type="select"
-                        className="form-control-alternative"
+                        className="form-control"
                         name="select-parent"
                         id="select-parent"
                         defaultValue={parentId}
@@ -272,7 +272,7 @@ function Categories() {
                         Cor
                       </label>
                       <Input
-                        className="form-control-alternative"
+                        className="form-control"
                         id="input-color"
                         type="color"
                         name={color}

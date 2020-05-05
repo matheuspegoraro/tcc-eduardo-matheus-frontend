@@ -227,7 +227,7 @@ function Cards() {
                 <label className="form-control-label" htmlFor="bank-id">Banco:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bank-id"
                   id="bank-id"
                   defaultValue={bankId}
@@ -246,7 +246,7 @@ function Cards() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Nome do Cartão:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="card-name"
                   placeholder="Ex: Cartão Platinum..."
                   type="text"
@@ -258,7 +258,7 @@ function Cards() {
                 <label className="form-control-label" htmlFor="name-bank">Dia de fechamento:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   id="closing-day"
                   defaultValue={closingDay}
                   onChange={e => setClosingDay(e.target.value)}>
@@ -271,7 +271,7 @@ function Cards() {
                 <label className="form-control-label" htmlFor="name-bank">Dia de vencimento:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   id="deadline-day"
                   defaultValue={deadlineDay}
                   onChange={e => setDeadlineDay(e.target.value)}>
@@ -282,7 +282,7 @@ function Cards() {
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Limite de Crédito:</label>
-                <InputGroup className="form-control-alternative">
+                <InputGroup>
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
                     type="text"

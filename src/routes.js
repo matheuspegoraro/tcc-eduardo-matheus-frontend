@@ -9,7 +9,7 @@ import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
-import Banks from "./views/pages/Banks";
+import Banks from "./views/pages/Bank/Banks";
 import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
@@ -18,6 +18,8 @@ import Revenues from "./views/pages/Revenues";
 import Transfers from "./views/pages/Transfers";
 import Chat from "./views/pages/Chat/Chat";
 import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
+import MaintenanceBank from "./views/pages/Bank/Maintenance";
+
 
 import { getTokenDecoded } from "./auth";
 
@@ -114,6 +116,24 @@ function routes() {
           layout: "/app",
           private: true,
           display: true
+        },
+        {
+          path: "/bancos/:id/editar",
+          name: "Bancos - Editar",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceBank,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/bancos/novo",
+          name: "Bancos - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceBank,
+          layout: "/app",
+          private: true,
+          display: false
         },
         {
           path: "/bancos",

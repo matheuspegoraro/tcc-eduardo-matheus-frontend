@@ -190,7 +190,7 @@ function BillTypes() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Nome do Tipo:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="bill-name"
                   placeholder="Ex: Conta corrente, conta poupança..."
                   type="text"

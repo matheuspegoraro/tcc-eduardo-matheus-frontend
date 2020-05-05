@@ -250,7 +250,7 @@ function Bills() {
                 <label className="form-control-label" htmlFor="bank-id">Banco:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bank-id"
                   id="bank-id"
                   defaultValue={bankId}
@@ -270,7 +270,7 @@ function Bills() {
                 <label className="form-control-label" htmlFor="bill-type-id">Tipo de Conta:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bill-type-id"
                   id="bill-type-id"
                   defaultValue={billTypeId}
@@ -286,7 +286,7 @@ function Bills() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="bill-name">Nome da Conta:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="bill-name"
                   placeholder="Ex: Cartão Platinum..."
                   type="text"
@@ -296,7 +296,7 @@ function Bills() {
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="current-value">Valor Corrente/Inicial:</label>
-                <InputGroup className="form-control-alternative">
+                <InputGroup className="form-control">
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
                     type="text"

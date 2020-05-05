@@ -23,17 +23,11 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -45,14 +39,10 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col
 } from "reactstrap";
-
-var ps;
 
 class Sidebar extends React.Component {
   state = {
@@ -99,7 +89,7 @@ class Sidebar extends React.Component {
         } else {
           return (
             <UncontrolledDropdown key={key} nav>
-              <DropdownToggle nav className="nav-link-icon">
+              <DropdownToggle nav caret>
                 <i className={prop.icon} />
                 {prop.name}
               </DropdownToggle>
@@ -180,21 +170,6 @@ class Sidebar extends React.Component {
           {/* Heading */}
           <Nav className="align-items-center d-md-none">
             <UncontrolledDropdown nav>
-              <DropdownToggle nav className="nav-link-icon">
-                <i className="ni ni-bell-55" />
-              </DropdownToggle>
-              <DropdownMenu
-                aria-labelledby="navbar-default_dropdown_1"
-                className="dropdown-menu-arrow"
-                right
-              >
-                <DropdownItem>Action</DropdownItem>
-                <DropdownItem>Another action</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Something else here</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <UncontrolledDropdown nav>
               <DropdownToggle nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
@@ -260,21 +235,6 @@ class Sidebar extends React.Component {
               </Row>
             </div>
             {/* Form */}
-            <Form className="mt-4 mb-3 d-md-none">
-              <InputGroup className="input-group-rounded input-group-merge">
-                <Input
-                  aria-label="Search"
-                  className="form-control-rounded form-control-prepended"
-                  placeholder="Search"
-                  type="search"
-                />
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <span className="fa fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-            </Form>
             {/* Navigation */}
             <h6 className="navbar-heading text-muted">Menu</h6>
             <Nav navbar>

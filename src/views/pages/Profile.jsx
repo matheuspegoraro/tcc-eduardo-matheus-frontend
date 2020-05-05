@@ -162,7 +162,7 @@ class Profile extends React.Component {
                               Username
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="lucky.jesse"
                               id="input-username"
                               placeholder="Username"
@@ -179,7 +179,7 @@ class Profile extends React.Component {
                               Email address
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               id="input-email"
                               placeholder="jesse@example.com"
                               type="email"
@@ -197,7 +197,7 @@ class Profile extends React.Component {
                               First name
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="Lucky"
                               id="input-first-name"
                               placeholder="First name"
@@ -214,7 +214,7 @@ class Profile extends React.Component {
                               Last name
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="Jesse"
                               id="input-last-name"
                               placeholder="Last name"
@@ -240,7 +240,7 @@ class Profile extends React.Component {
                               Address
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                               id="input-address"
                               placeholder="Home Address"
@@ -259,7 +259,7 @@ class Profile extends React.Component {
                               City
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="New York"
                               id="input-city"
                               placeholder="City"
@@ -276,7 +276,7 @@ class Profile extends React.Component {
                               Country
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               defaultValue="United States"
                               id="input-country"
                               placeholder="Country"
@@ -293,7 +293,7 @@ class Profile extends React.Component {
                               Postal code
                             </label>
                             <Input
-                              className="form-control-alternative"
+                              className="form-control"
                               id="input-postal-code"
                               placeholder="Postal code"
                               type="number"
@@ -309,7 +309,7 @@ class Profile extends React.Component {
                       <FormGroup>
                         <label>About Me</label>
                         <Input
-                          className="form-control-alternative"
+                          className="form-control"
                           placeholder="A few words about you ..."
                           rows="4"
                           defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
