@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+
 import {
   Tooltip,
   Button,
@@ -11,7 +13,9 @@ import {
   Container,
   Row,
   Col,
-  Modal
+  Modal,
+  Breadcrumb,
+  BreadcrumbItem
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -23,7 +27,7 @@ function Categories() {
 
   const [categories, setCategories] = useState([]);
   const [options, setOptions] = useState([]);
-  
+
   // form inputs
   const [modalCategory, setModalCategory] = useState(false);
   const [editIdCategory, setEditIdCategory] = useState(0);
@@ -31,7 +35,7 @@ function Categories() {
   const [parentId, setParentId] = useState(null);
   const [color, setColor] = useState('#000000');
 
-  const [message, setMessage] = useState({type: '', message: ''});
+  const [message, setMessage] = useState({ type: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -57,7 +61,7 @@ function Categories() {
     setName('');
     setParentId(null);
     setColor('#000000');
-    
+
     setModalCategory(!modalCategory);
   }
 
@@ -83,7 +87,7 @@ function Categories() {
   async function handleCreate() {
 
     if (!name || !color) {
-      setMessage({type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!"});
+      setMessage({ type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!" });
     } else {
       try {
         setLoading(true);
@@ -93,11 +97,11 @@ function Categories() {
         });
 
         if (response) {
-          setMessage({type: 'success', message: "Categoria criada com suceso!"});
+          setMessage({ type: 'success', message: "Categoria criada com suceso!" });
           toggleModal();
         }
       } catch (err) {
-        setMessage({type: 'error', message: "Houve um problema ao cadastrar a categoria."});
+        setMessage({ type: 'error', message: "Houve um problema ao cadastrar a categoria." });
         setLoading(false);
       }
     }
@@ -106,7 +110,7 @@ function Categories() {
   async function handleEdit() {
 
     if (!name || !color) {
-      setMessage({type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!"});
+      setMessage({ type: 'warning', message: "Preencha a descrição e selecione uma cor para continuar!" });
     } else {
       try {
         setLoading(true);
@@ -116,11 +120,11 @@ function Categories() {
         });
 
         if (response) {
-          setMessage({type: 'success', message: "Categoria alterada com suceso!"});
+          setMessage({ type: 'success', message: "Categoria alterada com suceso!" });
           toggleModal();
         }
       } catch (err) {
-        setMessage({type: 'error', message: "Houve um problema ao editar a categoria."});
+        setMessage({ type: 'error', message: "Houve um problema ao editar a categoria." });
         setLoading(false);
       }
     }
@@ -136,21 +140,21 @@ function Categories() {
         });
 
         if (response) {
-          setMessage({type: 'success', message: "Categoria removida com sucesso!"});
+          setMessage({ type: 'success', message: "Categoria removida com sucesso!" });
           loadAll();
         }
       } catch (err) {
-        setMessage({type: 'error', message: "Houve um problema ao remover a categoria."});
+        setMessage({ type: 'error', message: "Houve um problema ao remover a categoria." });
         setLoading(false);
       }
     }
   };
 
-  async function listOptions(tempCategories, lvl = 0, tempOptions) {   
+  async function listOptions(tempCategories, lvl = 0, tempOptions) {
     tempCategories.forEach(async category => {
 
       category.space = "-".repeat(lvl);
-      
+
       tempOptions.push(category);
 
       if (category.children.length > 0)
@@ -165,11 +169,11 @@ function Categories() {
       case 'error':
         toast.error(message.message);
         break;
-    
+
       case 'warning':
         toast.warning(message.message);
         break;
-      
+
       case 'success':
         toast.success(message.message);
         break;
@@ -182,14 +186,22 @@ function Categories() {
 
   return (
     <>
-      <HeaderWithDescription 
-        title="Categorias de Contas" 
+      <HeaderWithDescription
+        title="Categorias de Contas"
         description="Utilize as categorias para separar, filtrar e gerenciar seu fluxo de caixa."
         color="info"
-      /> 
+      />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
-      <Modal
+
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Categorias</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+
+        <Modal
           className="modal-dialog-centered"
           isOpen={modalCategory}
           toggle={() => modalCategory}
@@ -197,7 +209,7 @@ function Categories() {
           <Form role="form" onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalCategoryCreateLabel">
-                {!editIdCategory ? 'Criar Nova Categoria': `Editar Categoria - ${name}`}
+                {!editIdCategory ? 'Criar Nova Categoria' : `Editar Categoria - ${name}`}
               </h5>
               <button
                 aria-label="Close"
@@ -296,7 +308,7 @@ function Categories() {
                 color="info"
                 type="submit"
               >
-                {!editIdCategory ? 'Criar!': 'Editar!'}
+                {!editIdCategory ? 'Criar!' : 'Editar!'}
               </Button>
             </div>
           </Form>
@@ -331,7 +343,7 @@ function Categories() {
       </Container>
     </>
   );
-  
+
 }
 
 export default Categories;

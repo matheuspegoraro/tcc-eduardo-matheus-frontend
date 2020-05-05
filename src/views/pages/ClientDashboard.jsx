@@ -5,6 +5,8 @@ import {
   CardBody,
   Container,
   Row,
+  Breadcrumb,
+  BreadcrumbItem
 } from "reactstrap";
 
 import MovimentsValues from '../../components/Charts/MovimentsValues';
@@ -18,6 +20,13 @@ class Index extends React.Component {
         <ClientHeader />
         {/* Page content */}
         <Container className="mt-3 mb-4" fluid>
+
+          <div>
+            <Breadcrumb>
+              <BreadcrumbItem active>Dashboard</BreadcrumbItem>
+            </Breadcrumb>
+          </div>
+
           <Card className="shadow">
             <CardHeader className="bg-transparent">
               <Row className="align-items-center">
@@ -33,7 +42,7 @@ class Index extends React.Component {
               <MovimentsValues />
             </CardBody>
           </Card>
-      </Container>
+        </Container>
       </>
     );
   }
