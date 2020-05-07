@@ -72,7 +72,7 @@ function Dashboard(props) {
         routes={routes}
         logo={{
           innerLink: "/dashboard/principal",
-          imgSrc: require("assets/img/brand/argon-react.png"),
+          imgSrc: require("assets/img/brand/logo.jpg"),
           imgAlt: "..."
         }}
       />

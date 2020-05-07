@@ -1,8 +1,6 @@
 import ClientDashboard from "views/pages/ClientDashboard.jsx";
 import AdvisoryDashboard from "views/pages/AdvisoryDashboard.jsx";
 import AdminDashboard from "views/pages/AdminDashboard.jsx";
-import Profile from "views/pages/Profile.jsx";
-import Maps from "views/pages/Maps.jsx";
 import Register from "views/pages/Register.jsx";
 import Login from "views/pages/Login.jsx";
 import Categories from "views/pages/Categories.jsx";
@@ -14,12 +12,12 @@ import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
 import Expenses from "./views/pages/Expenses";
-import Revenues from "./views/pages/Revenues";
+import Revenues from "./views/pages/Revenue/Revenues";
 import Transfers from "./views/pages/Transfers";
 import Chat from "./views/pages/Chat/Chat";
 import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 import MaintenanceBank from "./views/pages/Bank/Maintenance";
-
+import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
 
 import { getTokenDecoded } from "./auth";
 
@@ -90,6 +88,24 @@ function routes() {
       private: true,
       display: true,
       children: [
+        {
+          path: "/receitas/:id/editar",
+          name: "Receitas",
+          icon: "fa fa-arrow-up text-green",
+          component: MaintenanceRevenue,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/receitas/novo",
+          name: "Receitas",
+          icon: "fa fa-arrow-up text-green",
+          component: MaintenanceRevenue,
+          layout: "/app",
+          private: true,
+          display: false
+        },
         {
           path: "/receitas",
           name: "Receitas",
