@@ -14,7 +14,8 @@ import BillTypes from "./views/pages/BillTypes";
 import Expenses from "./views/pages/Expense/Expenses";
 import MaintenanceExpense from "./views/pages/Expense/Maintenance";
 import Revenues from "./views/pages/Revenue/Revenues";
-import Transfers from "./views/pages/Transfers";
+import Transfers from "./views/pages/Transfer/Transfers";
+import MaintenanceTransfer from "./views/pages/Transfer/Maintenance";
 import Chat from "./views/pages/Chat/Chat";
 import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 import MaintenanceBank from "./views/pages/Bank/Maintenance";
@@ -142,6 +143,15 @@ function routes() {
           layout: "/app",
           private: true,
           display: true
+        },
+        {
+          path: "/transferencias/novo",
+          name: "Transferências - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceTransfer,
+          layout: "/app",
+          private: true,
+          display: false
         },
         {
           path: "/transferencias",
