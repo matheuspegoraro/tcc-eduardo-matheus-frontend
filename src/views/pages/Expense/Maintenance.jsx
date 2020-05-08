@@ -53,7 +53,7 @@ function Maintenance() {
     if (id) {
       async function fetchData() {
         try {
-          const { data } = await api.get(`/movements/revenues/${id}`, {
+          const { data } = await api.get(`/movements/expenses/${id}`, {
             headers: {
               authorization: `Bearer ${localStorage.getItem('api_token')}`
             }
@@ -130,23 +130,23 @@ function Maintenance() {
     setLoading(true);
 
     try {
-      await api.post('/movements/revenues', {
+      await api.post('/movements/expenses', {
         billId: bill,
-        movementTypeId: 2,
+        movementTypeId: 1,
         categoryId: category,
         name: description,
         done,
         dischargeDate,
         value: formatSaveMoney(value),
         date
-      }, {
+    }, {
         headers: {
-          authorization: `Bearer ${localStorage.getItem('api_token')}`
+            authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
-      });
+    });
 
       toast.success('A movimentação foi adicionada com sucesso!');
-      history.push('/app/receitas');
+      history.push('/app/despesas');
 
     } catch (e) {
       if (e.response) {
@@ -163,9 +163,9 @@ function Maintenance() {
     setLoading(true);
 
     try {
-      await api.put(`/movements/revenues/${id}`, {
+      await api.put(`/movements/expenses/${id}`, {
         billId: bill,
-        movementTypeId: 2,
+        movementTypeId: 1,
         categoryId: category,
         name: description,
         value: formatSaveMoney(value),
@@ -177,7 +177,7 @@ function Maintenance() {
       });
 
       toast.success('A movimentação foi alterada com sucesso!');
-      history.push('/app/receitas');
+      history.push('/app/despesas');
 
     } catch (e) {
       if (e.response) {
@@ -192,9 +192,9 @@ function Maintenance() {
   return (
     <>
       <HeaderWithDescription
-          title="Receitas"
-          description="Permite o gerencimento de suas contas à receber, você pode controlar a entrada de valores na empresa e conferir recebimentos pendentes."
-          color="success"
+        title="Despesas"
+        description="Permite o gerencimento de suas contas à pagar, você pode controlar a saída de valores na empresa e conferir pagamentos pendentes."
+        color="danger"
       />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
@@ -202,7 +202,7 @@ function Maintenance() {
         <div>
           <Breadcrumb>
             <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
-            <BreadcrumbItem><Link to="/app/receitas">Receitas</Link></BreadcrumbItem>
+            <BreadcrumbItem><Link to="/app/despesas">Despesas</Link></BreadcrumbItem>
             <BreadcrumbItem active>Manutenção</BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -313,16 +313,16 @@ function Maintenance() {
                     <div className="custom-control custom-control-alternative custom-checkbox mb-3">
                       <input
                         className="custom-control-input"
-                        id="doneRevenue"
+                        id="doneExpense"
                         type="checkbox"
                         onChange={e => setDone(!done)}
                       />
-                      <label className="custom-control-label" htmlFor="doneRevenue">
-                        Você já recebeu o valor ?
-                      </label>
+                      <label className="custom-control-label" htmlFor="doneExpense">
+                        Você já pagou o valor ?
+                                    </label>
                     </div>
                     <div hidden={!done}>
-                      <label className="form-control-label" htmlFor="dischargeDate">Recebimento em:</label>
+                      <label className="form-control-label" htmlFor="dischargeDate">Pagamento em:</label>
                       <Input
                         required={done}
                         type="date"

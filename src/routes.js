@@ -11,7 +11,8 @@ import Banks from "./views/pages/Bank/Banks";
 import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
-import Expenses from "./views/pages/Expenses";
+import Expenses from "./views/pages/Expense/Expenses";
+import MaintenanceExpense from "./views/pages/Expense/Maintenance";
 import Revenues from "./views/pages/Revenue/Revenues";
 import Transfers from "./views/pages/Transfers";
 import Chat from "./views/pages/Chat/Chat";
@@ -114,6 +115,24 @@ function routes() {
           layout: "/app",
           private: true,
           display: true
+        },
+        {
+          path: "/despesas/:id/editar",
+          name: "Despesas - Editar",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceExpense,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/despesas/novo",
+          name: "Despesas - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceExpense,
+          layout: "/app",
+          private: true,
+          display: false
         },
         {
           path: "/despesas",
