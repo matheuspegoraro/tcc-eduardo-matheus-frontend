@@ -5,12 +5,9 @@ import {
   CardBody,
   Container,
   Row,
-<<<<<<< HEAD
-  Col
-=======
+  Col,
   Breadcrumb,
   BreadcrumbItem
->>>>>>> b49faedc5d97442f6be2d1577a6fd86496afc089
 } from "reactstrap";
 
 import MovimentsValues from '../../components/Charts/MovimentsValues';
