@@ -82,7 +82,7 @@ function MovimentsValues() {
         <>
             {(revenues && expenses) ? 
               <Bar
-                  height={275}
+                  height={285}
                   data={chartExample2.data}
                   options={chartExample2.options}
               /> : ''

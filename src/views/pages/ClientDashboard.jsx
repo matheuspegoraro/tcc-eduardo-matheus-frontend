@@ -22,15 +22,14 @@ class Index extends React.Component {
         <ClientHeader />
         {/* Page content */}
         <Container className="mt-3 mb-4" fluid>
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem active>Dashboard</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        
           <Row>
             <Col sm={8}>
-
-              <div>
-                <Breadcrumb>
-                  <BreadcrumbItem active>Dashboard</BreadcrumbItem>
-                </Breadcrumb>
-              </div>
-
               <Card className="shadow">
                 <CardHeader className="bg-info">
                   <Row>
