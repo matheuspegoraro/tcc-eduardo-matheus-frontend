@@ -18,20 +18,6 @@ function MovimentsValues() {
 
     const chartExample2 = {
         options: {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  callback: function(value) {
-                    if (!(value % 10)) {
-                      //return '$' + value + 'k'
-                      return value;
-                    }
-                  }
-                }
-              }
-            ]
-          },
           tooltips: {
             callbacks: {
               label: function(item, data) {
@@ -95,10 +81,11 @@ function MovimentsValues() {
     return (
         <>
             {(revenues && expenses) ? 
-                <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                /> : ''
+              <Bar
+                  height={275}
+                  data={chartExample2.data}
+                  options={chartExample2.options}
+              /> : ''
             }
         </>
     );

@@ -95,6 +95,7 @@ function Categories() {
         if (response) {
           setMessage({type: 'success', message: "Categoria criada com suceso!"});
           toggleModal();
+          setLoading(false);
         }
       } catch (err) {
         setMessage({type: 'error', message: "Houve um problema ao cadastrar a categoria."});
