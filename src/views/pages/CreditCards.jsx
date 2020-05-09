@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Moment from 'react-moment';
+import { Link } from 'react-router-dom';
 import CurrencyInput from 'react-currency-input';
 
 import {
@@ -17,7 +18,9 @@ import {
   Modal,
   Media,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
+  BreadcrumbItem,
+  Breadcrumb
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -31,7 +34,7 @@ function Cards() {
   const [loading, setLoading] = useState(false);
 
   const [banks, setBanks] = useState([]);
-  
+
   //form inputs
   const [modalCreditCard, setModalCreditCard] = useState(false);
   const [bankId, setBankId] = useState('');
@@ -58,14 +61,14 @@ function Cards() {
     const creditCardEditable = creditCards.filter(creditCard => {
       return creditCard.id === id;
     });
-    
+
     setEditIdCreditCard(creditCardEditable[0].id);
     setBankId(creditCardEditable[0].bank.id);
     setName(creditCardEditable[0].name);
     setClosingDay(creditCardEditable[0].closingDay);
     setDeadlineDay(creditCardEditable[0].deadlineDay);
     setLimit(formatShowMoney(creditCardEditable[0].limit));
-    
+
     setModalCreditCard(!modalCreditCard);
 
   };
@@ -201,6 +204,14 @@ function Cards() {
       />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
+
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Cartões</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+
         <Modal
           className="modal-dialog-centered"
           isOpen={modalCreditCard}
@@ -209,8 +220,8 @@ function Cards() {
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                {!editIdCreditCard ? 'Adição de Cartões': `Editar Cartão - ${name}`}
-            </h5>
+                {!editIdCreditCard ? 'Adição de Cartões' : `Editar Cartão - ${name}`}
+              </h5>
               <button
                 aria-label="Close"
                 className="close"
@@ -226,7 +237,7 @@ function Cards() {
                 <label className="form-control-label" htmlFor="bank-id">Banco:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bank-id"
                   id="bank-id"
                   defaultValue={bankId}
@@ -245,7 +256,7 @@ function Cards() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Nome do Cartão:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="card-name"
                   placeholder="Ex: Cartão Platinum..."
                   type="text"
@@ -257,31 +268,31 @@ function Cards() {
                 <label className="form-control-label" htmlFor="name-bank">Dia de fechamento:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   id="closing-day"
                   defaultValue={closingDay}
                   onChange={e => setClosingDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
+                  {getAllDays().map(day => {
+                    return <option value={day} key={day}>{day}</option>
+                  })}
                 </Input>
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Dia de vencimento:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   id="deadline-day"
                   defaultValue={deadlineDay}
                   onChange={e => setDeadlineDay(e.target.value)}>
-                    {getAllDays().map(day => {
-                      return <option value={day} key={day}>{day}</option>
-                    })}
+                  {getAllDays().map(day => {
+                    return <option value={day} key={day}>{day}</option>
+                  })}
                 </Input>
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Limite de Crédito:</label>
-                <InputGroup className="form-control-alternative">
+                <InputGroup>
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
                     type="text"
@@ -307,8 +318,8 @@ function Cards() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                {!editIdCreditCard ? 'Criar!': 'Editar!'}
-                </Button>
+                {!editIdCreditCard ? 'Criar!' : 'Editar!'}
+              </Button>
             </div>
           </Form>
         </Modal>

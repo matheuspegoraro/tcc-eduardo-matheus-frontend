@@ -69,8 +69,7 @@ function Register(props) {
         });
 
         setToken(token);
-
-        // this.props.history.push('/app/principal');
+        
         window.location.replace('/app/principal');
         setLoading(false);
 

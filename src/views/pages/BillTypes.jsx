@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Moment from 'react-moment';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -14,6 +15,8 @@ import {
   Table,
   CardFooter,
   Modal,
+  Breadcrumb,
+  BreadcrumbItem
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -24,7 +27,7 @@ function BillTypes() {
 
   const [billTypes, setBillTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   //form inputs
   const [modalBillType, setModalBillType] = useState(false);
   const [name, setName] = useState('');
@@ -44,10 +47,10 @@ function BillTypes() {
       return billType.id === id;
     });
 
-    if(billTypeEditable) {
+    if (billTypeEditable) {
       setEditIdBillType(billTypeEditable[0].id);
       setName(billTypeEditable[0].name);
-      
+
       setModalBillType(!modalBillType);
     }
 
@@ -138,7 +141,7 @@ function BillTypes() {
       return billType.id !== id;
     });
 
-    if(billType) {
+    if (billType) {
       try {
         await api.delete(`/bill-types/${id}`, {
           headers: {
@@ -148,7 +151,7 @@ function BillTypes() {
       } catch (error) {
         setLoading(false);
       };
-  
+
       toast.success('O tipo de conta foi removido com sucesso!');
       setLoading(false);
     } else {
@@ -166,6 +169,14 @@ function BillTypes() {
       />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
+
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Tipos de Contas Bancárias</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+
         <Modal
           className="modal-dialog-centered"
           isOpen={modalBillType}
@@ -174,8 +185,8 @@ function BillTypes() {
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                {!editIdBillType ? 'Adição de Tipo de Conta': `Alterar Tipo de Conta - ${name}`}
-            </h5>
+                {!editIdBillType ? 'Adição de Tipo de Conta' : `Alterar Tipo de Conta - ${name}`}
+              </h5>
               <button
                 aria-label="Close"
                 className="close"
@@ -190,7 +201,7 @@ function BillTypes() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="name-bank">Nome do Tipo:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="bill-name"
                   placeholder="Ex: Conta corrente, conta poupança..."
                   type="text"
@@ -210,7 +221,7 @@ function BillTypes() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                {!editIdBillType ? 'Criar!': 'Editar!'}
+                {!editIdBillType ? 'Criar!' : 'Editar!'}
               </Button>
             </div>
           </Form>
@@ -267,7 +278,7 @@ function BillTypes() {
                           className="ml-2 mt-1"
                         >
                           Remover
-                        </Button>                      
+                        </Button>
                       </td>
                     </tr>
                   ))}

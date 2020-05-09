@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Moment from 'react-moment';
+import { Link } from 'react-router-dom';
 import CurrencyInput from 'react-currency-input';
 
 import {
@@ -17,7 +18,9 @@ import {
   Modal,
   Media,
   InputGroup,
-  InputGroupAddon
+  InputGroupAddon,
+  BreadcrumbItem,
+  Breadcrumb
 } from "reactstrap";
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
@@ -32,7 +35,7 @@ function Bills() {
 
   const [banks, setBanks] = useState([]);
   const [billTypes, setBillTypes] = useState([]);
-  
+
   //form inputs
   const [modalBill, setModalBill] = useState(false);
   const [bankId, setBankId] = useState('');
@@ -45,8 +48,8 @@ function Bills() {
   function toggleModal() {
     setEditIdBill(null);
     setBankId('');
-    
-    if(billTypes[0]) 
+
+    if (billTypes[0])
       setBillTypeId(billTypes[0].id);
 
     setName('');
@@ -60,13 +63,13 @@ function Bills() {
     const billEditable = bills.filter(bill => {
       return bill.id === id;
     });
-    
+
     setEditIdBill(billEditable[0].id);
     setBankId(billEditable[0].bank.id);
     setBillTypeId(billEditable[0].billType.id);
     setName(billEditable[0].name);
     setCurrentValue(billEditable[0].currentValue);
-    
+
     setModalBill(!modalBill);
 
   };
@@ -196,7 +199,7 @@ function Bills() {
       return bill.id !== id;
     });
 
-    if(bill) {
+    if (bill) {
       try {
         await api.delete(`/bills/${id}`, {
           headers: {
@@ -206,7 +209,7 @@ function Bills() {
       } catch (error) {
         setLoading(false);
       };
-  
+
       toast.success('A conta foi removida com sucesso!');
       setLoading(false);
     } else {
@@ -224,6 +227,14 @@ function Bills() {
       />
       {/* Page content */}
       <Container className="mt-3 mb-4" fluid>
+
+        <div>
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Contas Bancárias</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+
         <Modal
           className="modal-dialog-centered"
           isOpen={modalBill}
@@ -232,8 +243,8 @@ function Bills() {
           <Form onSubmit={handleSubmit}>
             <div className="modal-header">
               <h5 className="modal-title" id="modalOfxLabel">
-                {!editIdBill ? 'Adição de Contas': `Alterar Conta - ${name}`}
-            </h5>
+                {!editIdBill ? 'Adição de Contas' : `Alterar Conta - ${name}`}
+              </h5>
               <button
                 aria-label="Close"
                 className="close"
@@ -249,7 +260,7 @@ function Bills() {
                 <label className="form-control-label" htmlFor="bank-id">Banco:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bank-id"
                   id="bank-id"
                   defaultValue={bankId}
@@ -269,7 +280,7 @@ function Bills() {
                 <label className="form-control-label" htmlFor="bill-type-id">Tipo de Conta:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
+                  className="form-control"
                   name="bill-type-id"
                   id="bill-type-id"
                   defaultValue={billTypeId}
@@ -285,7 +296,7 @@ function Bills() {
               <FormGroup>
                 <label className="form-control-label" htmlFor="bill-name">Nome da Conta:</label>
                 <Input
-                  className="form-control-alternative"
+                  className="form-control"
                   id="bill-name"
                   placeholder="Ex: Cartão Platinum..."
                   type="text"
@@ -295,7 +306,7 @@ function Bills() {
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="current-value">Valor Corrente/Inicial:</label>
-                <InputGroup className="form-control-alternative">
+                <InputGroup className="form-control">
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
                     type="text"
@@ -321,7 +332,7 @@ function Bills() {
                 </Button>
               <Button className="my-4" color="success" type="submit" disabled={loading}>
                 {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
-                {!editIdBill ? 'Criar!': 'Editar!'}
+                {!editIdBill ? 'Criar!' : 'Editar!'}
               </Button>
             </div>
           </Form>

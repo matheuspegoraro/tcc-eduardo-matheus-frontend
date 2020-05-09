@@ -189,7 +189,7 @@ function ClientPerAdvisory() {
                   <label className="form-control-label" htmlFor="advisories">Consultorias:</label>
                   <Input
                     type="select"
-                    className="form-control-alternative"
+                    className="form-control"
                     name="advisories"
                     id="advisories"
                     options={ advisories !== undefined ? advisories.map(advisory => {

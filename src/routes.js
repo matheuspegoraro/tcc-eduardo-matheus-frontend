@@ -1,23 +1,25 @@
 import ClientDashboard from "views/pages/ClientDashboard.jsx";
 import AdvisoryDashboard from "views/pages/AdvisoryDashboard.jsx";
 import AdminDashboard from "views/pages/AdminDashboard.jsx";
-import Profile from "views/pages/Profile.jsx";
-import Maps from "views/pages/Maps.jsx";
 import Register from "views/pages/Register.jsx";
 import Login from "views/pages/Login.jsx";
 import Categories from "views/pages/Categories.jsx";
 import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
-import Banks from "./views/pages/Banks";
+import Banks from "./views/pages/Bank/Banks";
 import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
-import Expenses from "./views/pages/Expenses";
-import Revenues from "./views/pages/Revenues";
-import Transfers from "./views/pages/Transfers";
+import Expenses from "./views/pages/Expense/Expenses";
+import MaintenanceExpense from "./views/pages/Expense/Maintenance";
+import Revenues from "./views/pages/Revenue/Revenues";
+import Transfers from "./views/pages/Transfer/Transfers";
+import MaintenanceTransfer from "./views/pages/Transfer/Maintenance";
 import Chat from "./views/pages/Chat/Chat";
 import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
+import MaintenanceBank from "./views/pages/Bank/Maintenance";
+import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
 
 import { getTokenDecoded } from "./auth";
 
@@ -89,6 +91,24 @@ function routes() {
       display: true,
       children: [
         {
+          path: "/receitas/:id/editar",
+          name: "Receitas",
+          icon: "fa fa-arrow-up text-green",
+          component: MaintenanceRevenue,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/receitas/novo",
+          name: "Receitas",
+          icon: "fa fa-arrow-up text-green",
+          component: MaintenanceRevenue,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
           path: "/receitas",
           name: "Receitas",
           icon: "fa fa-arrow-up text-green",
@@ -96,6 +116,24 @@ function routes() {
           layout: "/app",
           private: true,
           display: true
+        },
+        {
+          path: "/despesas/:id/editar",
+          name: "Despesas - Editar",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceExpense,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/despesas/novo",
+          name: "Despesas - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceExpense,
+          layout: "/app",
+          private: true,
+          display: false
         },
         {
           path: "/despesas",
@@ -107,6 +145,15 @@ function routes() {
           display: true
         },
         {
+          path: "/transferencias/novo",
+          name: "Transferências - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceTransfer,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
           path: "/transferencias",
           name: "Transferências",
           icon: "fa fa-exchange-alt text-primary",
@@ -114,6 +161,24 @@ function routes() {
           layout: "/app",
           private: true,
           display: true
+        },
+        {
+          path: "/bancos/:id/editar",
+          name: "Bancos - Editar",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceBank,
+          layout: "/app",
+          private: true,
+          display: false
+        },
+        {
+          path: "/bancos/novo",
+          name: "Bancos - Novo",
+          icon: "ni ni-building text-blue",
+          component: MaintenanceBank,
+          layout: "/app",
+          private: true,
+          display: false
         },
         {
           path: "/bancos",

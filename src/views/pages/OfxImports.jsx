@@ -132,7 +132,6 @@ function OfxImports(props) {
                 <label className="form-control-label" htmlFor="bill-id">Conta Bancária:</label>
                 <Input
                   type="select"
-                  className="form-control-alternative"
                   name="bill-id"
                   id="bill-id"
                   defaultValue={billId}
