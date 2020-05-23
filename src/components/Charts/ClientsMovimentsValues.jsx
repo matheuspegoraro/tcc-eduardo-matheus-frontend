@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Chart from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 import {
   chartOptions,
@@ -11,10 +11,9 @@ import api from '../../axios';
 
 import { formatShowMoney } from '../../utils';
 
-function MovimentsValues() {
+function ClientsMovimentsValues() {
 
-    const [revenues, setRevenues] = useState(null);
-    const [expenses, setExpenses] = useState(null);
+    const [datasets, setDatasets] = useState([]);
 
     const chartExample2 = {
         options: {
@@ -35,19 +34,7 @@ function MovimentsValues() {
         },
         data: {
           labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-          datasets: [
-            {
-                label: "Receitas",
-                data: revenues,
-                backgroundColor: '#2dce89'  
-            }, 
-            {
-              label: "Despesas",
-              data: expenses,
-              backgroundColor: '#f5365c'  
-            },
-            
-          ],
+          datasets: datasets,
         },
     };
 
@@ -60,7 +47,7 @@ function MovimentsValues() {
     useEffect(() => {
 
         async function fetchData(type) {
-          const response = await api.get(`http://localhost:3333/client-dashboard/${type}`, {
+          const response = await api.get(`http://localhost:3333/advisory-dashboard/${type}`, {
             headers: {
               authorization: `Bearer ${localStorage.getItem('api_token')}`
             }
@@ -69,9 +56,26 @@ function MovimentsValues() {
           return response.data;
         }
 
-        async function fetchDataLoad() {
-            setRevenues(await fetchData(2));
-            setExpenses(await fetchData(1));
+        async function fetchDataLoad() {     
+          let tempDatasets = [];
+
+          (await fetchData(2)).map(revenue => {
+            tempDatasets.push({
+              label: "RECEITAS DE - " + revenue.client.name,
+              data: revenue.data,
+              borderColor: '#2dce89',
+            });
+          });
+
+          (await fetchData(1)).map(expense => {
+            tempDatasets.push({
+              label: "DESEPESAS DE - " + expense.client.name,
+              data: expense.data,
+              borderColor: '#f5365c',
+            });
+          });
+
+          setDatasets(tempDatasets);
         }
     
         fetchDataLoad();
@@ -80,8 +84,8 @@ function MovimentsValues() {
 
     return (
         <>
-            {(revenues && expenses) ? 
-              <Bar
+            {datasets.length > 0 ? 
+              <Line
                   height={470}
                   data={chartExample2.data}
                   options={chartExample2.options}
@@ -91,4 +95,4 @@ function MovimentsValues() {
     );
 }
 
-export default MovimentsValues;
+export default ClientsMovimentsValues;
