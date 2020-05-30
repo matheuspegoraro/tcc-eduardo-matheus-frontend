@@ -306,7 +306,7 @@ function Bills() {
               </FormGroup>
               <FormGroup>
                 <label className="form-control-label" htmlFor="current-value">Valor Corrente/Inicial:</label>
-                <InputGroup className="form-control">
+                <InputGroup>
                   <InputGroupAddon addonType="prepend">R$</InputGroupAddon>
                   <Input
                     type="text"

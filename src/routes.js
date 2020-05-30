@@ -302,6 +302,8 @@ function routes() {
     }
   ];
 
+  console.log(companyType);
+
   switch (companyType) {
     case 1:
       return [...defaultRoutes, ...clientRoutes];
