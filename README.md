@@ -7,6 +7,8 @@
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - [Node.js](https://nodejs.org/en/)
+- [React.js](https://reactjs.org)
+- [Reactstrap](https://reactstrap.github.io/)
 
 ## 💻 Instalação
 
