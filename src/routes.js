@@ -8,7 +8,6 @@ import ForgotPassword from "./views/pages/ForgotPassword";
 import RecoveryPassword from "./views/pages/RecoveryPassword";
 import OfxImports from "./views/pages/OfxImports";
 import Banks from "./views/pages/Bank/Banks";
-import CreditCards from "./views/pages/CreditCards";
 import Bills from "./views/pages/Bills";
 import BillTypes from "./views/pages/BillTypes";
 import Expenses from "./views/pages/Expense/Expenses";
@@ -185,15 +184,6 @@ function routes() {
           name: "Bancos",
           icon: "ni ni-building text-blue",
           component: Banks,
-          layout: "/app",
-          private: true,
-          display: true
-        },
-        {
-          path: "/cartoes-credito",
-          name: "Cartões",
-          icon: "ni ni-credit-card text-info",
-          component: CreditCards,
           layout: "/app",
           private: true,
           display: true
