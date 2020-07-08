@@ -22,7 +22,7 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
 import { toast } from 'react-toastify';
-import { formatSaveMoney, formatShowMoney } from '../../../utils';
+import { formatSaveMoney, formatShowMoney, formatShowDate } from '../../../utils';
 import CurrencyInput from 'react-currency-input';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
@@ -290,9 +290,7 @@ function Expenses() {
                                                 <td>{expense.bill.name}</td>
                                                 <td>R$ {formatShowMoney(expense.value)}</td>
                                                 <td>
-                                                    <Moment format="DD/MM/YYYY">
-                                                        {expense.date}
-                                                    </Moment>
+                                                    {formatShowDate(expense.date)}
                                                 </td>
                                                 <td>
                                                     {expense.done ?
@@ -307,9 +305,7 @@ function Expenses() {
                                                 <td>
                                                     {!expense.dischargeDate ?
                                                         '-' :
-                                                        <Moment format="DD/MM/YYYY">
-                                                            {expense.dischargeDate}
-                                                        </Moment>
+                                                        formatShowDate(expense.dischargeDate)
                                                     }
                                                 </td>
                                                 <td>

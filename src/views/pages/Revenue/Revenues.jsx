@@ -23,7 +23,7 @@ import {
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
-import { formatSaveMoney, formatShowMoney } from '../../../utils';
+import { formatSaveMoney, formatShowMoney, formatShowDate } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
 function Revenues() {
@@ -289,9 +289,7 @@ function Revenues() {
                                                 <td>{revenue.bill.name}</td>
                                                 <td>R$ {formatShowMoney(revenue.value)}</td>
                                                 <td>
-                                                    <Moment format="DD/MM/YYYY">
-                                                        {revenue.date}
-                                                    </Moment>
+                                                    {formatShowDate(revenue.date)}
                                                 </td>
                                                 <td>
                                                     {revenue.done ?
@@ -306,9 +304,7 @@ function Revenues() {
                                                 <td>
                                                     {!revenue.dischargeDate ?
                                                         '-' :
-                                                        <Moment format="DD/MM/YYYY">
-                                                            {revenue.dischargeDate}
-                                                        </Moment>
+                                                        formatShowDate(revenue.dischargeDate)
                                                     }
                                                 </td>
                                                 <td>
