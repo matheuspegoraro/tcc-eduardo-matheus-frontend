@@ -34,5 +34,5 @@ export const formatShowDate = tempDate => {
 
   tempDate.setHours(tempDate.getHours() + 3);
 
-  return `${tempDate.getDate().toString().padStart(2, '0')}/${tempDate.getMonth().toString().padStart(2, '0')}/${tempDate.getFullYear().toString().padStart(2, '0')}`;
+  return `${tempDate.getDate().toString().padStart(2, '0')}/${(tempDate.getMonth() + 1).toString().padStart(2, '0')}/${tempDate.getFullYear().toString().padStart(2, '0')}`;
 }
