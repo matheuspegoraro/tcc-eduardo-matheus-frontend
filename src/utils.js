@@ -25,14 +25,3 @@ export const formatShowMoney = tempMoney => {
 
   return tempMoney.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-
-export const formatShowDate = tempDate => {
-  if (!tempDate)
-    tempDate = new Date();
-  else
-    tempDate = new Date(tempDate);
-
-  tempDate.setHours(tempDate.getHours() + 3);
-
-  return `${tempDate.getDate().toString().padStart(2, '0')}/${(tempDate.getMonth() + 1).toString().padStart(2, '0')}/${tempDate.getFullYear().toString().padStart(2, '0')}`;
-}

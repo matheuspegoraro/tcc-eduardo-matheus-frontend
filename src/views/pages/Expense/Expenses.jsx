@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import Moment from 'react-moment';
+import moment from 'moment';
 
 import {
     Button,
@@ -290,7 +291,7 @@ function Expenses() {
                                                 <td>{expense.bill.name}</td>
                                                 <td>R$ {formatShowMoney(expense.value)}</td>
                                                 <td>
-                                                    {formatShowDate(expense.date)}
+                                                    {moment(expense.date).add(3, "hours").format('DD/MM/YYYY')}
                                                 </td>
                                                 <td>
                                                     {expense.done ?
@@ -305,7 +306,7 @@ function Expenses() {
                                                 <td>
                                                     {!expense.dischargeDate ?
                                                         '-' :
-                                                        formatShowDate(expense.dischargeDate)
+                                                        moment(expense.dischargeDate).add(3, "hours").format('DD/MM/YYYY')
                                                     }
                                                 </td>
                                                 <td>

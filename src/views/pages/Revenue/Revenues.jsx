@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
+
 import Moment from 'react-moment';
+import moment from 'moment';
+
 import CurrencyInput from 'react-currency-input';
 import { toast } from 'react-toastify';
 
@@ -23,7 +26,7 @@ import {
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
-import { formatSaveMoney, formatShowMoney, formatShowDate } from '../../../utils';
+import { formatSaveMoney, formatShowMoney } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
 function Revenues() {
@@ -289,7 +292,7 @@ function Revenues() {
                                                 <td>{revenue.bill.name}</td>
                                                 <td>R$ {formatShowMoney(revenue.value)}</td>
                                                 <td>
-                                                    {formatShowDate(revenue.date)}
+                                                    {moment(revenue.date).add(3, "hours").format('DD/MM/YYYY')}
                                                 </td>
                                                 <td>
                                                     {revenue.done ?
@@ -304,7 +307,9 @@ function Revenues() {
                                                 <td>
                                                     {!revenue.dischargeDate ?
                                                         '-' :
-                                                        formatShowDate(revenue.dischargeDate)
+                                                        <Moment format="DD/MM/YYYY">
+                                                            {revenue.dischargeDate}
+                                                        </Moment>
                                                     }
                                                 </td>
                                                 <td>

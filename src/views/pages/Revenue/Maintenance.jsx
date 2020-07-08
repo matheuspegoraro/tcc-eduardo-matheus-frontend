@@ -305,7 +305,7 @@ function Maintenance() {
                       name="date"
                       id="date"
                       disabled={id && done}
-                      value={moment(date).format('YYYY-MM-DD')}
+                      value={moment(date).add(3, "hours").format('YYYY-MM-DD')}
                       onChange={e => setDate(e.target.value)}
                     />
                   </FormGroup>
