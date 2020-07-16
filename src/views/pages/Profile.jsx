@@ -1,187 +1,162 @@
-/*!
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   FormGroup,
   Form,
   Input,
   Container,
   Row,
-  Col
+  Col,
+  Breadcrumb,
+  BreadcrumbItem
 } from "reactstrap";
-// core components
-import UserHeader from "components/Headers/UserHeader.jsx";
 
-class Profile extends React.Component {
-  render() {
-    return (
-      <>
-        <UserHeader />
-        {/* Page content */}
-        <Container  fluid>
-          <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-              <Card className="card-profile shadow">
-                <Row className="justify-content-center">
-                  <Col className="order-lg-2" lg="3">
-                    <div className="card-profile-image">
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        <img
-                          alt="..."
-                          className="rounded-circle"
-                          src={require("assets/img/theme/team-4-800x800.jpg")}
-                        />
-                      </a>
-                    </div>
+import HeaderWithDescription from "./../../components/Headers/HeaderWithDescription";
+import api from '../../axios';
+import { toast } from "react-toastify";
+
+function Profile() {
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [type, setType] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+    async function loadProfile() {
+
+      const { data } = await api.get('/profile', {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      setName(data.name);
+      setEmail(data.email);
+      setCreatedAt(data.createdAt);
+      setCompanyName(data.company.name);
+
+      switch (data.type) {
+        case 1:
+          setType('1 - ADMINISTRADOR');
+          break;
+        case 2:
+          setType('2 - CONSULTOR');
+          break;
+        case 3:
+          setType('3 - CLIENTE');
+          break;
+      }
+
+    };
+
+    loadProfile();
+  }, []);
+
+  async function handleUpdate() {
+
+    setLoading(true);
+
+    try {
+
+      if (!name) {
+        toast.warning("Preencha os campos obrigatórios!");
+        return;
+      }
+
+      await api.put('/profile', { name }, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      toast.success("Perfil atualizado com sucesso!");
+
+    } catch (error) {
+      toast.error("Ocorreu um erro ao atualizar o perfil!");
+    } finally {
+      setLoading(false)
+    }
+
+  }
+
+  return (
+
+    <>
+      <HeaderWithDescription
+        title="Receitas"
+        description="Permite o gerencimento de suas contas à receber, você pode controlar a entrada de valores na empresa e conferir recebimentos pendentes."
+        color="success"
+      />
+
+      {/* Page content */}
+      <Container className="mt-3 mb-4" fluid>
+
+        <Breadcrumb>
+          <BreadcrumbItem><Link to="/app/principal">Dashboard</Link></BreadcrumbItem>
+          <BreadcrumbItem active>Perfil</BreadcrumbItem>
+        </Breadcrumb>
+
+        <Row>
+          <Col className="order-xl-1">
+            <Card className="bg-secondary shadow">
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xs="8">
+                    <h3 className="mb-0">Informações Gerais </h3>
                   </Col>
                 </Row>
-                <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                  <div className="d-flex justify-content-between">
-                    <Button
-                      className="mr-4"
-                      color="info"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                      size="sm"
-                    >
-                      Connect
-                    </Button>
-                    <Button
-                      className="float-right"
-                      color="default"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                      size="sm"
-                    >
-                      Message
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardBody className="pt-0 pt-md-4">
-                  <Row>
-                    <div className="col">
-                      <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                        <div>
-                          <span className="heading">22</span>
-                          <span className="description">Friends</span>
-                        </div>
-                        <div>
-                          <span className="heading">10</span>
-                          <span className="description">Photos</span>
-                        </div>
-                        <div>
-                          <span className="heading">89</span>
-                          <span className="description">Comments</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Row>
-                  <div className="text-center">
-                    <h3>
-                      Jessica Jones
-                      <span className="font-weight-light">, 27</span>
-                    </h3>
-                    <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      Bucharest, Romania
-                    </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
-                      Solution Manager - Creative Tim Officer
-                    </div>
-                    <div>
-                      <i className="ni education_hat mr-2" />
-                      University of Computer Science
-                    </div>
-                    <hr className="my-4" />
-                    <p>
-                      Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                      Nick Murphy — writes, performs and records all of his own
-                      music.
-                    </p>
-                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                      Show more
-                    </a>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col className="order-xl-1" xl="8">
-              <Card className="bg-secondary shadow">
-                <CardHeader className="bg-white border-0">
-                  <Row className="align-items-center">
-                    <Col xs="8">
-                      <h3 className="mb-0">My account</h3>
-                    </Col>
-                    <Col className="text-right" xs="4">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        Settings
-                      </Button>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <CardBody>
+              </CardHeader>
+              <CardBody>
+                {name ?
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      User information
+                      Usuário
                     </h6>
-                    <div className="pl-lg-4">
+                    <div>
                       <Row>
-                        <Col lg="6">
+                        <Col >
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-username"
                             >
-                              Username
+                              Nome completo:
                             </label>
                             <Input
                               className="form-control"
-                              defaultValue="lucky.jesse"
-                              id="input-username"
-                              placeholder="Username"
+                              defaultValue={name}
+                              onChange={e => setName(e.target.value)}
+                              placeholder="Ex: João da Silva"
                               type="text"
                             />
                           </FormGroup>
                         </Col>
-                        <Col lg="6">
+                      </Row>
+                      <Row>
+                        <Col >
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Email address
+                              E-mail:
                             </label>
                             <Input
                               className="form-control"
-                              id="input-email"
-                              placeholder="jesse@example.com"
+                              defaultValue={email}
+                              placeholder="email@email.com"
+                              disabled={true}
                               type="email"
                             />
                           </FormGroup>
@@ -194,13 +169,12 @@ class Profile extends React.Component {
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              First name
+                              Tipo:
                             </label>
                             <Input
                               className="form-control"
-                              defaultValue="Lucky"
-                              id="input-first-name"
-                              placeholder="First name"
+                              defaultValue={type}
+                              disabled={true}
                               type="text"
                             />
                           </FormGroup>
@@ -211,13 +185,12 @@ class Profile extends React.Component {
                               className="form-control-label"
                               htmlFor="input-last-name"
                             >
-                              Last name
+                              Ativo desde:
                             </label>
                             <Input
                               className="form-control"
-                              defaultValue="Jesse"
-                              id="input-last-name"
-                              placeholder="Last name"
+                              defaultValue={createdAt ? moment(createdAt).add(3, 'hours').format('DD/MM/YYYY') : ''}
+                              disabled={true}
                               type="text"
                             />
                           </FormGroup>
@@ -227,9 +200,9 @@ class Profile extends React.Component {
                     <hr className="my-4" />
                     {/* Address */}
                     <h6 className="heading-small text-muted mb-4">
-                      Contact information
+                      Empresa
                     </h6>
-                    <div className="pl-lg-4">
+                    <div>
                       <Row>
                         <Col md="12">
                           <FormGroup>
@@ -237,96 +210,33 @@ class Profile extends React.Component {
                               className="form-control-label"
                               htmlFor="input-address"
                             >
-                              Address
+                              Nome:
                             </label>
                             <Input
                               className="form-control"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
+                              defaultValue={companyName}
+                              disabled={true}
                               type="text"
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Description */}
-                    <h6 className="heading-small text-muted mb-4">About me</h6>
-                    <div className="pl-lg-4">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          className="form-control"
-                          placeholder="A few words about you ..."
-                          rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                          type="textarea"
-                        />
-                      </FormGroup>
                     </div>
                   </Form>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </>
-    );
-  }
+                  : ''}
+              </CardBody>
+              <CardFooter>
+                <Button color="success" type="submit" onClick={() => handleUpdate()} disabled={loading}>
+                  {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
+                  Salvar
+                </Button>
+              </CardFooter>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
 }
 
 export default Profile;

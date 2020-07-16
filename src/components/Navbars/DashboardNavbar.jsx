@@ -52,7 +52,7 @@ function DashboardNavbar() {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Bem vindo!</h6>
                 </DropdownItem>
-                <DropdownItem to="/app/user-profile" tag={Link}>
+                <DropdownItem to="/app/perfil" tag={Link}>
                   <i className="ni ni-single-02" />
                   <span>Perfil</span>
                 </DropdownItem>

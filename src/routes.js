@@ -19,6 +19,7 @@ import Chat from "./views/pages/Chat/Chat";
 import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 import MaintenanceBank from "./views/pages/Bank/Maintenance";
 import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
+import Profile from "./views/pages/Profile";
 
 import { getTokenDecoded } from "./auth";
 
@@ -256,6 +257,15 @@ function routes() {
           display: true
         }
       ]
+    },
+    {
+      path: "/perfil",
+      name: "Perfil",
+      icon: "ni ni-bag-17 text-orange",
+      component: Profile,
+      layout: "/app",
+      private: true,
+      display: true
     }
   ];
 
