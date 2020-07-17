@@ -23,8 +23,6 @@ import { toast } from 'react-toastify';
 
 function OfxImports(props) {
 
-  console.log(props);
-
   const [transactions, setTransactions] = useState([]);
   
   const [bills, setBills] = useState('');
@@ -59,7 +57,11 @@ function OfxImports(props) {
         }
       });
 
-      const { transactions, file } = response.data;
+      const { file } = response.data;
+
+      let transactions = response.data.transactions.map(transaction => {
+        return {...transaction, ...{SELECTED: false}}
+      });
 
       setTransactions(transactions);
       setFileName(file.name);
@@ -75,6 +77,65 @@ function OfxImports(props) {
     
     }
   };
+
+  function handleSelect(checknum) {
+    
+    let tempTransactions = transactions.map(transaction => {
+
+      let tempTransaction = transaction;
+
+      if(tempTransaction.CHECKNUM === checknum) {
+        if(tempTransaction.SELECTED === false) {
+          tempTransaction.SELECTED = true;
+        } else {
+          tempTransaction.SELECTED = false;
+        }
+      }
+
+      return tempTransaction;
+    });
+
+    setTransactions(tempTransactions);
+
+  };
+
+  async function confirmUpload() {
+
+    setLoading(true);
+
+    try {
+    
+      let tempTransactions = transactions.filter(transaction => {
+        return transaction.SELECTED === true;
+      });
+
+      if (tempTransactions.length > 0) {
+
+        const response = await api.post('/upload/ofx/confirm', { transactions: tempTransactions, billId }, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('api_token')}`
+          }
+        });
+
+        setTransactions([]);
+        setFileName('');
+        setFileOfx('');
+        setLabelFile('Aguardando a importação do arquivo...');
+        toast.success('Movimentações geradas com sucesso!');
+
+      } else {
+
+        toast.error('Nenhuma movimentação foi selecionada!');
+      
+      }
+    
+    } catch (error) {
+    
+      toast.error('Ocorreu um erro na requisição!');
+    
+    }
+
+  }
 
   useEffect(() => {
 
@@ -191,7 +252,7 @@ function OfxImports(props) {
                   <Col className="text-right" xs="4">
                     <Button
                       color="success"
-                      onClick={e => e.preventDefault()}
+                      onClick={() => confirmUpload()}
                       size="sm"
                     >
                       Confimar
@@ -218,24 +279,26 @@ function OfxImports(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions.map(transaction => (
-                    <tr key={uniqueId()}>
-                      <td>
-                        <label className="custom-toggle">
-                          <input type="checkbox" />
-                          <span className="custom-toggle-slider rounded-circle" />
-                        </label>
-                      </td>
-                      <td>10/01/2020</td>
-                      <td>{transaction.MEMO}</td>
-                      <td>Transferências</td>
-                      <td style={{ color: transaction.TRNTYPE === 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
-                      <td className="text-right">
-                        <i className="ni ni-ruler-pencil text-primary mr-3" />
-                        <i className="ni ni-check-bold text-success" />
-                      </td>
-                    </tr>
-                  ))}
+                  {transactions.map(transaction => {                    
+                    return (
+                      <tr key={transaction.CHECKNUM}>
+                        <td>
+                          <label className="custom-toggle">
+                            <input type="checkbox" onChange={() => handleSelect(transaction.CHECKNUM)} />
+                            <span className="custom-toggle-slider rounded-circle" />
+                          </label>
+                        </td>
+                        <td>10/01/2020</td>
+                        <td>{transaction.MEMO}</td>
+                        <td>Transferências</td>
+                        <td style={{ color: transaction.TRNTYPE === 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
+                        <td className="text-right">
+                          <i className="ni ni-ruler-pencil text-primary mr-3" />
+                          <i className="ni ni-check-bold text-success" />
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </Table>
               <CardFooter>
