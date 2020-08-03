@@ -32,7 +32,29 @@ function OfxImports(props) {
   const [fileName, setFileName] = useState('');
   const [labelFile, setLabelFile] = useState('Aguardando a importação do arquivo...');
   const [loading, setLoading] = useState(false);
+
   const [modalOfx, setModalOfx] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+
+  const [checknum, setChecknum] = useState("");
+  const [category, setCategory] = useState([]);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    loadAll();
+  }, []);
+
+  async function loadAll() {
+    setCategories([]);
+
+    await api.get('/categories', {
+      headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
+    }).then(async response => {
+      setCategories(response.data);
+    });
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -84,6 +106,9 @@ function OfxImports(props) {
 
       let tempTransaction = transaction;
 
+      tempTransaction.CATEGORY = "";
+      tempTransaction.CATEGORYDESCRIPTION = "";
+
       if(tempTransaction.CHECKNUM === checknum) {
         if(tempTransaction.SELECTED === false) {
           tempTransaction.SELECTED = true;
@@ -93,6 +118,7 @@ function OfxImports(props) {
       }
 
       return tempTransaction;
+      
     });
 
     setTransactions(tempTransactions);
@@ -101,10 +127,22 @@ function OfxImports(props) {
 
   async function confirmUpload() {
 
+    let pendingTransactions = false;
+
+    transactions.map(transaction => {
+      if (transaction.SELECTED === true && transaction.CATEGORY == "") pendingTransactions = true;
+    });
+
+    if(pendingTransactions) {
+      toast.error('Todas as movimentações selecionadas devem ter uma categoria selecionada!');
+
+      return;
+    }
+
     setLoading(true);
 
     try {
-    
+
       let tempTransactions = transactions.filter(transaction => {
         return transaction.SELECTED === true;
       });
@@ -158,6 +196,32 @@ function OfxImports(props) {
     if(bills.length > 0) setBillId(bills[0].id);
 
   }, [bills]);
+
+  function editTransaction(transaction) {
+    setChecknum(transaction.CHECKNUM);
+    setDescription(transaction.MEMO);
+    setCategory(transaction.CATEGORY);
+    setModalEdit(true);
+  }
+
+  function updateTransaction() {
+    let tempTransactions = transactions.map(transaction => {
+
+      let tempTransaction = transaction;
+
+      if(tempTransaction.CHECKNUM === checknum) {
+        tempTransaction.MEMO = description;
+        tempTransaction.CATEGORY = category;
+        tempTransaction.CATEGORYDESCRIPTION = categories.find(category => category.id == transaction.CATEGORY).name;
+      }
+
+      return tempTransaction;
+      
+    });
+
+    setTransactions(tempTransactions);
+    setModalEdit(!modalEdit);
+  }
 
   return (
     <>
@@ -241,6 +305,82 @@ function OfxImports(props) {
           </Form>
         </Modal>
 
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={modalEdit}
+          toggle={() => setModalEdit(!modalEdit)}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="modalOfxLabel">
+              Edite a transação
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => setModalEdit(!modalEdit)}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <FormGroup>
+              <label
+                className="form-control-label"
+                htmlFor="input-name"
+              >
+                Descrição
+              </label>
+              <Input
+                className="form-control"
+                value={description}
+                id="input-name"
+                placeholder="Descrição..."
+                type="text"
+                onChange={e => setDescription(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="bill-id">
+                Categoria
+              </label>
+              <Input
+                type="select"
+                className="form-control"
+                name="select-parent"
+                id="select-parent"
+                onChange={e => {
+                  if (e.target.value !== '')
+                    setCategory(e.target.value);
+                  else
+                  setCategory(null);
+                }}>
+                <option value=''>Nenhum</option>
+                {categories !== undefined ? categories.map(category => {
+                  return <option value={category.id} key={category.id}>
+                    {category.space} {category.name}
+                  </option>
+                }) : ''}
+              </Input>
+            </FormGroup>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => setModalEdit(!modalEdit)}
+            >
+              Fechar
+            </Button>
+            <Button className="my-4" color="success" type="submit" disabled={loading} onClick={() => updateTransaction()}>
+              {loading && <i className="fas fa-spinner fa-pulse mr-2"></i>}
+              Atualizar!
+            </Button>
+          </div>
+        </Modal>
+
         <Row>
           <Col>
             <Card className="bg-secondary shadow">
@@ -290,11 +430,10 @@ function OfxImports(props) {
                         </td>
                         <td>10/01/2020</td>
                         <td>{transaction.MEMO}</td>
-                        <td>Transferências</td>
+                        <td>{transaction.CATEGORY == "" ? "-" : transaction.CATEGORYDESCRIPTION}</td>
                         <td style={{ color: transaction.TRNTYPE === 'CREDIT' ? '#2dce89' : '#f5365c' }}>R$ {transaction.TRNAMT}</td>
                         <td className="text-right">
-                          <i className="ni ni-ruler-pencil text-primary mr-3" />
-                          <i className="ni ni-check-bold text-success" />
+                          <i className="ni ni-ruler-pencil text-primary mr-3" onClick={() => editTransaction(transaction)} />
                         </td>
                       </tr>
                     )
