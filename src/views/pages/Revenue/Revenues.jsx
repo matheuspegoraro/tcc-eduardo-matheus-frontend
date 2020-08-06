@@ -26,7 +26,7 @@ import {
 
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
-import { formatSaveMoney, formatShowMoney } from '../../../utils';
+import { formatSaveMoney, formatShowMoney, monthNames } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
 function Revenues() {
@@ -45,14 +45,34 @@ function Revenues() {
 
     const history = useHistory();
 
+    const [currentMonth, setCurrentMonth] = useState(0);
+    const [currentYear, setCurrentYear] = useState(0);
+
+    useEffect(() => {
+        setCurrentMonth(moment().month() + 1);
+        setCurrentYear(moment().year());
+    }, []);
+
     function toggleModalPay() {
         setModalPay(!modalPay);
+    }
+
+    function addMonth(increase) {
+        if(currentMonth === 12 && increase === 1) {
+            setCurrentYear(currentYear + 1);
+            setCurrentMonth(1);
+        } else if(currentMonth === 1 && increase === -1) {
+            setCurrentYear(currentYear - 1);
+            setCurrentMonth(12);
+        } else {
+            setCurrentMonth(currentMonth + increase);
+        }
     }
 
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/movements/revenues', {
+            const response = await api.get(`/movements/revenues?month=${currentMonth}&year=${currentYear}`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
@@ -63,7 +83,7 @@ function Revenues() {
 
         fetchData();
 
-    }, [loading]);
+    }, [loading, currentMonth]);
 
 
     async function handleMakePayment(revenueId) {
@@ -255,8 +275,31 @@ function Revenues() {
                         <Card className="bg-secondary shadow">
                             <CardHeader className="bg-white border-0">
                                 <Row className="align-items-center">
-                                    <Col xs="8">
+                                    <Col xs="4">
                                         <h3 className="mb-0">Receitas</h3>
+                                    </Col>
+                                    <Col xs="4" className="text-center">
+                                        <Button
+                                            color="success"
+                                            onClick={() => addMonth(-1)}
+                                            size="sm"
+                                        >
+                                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                        </Button>
+                                        <Button
+                                            color="success"
+                                            size="sm"
+                                            disabled={true}
+                                        >
+                                            {monthNames[currentMonth - 1]} / {currentYear}
+                                        </Button>
+                                        <Button
+                                            color="success"
+                                            onClick={() => addMonth(+1)}
+                                            size="sm"
+                                        >
+                                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                        </Button>
                                     </Col>
                                     <Col className="text-right" xs="4">
                                         <Button
@@ -265,7 +308,7 @@ function Revenues() {
                                             size="sm"
                                         >
                                             Novo
-                                    </Button>
+                                        </Button>
                                     </Col>
                                 </Row>
                             </CardHeader>

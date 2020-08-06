@@ -23,7 +23,7 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
 import { toast } from 'react-toastify';
-import { formatSaveMoney, formatShowMoney, formatShowDate } from '../../../utils';
+import { formatSaveMoney, formatShowMoney, monthNames } from '../../../utils';
 import CurrencyInput from 'react-currency-input';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
@@ -42,14 +42,34 @@ function Expenses() {
 
     const history = useHistory();
 
+    const [currentMonth, setCurrentMonth] = useState(0);
+    const [currentYear, setCurrentYear] = useState(0);
+
+    useEffect(() => {
+        setCurrentMonth(moment().month() + 1);
+        setCurrentYear(moment().year());
+    }, []);
+
     function toggleModalPay() {
         setModalPay(!modalPay);
+    }
+
+    function addMonth(increase) {
+        if(currentMonth === 12 && increase === 1) {
+            setCurrentYear(currentYear + 1);
+            setCurrentMonth(1);
+        } else if(currentMonth === 1 && increase === -1) {
+            setCurrentYear(currentYear - 1);
+            setCurrentMonth(12);
+        } else {
+            setCurrentMonth(currentMonth + increase);
+        }
     }
 
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/movements/expenses', {
+            const response = await api.get(`/movements/expenses?month=${currentMonth}&year=${currentYear}`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('api_token')}`
                 }
@@ -60,7 +80,7 @@ function Expenses() {
 
         fetchData();
 
-    }, [loading]);
+    }, [loading, currentMonth]);
 
 
 
@@ -254,8 +274,31 @@ function Expenses() {
                         <Card className="bg-secondary shadow">
                             <CardHeader className="bg-white border-0">
                                 <Row className="align-items-center">
-                                    <Col xs="8">
+                                    <Col xs="4">
                                         <h3 className="mb-0">Despesas</h3>
+                                    </Col>
+                                    <Col xs="4" className="text-center">
+                                        <Button
+                                            color="danger"
+                                            onClick={() => addMonth(-1)}
+                                            size="sm"
+                                        >
+                                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            size="sm"
+                                            disabled={true}
+                                        >
+                                            {monthNames[currentMonth - 1]} / {currentYear}
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            onClick={() => addMonth(+1)}
+                                            size="sm"
+                                        >
+                                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                        </Button>
                                     </Col>
                                     <Col className="text-right" xs="4">
                                         <Button
