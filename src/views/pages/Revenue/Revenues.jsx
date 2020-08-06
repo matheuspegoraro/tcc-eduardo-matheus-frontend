@@ -29,7 +29,7 @@ import api from '../../../axios';
 import { formatSaveMoney, formatShowMoney } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
-function Revenues() {
+function Revenues(props) {
 
     const REVENUES = 2;
 
@@ -45,6 +45,8 @@ function Revenues() {
 
     const history = useHistory();
 
+    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
+
     function toggleModalPay() {
         setModalPay(!modalPay);
     }
@@ -52,11 +54,26 @@ function Revenues() {
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/movements/revenues', {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
-                }
-            });
+
+            let response;
+
+            if (!clientCompanyId) {
+
+                response = await api.get('/movements/revenues', {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            } else {
+
+                response = await api.get(`/relationship-company/revenues/${clientCompanyId}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            }
 
             setRevenues(response.data);
         }
@@ -258,15 +275,19 @@ function Revenues() {
                                     <Col xs="8">
                                         <h3 className="mb-0">Receitas</h3>
                                     </Col>
-                                    <Col className="text-right" xs="4">
-                                        <Button
-                                            color="success"
-                                            onClick={() => history.push(`/app/receitas/novo`)}
-                                            size="sm"
-                                        >
-                                            Novo
-                                    </Button>
-                                    </Col>
+
+                                    {!clientCompanyId &&
+                                        <Col className="text-right" xs="4">
+                                            <Button
+                                                color="success"
+                                                onClick={() => history.push(`/app/receitas/novo`)}
+                                                size="sm"
+                                            >
+                                                Novo
+                                            </Button>
+                                        </Col>
+                                    }
+
                                 </Row>
                             </CardHeader>
                             <Table className="align-items-center table-flush" responsive>
@@ -280,7 +301,7 @@ function Revenues() {
                                         <th scope="col">Recebido</th>
                                         <th scope="col">Recebimento em</th>
                                         <th scope="col">Cadastrado em</th>
-                                        <th scope="col">Ações</th>
+                                        {!clientCompanyId && <th scope="col">Ações</th>}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -317,24 +338,29 @@ function Revenues() {
                                                         {revenue.createdAt}
                                                     </Moment>
                                                 </td>
-                                                <td>
-                                                    <Button
-                                                        color="info"
-                                                        onClick={() => history.push(`/app/receitas/${revenue.id}/editar`)}
-                                                        size="sm"
-                                                        className="mt-1"
-                                                    >
-                                                        Alterar
+                                                {
+                                                    !clientCompanyId &&
+
+                                                    <td>
+                                                        <Button
+                                                            color="info"
+                                                            onClick={() => history.push(`/app/receitas/${revenue.id}/editar`)}
+                                                            size="sm"
+                                                            className="mt-1"
+                                                        >
+                                                            Alterar
                                                          </Button>
-                                                    <Button
-                                                        color="danger"
-                                                        onClick={() => handleDelete(revenue.id)}
-                                                        size="sm"
-                                                        className="ml-2 mt-1"
-                                                    >
-                                                        Remover
+                                                        <Button
+                                                            color="danger"
+                                                            onClick={() => handleDelete(revenue.id)}
+                                                            size="sm"
+                                                            className="ml-2 mt-1"
+                                                        >
+                                                            Remover
                                                          </Button>
-                                                </td>
+                                                    </td>
+                                                }
+
                                             </tr>
                                         )
                                     })}
