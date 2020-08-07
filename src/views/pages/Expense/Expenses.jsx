@@ -28,7 +28,7 @@ import CurrencyInput from 'react-currency-input';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
 
-function Expenses() {
+function Expenses(props) {
 
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -50,6 +50,8 @@ function Expenses() {
         setCurrentYear(moment().year());
     }, []);
 
+    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
+
     function toggleModalPay() {
         setModalPay(!modalPay);
     }
@@ -67,13 +69,28 @@ function Expenses() {
     }
 
     useEffect(() => {
-
         async function fetchData() {
-            const response = await api.get(`/movements/expenses?month=${currentMonth}&year=${currentYear}`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
-                }
-            });
+
+            let response;
+
+            if (!clientCompanyId) {
+
+                response = await api.get(`/movements/expenses?month=${currentMonth}&year=${currentYear}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            } else {
+
+                response = await api.get(`/relationship-company/expenses/${clientCompanyId}?month=${currentMonth}&year=${currentYear}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            }
+
 
             setExpenses(response.data);
         }
@@ -300,15 +317,18 @@ function Expenses() {
                                             <i class="fa fa-arrow-right" aria-hidden="true"></i>
                                         </Button>
                                     </Col>
-                                    <Col className="text-right" xs="4">
-                                        <Button
-                                            color="success"
-                                            onClick={() => history.push('/app/despesas/novo')}
-                                            size="sm"
-                                        >
-                                            Novo
-                                    </Button>
-                                    </Col>
+                                    {!clientCompanyId &&
+                                        <Col className="text-right" xs="4">
+                                            <Button
+                                                color="success"
+                                                onClick={() => history.push('/app/despesas/novo')}
+                                                size="sm"
+                                            >
+                                                Novo
+                                            </Button>
+                                        </Col>
+                                    }
+
                                 </Row>
                             </CardHeader>
                             <Table className="align-items-center table-flush" responsive>
@@ -322,7 +342,7 @@ function Expenses() {
                                         <th scope="col">Pago</th>
                                         <th scope="col">Pago em</th>
                                         <th scope="col">Cadastrado em</th>
-                                        <th scope="col">Ações</th>
+                                        {!clientCompanyId && <th scope="col">Ações</th>}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -357,24 +377,28 @@ function Expenses() {
                                                         {expense.createdAt}
                                                     </Moment>
                                                 </td>
-                                                <td>
-                                                    <Button
-                                                        color="info"
-                                                        onClick={() => history.push(`/app/despesas/${expense.id}/editar`)}
-                                                        size="sm"
-                                                        className="mt-1"
-                                                    >
-                                                        Alterar
-                                                         </Button>
-                                                    <Button
-                                                        color="danger"
-                                                        onClick={() => handleDelete(expense.id)}
-                                                        size="sm"
-                                                        className="ml-2 mt-1"
-                                                    >
-                                                        Remover
-                                                         </Button>
-                                                </td>
+                                                {!clientCompanyId &&
+
+                                                    <td>
+                                                        <Button
+                                                            color="info"
+                                                            onClick={() => history.push(`/app/despesas/${expense.id}/editar`)}
+                                                            size="sm"
+                                                            className="mt-1"
+                                                        >
+                                                            Alterar
+                                                        </Button>
+                                                        <Button
+                                                            color="danger"
+                                                            onClick={() => handleDelete(expense.id)}
+                                                            size="sm"
+                                                            className="ml-2 mt-1"
+                                                        >
+                                                            Remover
+                                                        </Button>
+                                                    </td>
+                                                }
+
                                             </tr>
                                         )
                                     })}

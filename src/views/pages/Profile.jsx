@@ -94,8 +94,8 @@ function Profile() {
 
     <>
       <HeaderWithDescription
-        title="Receitas"
-        description="Permite o gerencimento de suas contas à receber, você pode controlar a entrada de valores na empresa e conferir recebimentos pendentes."
+        title="Perfil"
+        description="Principais informações do usuário, e empresa."
         color="success"
       />
 

@@ -21,10 +21,12 @@ import { toast } from 'react-toastify';
 import { formatShowMoney } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
-function Transfers() {
+function Transfers(props) {
 
     const [transfers, setTransfers] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
 
     //history
     const history = useHistory();
@@ -32,11 +34,26 @@ function Transfers() {
     useEffect(() => {
 
         async function fetchData() {
-            const response = await api.get('/movements/transfers', {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('api_token')}`
-                }
-            });
+
+            let response;
+
+            if (!clientCompanyId) {
+
+                response = await api.get('/movements/transfers', {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            } else {
+
+                response = await api.get(`/relationship-company/transfers/${clientCompanyId}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('api_token')}`
+                    }
+                });
+
+            }
 
             setTransfers(response.data);
         }
@@ -107,15 +124,17 @@ function Transfers() {
                                     <Col xs="8">
                                         <h3 className="mb-0">Tranferências</h3>
                                     </Col>
-                                    <Col className="text-right" xs="4">
-                                        <Button
-                                            color="success"
-                                            onClick={() => history.push('/app/transferencias/novo')}
-                                            size="sm"
-                                        >
-                                            Tranferir
-                                    </Button>
-                                    </Col>
+                                    { !clientCompanyId &&
+                                        <Col className="text-right" xs="4">
+                                            <Button
+                                                color="success"
+                                                onClick={() => history.push('/app/transferencias/novo')}
+                                                size="sm"
+                                            >
+                                                Tranferir
+                                        </Button>
+                                        </Col>
+                                    }
                                 </Row>
                             </CardHeader>
                             <Table className="align-items-center table-flush" responsive>
@@ -127,7 +146,7 @@ function Transfers() {
                                         <th scope="col">Valor</th>
                                         <th scope="col">Transferido em</th>
                                         <th scope="col">Cadastrado em</th>
-                                        <th scope="col">Ações</th>
+                                        { !clientCompanyId && <th scope="col">Ações</th> }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,6 +167,7 @@ function Transfers() {
                                                         {transfer.createdAt}
                                                     </Moment>
                                                 </td>
+                                                { !clientCompanyId && 
                                                 <td>
                                                     <Button
                                                         color="danger"
@@ -158,6 +178,7 @@ function Transfers() {
                                                         Remover
                                                          </Button>
                                                 </td>
+                                                }
                                             </tr>
                                         )
                                     })}

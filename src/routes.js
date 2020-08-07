@@ -20,6 +20,7 @@ import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 import MaintenanceBank from "./views/pages/Bank/Maintenance";
 import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
 import Profile from "./views/pages/Profile";
+import Consultancies from "./views/pages/Consultancies";
 
 import { getTokenDecoded } from "./auth";
 
@@ -278,6 +279,51 @@ function routes() {
       layout: "/app",
       private: true,
       display: true
+    },
+    {
+      path: "/perfil",
+      name: "Perfil",
+      icon: "ni ni-bag-17 text-orange",
+      component: Profile,
+      layout: "/app",
+      private: true,
+      display: false
+    },
+    {
+      path: "/consultorias",
+      name: "Análise de Clientes",
+      icon: "fa fa-user-circle text-orange",
+      component: Consultancies,
+      layout: "/app",
+      private: true,
+      display: true
+    },
+    {
+      path: "/receitas",
+      name: "Receitas",
+      icon: "fa fa-arrow-up text-green",
+      component: Revenues,
+      layout: "/app",
+      private: true,
+      display: false
+    },
+    {
+      path: "/despesas",
+      name: "Despesas",
+      icon: "fa fa-arrow-up text-green",
+      component: Expenses,
+      layout: "/app",
+      private: true,
+      display: false
+    },
+    {
+      path: "/transferencias",
+      name: "Transferências",
+      icon: "fa fa-exchange-alt text-primary",
+      component: Transfers,
+      layout: "/app",
+      private: true,
+      display: false
     },
   ];
 
