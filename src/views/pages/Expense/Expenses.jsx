@@ -95,7 +95,8 @@ function Expenses(props) {
             setExpenses(response.data);
         }
 
-        fetchData();
+        if (currentMonth !== 0 && currentYear !== 0) 
+            fetchData();
 
     }, [loading, currentMonth]);
 

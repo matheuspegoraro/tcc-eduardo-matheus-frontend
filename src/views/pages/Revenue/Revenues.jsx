@@ -97,7 +97,8 @@ function Revenues(props) {
             setRevenues(response.data);
         }
 
-        fetchData();
+        if (currentMonth !== 0 && currentYear !== 0) 
+            fetchData();
 
     }, [loading, currentMonth]);
 
