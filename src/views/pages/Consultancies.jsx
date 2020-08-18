@@ -12,7 +12,8 @@ import {
   Row,
   Col,
   Breadcrumb,
-  BreadcrumbItem
+  BreadcrumbItem,
+  UncontrolledTooltip
 } from "reactstrap";
 
 import HeaderWithDescription from "./../../components/Headers/HeaderWithDescription";
@@ -72,9 +73,7 @@ function Profile() {
                   <tr>
                     <th scope="col">Nome</th>
                     <th scope="col">Iniciou em</th>
-                    <th scope="col">Despesas</th>
-                    <th scope="col">Receitas</th>
-                    <th scope="col">Transferêcias</th>
+                    <th scope="col">Acessar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,41 +83,74 @@ function Profile() {
                       <tr key={client.id}>
                         <td>{client.clients.name}</td>
                         <td>
-                          { moment(client.createdAt).add(3, "hours").format('DD/MM/YYYY') }
+                          {moment(client.createdAt).add(3, "hours").format('DD/MM/YYYY')}
                         </td>
                         <td>
-                          <Button
-                            color="info"
-                            onClick={() => history.push(`/app/despesas`, {
-                              clientCompanyId: client.clients.id
-                            })}
-                            size="sm"
-                            className="mt-1"
-                          >
-                            Acessar
-                            </Button></td>
-                        <td>
-                          <Button
-                            color="info"
+
+                          <a
+                            className="fa fa-arrow-up text-green mr-2"
+                            href="#"
+                            style={{fontSize: 18}}
+                            id="tooltip1"
                             onClick={() => history.push(`/app/receitas`, {
                               clientCompanyId: client.clients.id
                             })}
-                            size="sm"
-                            className="mt-1"
                           >
-                            Acessar
-                          </Button></td>
-                        <td>
-                          <Button
-                            color="info"
+                          </a>
+                          <UncontrolledTooltip
+                            delay={0}
+                            target="tooltip1"
+                          >
+                            Receitas
+                          </UncontrolledTooltip>
+
+                          <a
+                            className="fa fa-arrow-down text-red mr-2"
+                            href="#"
+                            style={{fontSize: 18}}
+                            id="tooltip2"
+                            onClick={() => history.push(`/app/despesas`, {
+                              clientCompanyId: client.clients.id
+                            })}
+                          >
+                          </a>
+                          <UncontrolledTooltip
+                            delay={0}
+                            target="tooltip2"
+                          >
+                            Despesas
+                          </UncontrolledTooltip>
+
+                          <a
+                            className="fa fa-exchange-alt text-primary mr-2"
+                            href="#"
+                            style={{fontSize: 18}}
+                            id="tooltip3"
                             onClick={() => history.push(`/app/transferencias`, {
                               clientCompanyId: client.clients.id
                             })}
-                            size="sm"
-                            className="mt-1"
                           >
-                            Acessar
-                          </Button>
+                          </a>
+                          <UncontrolledTooltip
+                            delay={0}
+                            target="tooltip3"
+                          >
+                            Transferencias
+                          </UncontrolledTooltip>
+
+                          <a
+                            className="ni ni-money-coins text-warning mr-2"
+                            href="#"
+                            style={{fontSize: 18}}
+                            id="tooltip4"
+                          >
+                          </a>
+                          <UncontrolledTooltip
+                            delay={0}
+                            target="tooltip4"
+                          >
+                            Fluxo de Caixa
+                          </UncontrolledTooltip>
                         </td>
                       </tr>
                     )
