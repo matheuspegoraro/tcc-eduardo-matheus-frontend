@@ -143,6 +143,9 @@ function Profile() {
                             href="#"
                             style={{fontSize: 18}}
                             id="tooltip4"
+                            onClick={() => history.push(`/app/fluxo-de-caixa`, {
+                              clientCompanyId: client.clients.id
+                            })}
                           >
                           </a>
                           <UncontrolledTooltip

@@ -26,10 +26,18 @@ function Transfers(props) {
     const [transfers, setTransfers] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
+    const [clientCompanyId, setClientCompanyId] = useState(0);
 
     //history
     const history = useHistory();
+
+    useEffect(() => {
+        if(props.location.state) {
+            localStorage.setItem('clientCompanyId', props.location.state.clientCompanyId);
+        }
+
+        setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
+    }, []);
 
     useEffect(() => {
 

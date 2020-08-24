@@ -29,13 +29,13 @@ function CashFlow(props) {
 
     const [loading, setLoading] = useState(false);
 
-    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
-
     //history
     const history = useHistory();
 
     const [currentMonth, setCurrentMonth] = useState(0);
     const [currentYear, setCurrentYear] = useState(0);
+
+    const [clientCompanyId, setClientCompanyId] = useState(0);
 
     function addMonth(increase) {
         if(currentMonth === 12 && increase === 1) {
@@ -52,6 +52,12 @@ function CashFlow(props) {
     useEffect(() => {
         setCurrentMonth(moment().month() + 1);
         setCurrentYear(moment().year());
+
+        if(props.location.state) {
+            localStorage.setItem('clientCompanyId', props.location.state.clientCompanyId);
+        }
+
+        setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
     }, []);
 
     useEffect(() => {

@@ -335,6 +335,15 @@ function routes() {
       private: true,
       display: false
     },
+    {
+      path: "/fluxo-de-caixa",
+      name: "Fluxo de Caixa",
+      icon: "fa fa-chart-line text-orange",
+      component: CashFlow,
+      layout: "/app",
+      private: true,
+      display: false
+    },
   ];
 
   const adminRoutes = [

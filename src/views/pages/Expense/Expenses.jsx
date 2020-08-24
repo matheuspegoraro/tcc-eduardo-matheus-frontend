@@ -45,12 +45,18 @@ function Expenses(props) {
     const [currentMonth, setCurrentMonth] = useState(0);
     const [currentYear, setCurrentYear] = useState(0);
 
+    const [clientCompanyId, setClientCompanyId] = useState(0);
+
     useEffect(() => {
         setCurrentMonth(moment().month() + 1);
         setCurrentYear(moment().year());
-    }, []);
 
-    const clientCompanyId = props.location.state ? props.location.state.clientCompanyId : null;
+        if(props.location.state) {
+            localStorage.setItem('clientCompanyId', props.location.state.clientCompanyId);
+        }
+
+        setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
+    }, []);
 
     function toggleModalPay() {
         setModalPay(!modalPay);
