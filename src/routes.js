@@ -21,6 +21,7 @@ import MaintenanceBank from "./views/pages/Bank/Maintenance";
 import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
 import Profile from "./views/pages/Profile";
 import Consultancies from "./views/pages/Consultancies";
+import CashFlow from "./views/pages/CashFlow";
 
 import { getTokenDecoded } from "./auth";
 
@@ -91,6 +92,15 @@ function routes() {
       private: true,
       display: true,
       children: [
+        {
+          path: "/fluxo-de-caixa",
+          name: "Fluxo de Caixa",
+          icon: "fa fa-chart-line text-orange",
+          component: CashFlow,
+          layout: "/app",
+          private: true,
+          display: true
+        },
         {
           path: "/receitas/:id/editar",
           name: "Receitas",
