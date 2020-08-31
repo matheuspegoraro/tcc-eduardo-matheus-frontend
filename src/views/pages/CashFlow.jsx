@@ -83,8 +83,9 @@ function CashFlow(props) {
                 });
 
             }
-            console.log(response.data);
-            setMovements(response.data);
+            
+            if (currentMonth !== 0 && currentYear !== 0) 
+                setMovements(response.data);
         }
 
         fetchData();

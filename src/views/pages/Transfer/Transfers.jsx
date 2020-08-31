@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
+
 import Moment from 'react-moment';
+import moment from 'moment';
 
 import {
     Button,
@@ -18,7 +20,7 @@ import {
 import HeaderWithDescription from "components/Headers/HeaderWithDescription.jsx";
 import api from '../../../axios';
 import { toast } from 'react-toastify';
-import { formatShowMoney } from '../../../utils';
+import { formatShowMoney, monthNames } from '../../../utils';
 import { confirm } from "../../../components/Confirmations/Confirmation";
 
 function Transfers(props) {
@@ -26,18 +28,36 @@ function Transfers(props) {
     const [transfers, setTransfers] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [currentMonth, setCurrentMonth] = useState(0);
+    const [currentYear, setCurrentYear] = useState(0);
+
     const [clientCompanyId, setClientCompanyId] = useState(0);
 
-    //history
-    const history = useHistory();
+    function addMonth(increase) {
+        if(currentMonth === 12 && increase === 1) {
+            setCurrentYear(currentYear + 1);
+            setCurrentMonth(1);
+        } else if(currentMonth === 1 && increase === -1) {
+            setCurrentYear(currentYear - 1);
+            setCurrentMonth(12);
+        } else {
+            setCurrentMonth(currentMonth + increase);
+        }
+    }
 
     useEffect(() => {
+        setCurrentMonth(moment().month() + 1);
+        setCurrentYear(moment().year());
+
         if(props.location.state) {
             localStorage.setItem('clientCompanyId', props.location.state.clientCompanyId);
         }
 
         setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
     }, []);
+
+    //history
+    const history = useHistory();
 
     useEffect(() => {
 
@@ -47,7 +67,7 @@ function Transfers(props) {
 
             if (!clientCompanyId) {
 
-                response = await api.get('/movements/transfers', {
+                response = await api.get(`/movements/transfers?month=${currentMonth}&year=${currentYear}`, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem('api_token')}`
                     }
@@ -55,20 +75,21 @@ function Transfers(props) {
 
             } else {
 
-                response = await api.get(`/relationship-company/transfers/${clientCompanyId}`, {
+                response = await api.get(`/relationship-company/transfers/${clientCompanyId}?month=${currentMonth}&year=${currentYear}`, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem('api_token')}`
                     }
                 });
 
             }
-
-            setTransfers(response.data);
+            
+            if (currentMonth !== 0 && currentYear !== 0) 
+                setTransfers(response.data);
         }
 
         fetchData();
 
-    }, [loading]);
+    }, [loading, currentMonth]);
 
 
     async function handleDelete(transferId) {
@@ -129,8 +150,31 @@ function Transfers(props) {
                         <Card className="bg-secondary shadow">
                             <CardHeader className="bg-white border-0">
                                 <Row className="align-items-center">
-                                    <Col xs="8">
+                                    <Col xs="4">
                                         <h3 className="mb-0">Tranferências</h3>
+                                    </Col>
+                                    <Col xs="4" className="text-center">
+                                        <Button
+                                            color="success"
+                                            onClick={() => addMonth(-1)}
+                                            size="sm"
+                                        >
+                                            <i className="fa fa-arrow-left" aria-hidden="true"></i>
+                                        </Button>
+                                        <Button
+                                            color="success"
+                                            size="sm"
+                                            disabled={true}
+                                        >
+                                            {monthNames[currentMonth - 1]} / {currentYear}
+                                        </Button>
+                                        <Button
+                                            color="success"
+                                            onClick={() => addMonth(+1)}
+                                            size="sm"
+                                        >
+                                            <i className="fa fa-arrow-right" aria-hidden="true"></i>
+                                        </Button>
                                     </Col>
                                     { !clientCompanyId &&
                                         <Col className="text-right" xs="4">

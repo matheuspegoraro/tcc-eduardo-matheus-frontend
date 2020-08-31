@@ -17,6 +17,9 @@ const getTokenDecoded = () => {
 
   if (token == null) return false;
 
+  if (jwt.decode(token).type === 1) 
+    localStorage.setItem('clientCompanyId', null);
+
   return jwt.decode(token);
 };
 
