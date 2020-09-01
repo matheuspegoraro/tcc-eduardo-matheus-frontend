@@ -283,9 +283,9 @@ function routes() {
   const advisoryRoutes = [
     {
       path: "/principal",
-      name: "Principal",
-      icon: "ni ni-tv-2 text-primary",
-      component: AdvisoryDashboard,
+      name: "Análise de Clientes",
+      icon: "fa fa-user-circle text-orange",
+      component: Consultancies,
       layout: "/app",
       private: true,
       display: true
@@ -298,15 +298,6 @@ function routes() {
       layout: "/app",
       private: true,
       display: false
-    },
-    {
-      path: "/consultorias",
-      name: "Análise de Clientes",
-      icon: "fa fa-user-circle text-orange",
-      component: Consultancies,
-      layout: "/app",
-      private: true,
-      display: true
     },
     {
       path: "/receitas",
@@ -340,6 +331,15 @@ function routes() {
       name: "Fluxo de Caixa",
       icon: "fa fa-chart-line text-orange",
       component: CashFlow,
+      layout: "/app",
+      private: true,
+      display: false
+    },
+    {
+      path: "/dashboard-cliente",
+      name: "Dashboard do Cliente",
+      icon: "ni ni-tv-2 text-primary",
+      component: ClientDashboard,
       layout: "/app",
       private: true,
       display: false

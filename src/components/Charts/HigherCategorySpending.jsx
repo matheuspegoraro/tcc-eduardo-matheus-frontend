@@ -15,6 +15,8 @@ function HigherCategorySpending() {
 
     const [higherCategorySpending, setHigherCategorySpending] = useState([]);
 
+    const [clientCompanyId, setClientCompanyId] = useState(null);
+
     const chartExample2 = {
         options: {
           tooltips: {
@@ -48,8 +50,22 @@ function HigherCategorySpending() {
 
     useEffect(() => {
 
+      if(parseInt(localStorage.getItem('clientCompanyId')))
+        setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
+      else
+        setClientCompanyId(0);
+
       async function fetchData() {
-        const response = await api.get('http://localhost:3333/client-dashboard/higher-category-spending', {
+        
+        let url = '';
+
+        if (clientCompanyId) {
+          url = `/client-dashboard/higher-category-spending/${clientCompanyId}`;
+        } else {
+          url = `/client-dashboard/higher-category-spending`;
+        }
+
+        const response = await api.get(url, {
           headers: {
             authorization: `Bearer ${localStorage.getItem('api_token')}`
           }
@@ -58,9 +74,10 @@ function HigherCategorySpending() {
         setHigherCategorySpending(response.data.higherCategorySpending);
       }
   
-      fetchData();
+      if (clientCompanyId !== null)
+        fetchData();
   
-    }, []);
+    }, [clientCompanyId]);
 
     return (
         <>

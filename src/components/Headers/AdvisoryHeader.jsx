@@ -9,13 +9,11 @@ function AdvisoryHeader() {
   useEffect(() => {
 
     async function fetchData() {
-      const response = await api.get(`http://localhost:3333/client-dashboard/monthly-increase`, {
+      const response = await api.get(`/client-dashboard/monthly-increase`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
-
-      console.log(response.data);
 
       return response.data;
     }

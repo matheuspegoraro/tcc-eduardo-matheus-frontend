@@ -16,6 +16,8 @@ function MovimentsValues() {
     const [revenues, setRevenues] = useState(null);
     const [expenses, setExpenses] = useState(null);
 
+    const [clientCompanyId, setClientCompanyId] = useState(null);
+
     const chartExample2 = {
         options: {
           tooltips: {
@@ -59,24 +61,39 @@ function MovimentsValues() {
 
     useEffect(() => {
 
-        async function fetchData(type) {
-          const response = await api.get(`http://localhost:3333/client-dashboard/${type}`, {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('api_token')}`
-            }
-          });
+      if(parseInt(localStorage.getItem('clientCompanyId')))
+        setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
+      else
+        setClientCompanyId(0);
 
-          return response.data;
+      async function fetchData(type) {
+
+        let url = '';
+
+        if (clientCompanyId) {
+          url = `/client-dashboard/${type}/${clientCompanyId}`;
+        } else {
+          url = `/client-dashboard/${type}`;
         }
 
-        async function fetchDataLoad() {
-            setRevenues(await fetchData(2));
-            setExpenses(await fetchData(1));
-        }
-    
+        const response = await api.get(url, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('api_token')}`
+          }
+        });
+
+        return response.data;
+      }
+
+      async function fetchDataLoad() {
+          setRevenues(await fetchData(2));
+          setExpenses(await fetchData(1));
+      }
+  
+      if(clientCompanyId !== null) 
         fetchDataLoad();
     
-    }, []);
+    }, [clientCompanyId]);
 
     return (
         <>

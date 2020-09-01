@@ -47,7 +47,7 @@ function ClientsMovimentsValues() {
     useEffect(() => {
 
         async function fetchData(type) {
-          const response = await api.get(`http://localhost:3333/advisory-dashboard/${type}`, {
+          const response = await api.get(`/advisory-dashboard/${type}`, {
             headers: {
               authorization: `Bearer ${localStorage.getItem('api_token')}`
             }

@@ -20,7 +20,7 @@ import HeaderWithDescription from "./../../components/Headers/HeaderWithDescript
 import api from '../../axios';
 
 
-function Profile() {
+function Consultancies(props) {
 
   const [clients, setClients] = useState([]);
 
@@ -39,7 +39,6 @@ function Profile() {
     })()
 
   }, []);
-
 
   return (
     <>
@@ -154,6 +153,23 @@ function Profile() {
                           >
                             Fluxo de Caixa
                           </UncontrolledTooltip>
+
+                          <a
+                            className="ni ni-chart-bar-32 text-yellow mr-2"
+                            href="#"
+                            style={{fontSize: 18}}
+                            id="tooltip5"
+                            onClick={() => history.push(`/app/dashboard-cliente`, {
+                              clientCompanyId: client.clients.id
+                            })}
+                          >
+                          </a>
+                          <UncontrolledTooltip
+                            delay={0}
+                            target="tooltip5"
+                          >
+                            Dashboard
+                          </UncontrolledTooltip>
                         </td>
                       </tr>
                     )
@@ -172,4 +188,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Consultancies;

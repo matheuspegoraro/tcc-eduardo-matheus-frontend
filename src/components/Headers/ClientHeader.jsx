@@ -6,34 +6,57 @@ import api from '../../axios';
 
 import { formatShowMoney } from '../../utils';
 
-function ClientHeader() {
+function ClientHeader(props) {
+  
   const [percentCurrentLiquidity, setPercentCurrentLiquidity] = useState(0);
   const [currentLiquidity, setCurrentLiquidity] = useState(0);
 
   const [percentProjectedLiquidity, setPercentProjectedLiquidity] = useState(0);
   const [projectedLiquidity, setProjectedLiquidity] = useState(0);
 
-  useEffect(() => {
+  const [clientCompanyId, setClientCompanyId] = useState(0);
 
+  useEffect(() => {
+    setClientCompanyId(parseInt(localStorage.getItem('clientCompanyId')));
+  });
+
+  useEffect(() => {
+  
     async function fetchData() {
-      const response = await api.get(`http://localhost:3333/client-dashboard/current-liquidity`, {
+      let url = '';
+
+      if (clientCompanyId !== 0) {
+        url = `/client-dashboard/current-liquidity/${clientCompanyId}`;
+      } else {
+        url = `/client-dashboard/current-liquidity`;
+      }
+
+      const response = await api.get(url, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
       });
-
+  
       setPercentCurrentLiquidity(response.data.percentcurrentliquidity);
       setCurrentLiquidity(response.data.currentliquidity);
     }
 
     fetchData();
 
-  }, []);
+  }, [clientCompanyId]);
 
   useEffect(() => {
 
     async function fetchData() {
-      const response = await api.get(`http://localhost:3333/client-dashboard/projected-liquidity`, {
+      let url = '';
+
+      if (clientCompanyId !== 0) {
+        url = `/client-dashboard/projected-liquidity/${clientCompanyId}`;
+      } else {
+        url = `/client-dashboard/projected-liquidity`;
+      }
+
+      const response = await api.get(url, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
@@ -45,7 +68,7 @@ function ClientHeader() {
 
     fetchData();
 
-  }, []);
+  }, [clientCompanyId]);
 
   return (
     <>
