@@ -16,9 +16,10 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 
+import { formatShowMoney } from '../../utils';
+
 import HeaderWithDescription from "./../../components/Headers/HeaderWithDescription";
 import api from '../../axios';
-
 
 function Consultancies(props) {
 
@@ -33,8 +34,22 @@ function Consultancies(props) {
       const { data } = await api.get('/relationship-company', {
         headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
       });
+      
+      async function clientsTemp(data) {
+        data = await Promise.all(data.map(async client => {
+          const { data: { currentliquidity } } = await api.get(`/client-dashboard/current-liquidity/${client.clients.id}`, {
+            headers: { authorization: `Bearer ${localStorage.getItem('api_token')}` }
+          });
 
-      setClients(data);
+          client.clients.currentLiquidity = currentliquidity;
+          
+          return client;
+        }));
+
+        return data;
+      }
+
+      setClients(await clientsTemp(data));
 
     })()
 
@@ -73,11 +88,13 @@ function Consultancies(props) {
                     <th scope="col">Nome</th>
                     <th scope="col">Iniciou em</th>
                     <th scope="col">Acessar</th>
+                    <th scope="col">Valor em Caixa</th>
                   </tr>
                 </thead>
                 <tbody>
 
-                  {clients.map(client => {
+                  {clients.map(client => {    
+                    console.log(client);         
                     return (
                       <tr key={client.id}>
                         <td>{client.clients.name}</td>
@@ -170,6 +187,9 @@ function Consultancies(props) {
                           >
                             Dashboard
                           </UncontrolledTooltip>
+                        </td>
+                        <td>
+                          R$ {formatShowMoney(client.clients.currentLiquidity)}
                         </td>
                       </tr>
                     )
