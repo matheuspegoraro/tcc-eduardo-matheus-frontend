@@ -20,7 +20,7 @@ import ClientPerAdvisory from "./views/pages/ClientPerAdvisory";
 import MaintenanceBank from "./views/pages/Bank/Maintenance";
 import MaintenanceRevenue from "./views/pages/Revenue/Maintenance";
 import Profile from "./views/pages/Profile";
-import Consultancies from "./views/pages/Consultancies";
+import Consultancies from "./views/pages/Consultancie/Consultancies";
 import CashFlow from "./views/pages/CashFlow";
 
 import { getTokenDecoded } from "./auth";
@@ -343,6 +343,26 @@ function routes() {
       layout: "/app",
       private: true,
       display: false
+    },
+    {
+      path: null,
+      name: "Suporte",
+      icon: "ni ni-single-02 text-orange",
+      component: null,
+      layout: null,
+      private: true,
+      display: true,
+      children: [
+        {
+          path: "/chat-suporte",
+          name: "Chat Suporte",
+          icon: "fa fa-comments text-green",
+          component: Chat,
+          layout: "/app",
+          private: true,
+          display: true
+        }
+      ]
     },
   ];
 

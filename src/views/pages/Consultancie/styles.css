@@ -1,0 +1,11 @@
+.bg-green {
+  background-color: rgba(45, 205, 136, 0.6) !important;
+}
+
+.bg-red {
+  background-color: rgba(246, 55, 93, 0.6) !important;
+}
+
+.text-dark {
+  color: #000000 !important;
+}

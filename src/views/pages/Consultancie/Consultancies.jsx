@@ -16,10 +16,12 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 
-import { formatShowMoney } from '../../utils';
+import { formatShowMoney } from '../../../utils';
 
-import HeaderWithDescription from "./../../components/Headers/HeaderWithDescription";
-import api from '../../axios';
+import HeaderWithDescription from "./../../../components/Headers/HeaderWithDescription";
+import api from '../../../axios';
+
+import './styles.css';
 
 function Consultancies(props) {
 
@@ -46,7 +48,7 @@ function Consultancies(props) {
           return client;
         }));
 
-        return data;
+        return data.sort(reorder);
       }
 
       setClients(await clientsTemp(data));
@@ -54,6 +56,16 @@ function Consultancies(props) {
     })()
 
   }, []);
+
+  function reorder(a, b) {
+    if (a.clients.currentLiquidity >= b.clients.currentLiquidity) {
+      return 1
+    } else if (b.clients.currentLiquidity > a.clients.currentLiquidity) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
 
   return (
     <>
@@ -94,15 +106,15 @@ function Consultancies(props) {
                 <tbody>
 
                   {clients.map(client => {    
-                    console.log(client);         
+                    let currentLiquidity = client.clients.currentLiquidity;
+
                     return (
-                      <tr key={client.id}>
+                      <tr key={client.id} class={ 'text-dark ' + (currentLiquidity >= 0 ? 'bg-green' : 'bg-red') }>
                         <td>{client.clients.name}</td>
                         <td>
                           {moment(client.createdAt).add(3, "hours").format('DD/MM/YYYY')}
                         </td>
                         <td>
-
                           <a
                             className="fa fa-arrow-up text-green mr-2"
                             href="#"
@@ -189,7 +201,7 @@ function Consultancies(props) {
                           </UncontrolledTooltip>
                         </td>
                         <td>
-                          R$ {formatShowMoney(client.clients.currentLiquidity)}
+                          R$ {formatShowMoney(currentLiquidity)}
                         </td>
                       </tr>
                     )

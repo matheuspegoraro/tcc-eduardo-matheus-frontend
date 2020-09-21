@@ -18,6 +18,9 @@ import SimpleHeader from "../../../components/Headers/SimpleHeader";
 import 'react-chat-elements/dist/main.css';
 import './styles.css';
 
+import api from '../../../axios';
+import { getTokenDecoded } from "../../../auth";
+
 const users = {
   0: 'You',
   1: 'Mark',
@@ -37,18 +40,49 @@ function Chat() {
   const [useCustomBubble, setUseCustomBubble] = useState(false);
   const [currentUser, setCurrentUser] = useState(0);
 
-  useEffect(() => {
-    setMessages([
-      new Message({ id: 1, message: 'Boa tarde, Matheus!', senderName: 'Mark' }),
-      new Message({ id: 1, message: 'Poderia me passar o arquivo OFX para prosseguirmos com a conciliação bancária?', senderName: 'Mark' }),
-      new Message({ id: 0, message: 'Só um momento. Estou enviando...', senderName: 'Mark' }),
-    ]);
-  }, []);
+  const [advisorySelected, setAdvisorySelected] = useState(0);
+  const [companies, setCompanies] = useState([]);
 
-  const handleSubmit = e => {
+  const client = getTokenDecoded();
+
+  useEffect(() => {
+    const handleLoadAdvisories = async clientId => {
+
+      let url = '';
+
+      if (client.type === 2) {
+        url = `/relationship-clients`;
+      } else if (client.type === 1) {
+        url = `/relationship-company/${clientId}`;
+      }
+
+      const response = await api.get(url, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+  
+      setCompanies(response.data);
+    }
+
+    handleLoadAdvisories(client.companyId);
+  }, [client.companyId]);
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    
-    pushMessage(currentUser, message);
+
+    const { data } = await api.post(`/messages`, 
+      {
+        senderId: client.companyId, 
+        receiveId: advisorySelected,
+        message
+      }, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('api_token')}`
+      }
+    });
+
+    setMessages((prevState) => [...prevState, new Message({ id: 0, message: message })]);
     setMessage('');
   }
 
@@ -62,8 +96,38 @@ function Chat() {
     setMessages([...messages, newMessage]);
   }
 
-  const changeChat = () => {
-    console.log('change');
+  const loadHistory = id => {
+    const messages = async id => {
+
+      const { data } = await api.get(`/messages`, {
+        params: {
+          senderId: client.companyId, receiveId: id
+        },
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('api_token')}`
+        }
+      });
+
+      setMessages([]);
+
+      data.map(message => {
+
+        let sender;
+
+        if (message.senderId === client.companyId) {
+          sender = 0;
+        } else {
+          sender = 1;
+        }
+
+        setMessages((prevState) => [...prevState, new Message({ id: sender, message: message.message })])
+      
+      });
+    }
+
+    setAdvisorySelected(id);
+    messages(id);
+  
   }
 
   return (
@@ -74,21 +138,35 @@ function Chat() {
       <Container fluid className="p-0 mt-2">
         <Row className='chat-container'>
           <Col lg="4" className='chat-list-container'>
-            <ChatList
-              className='chat-list'
-              dataSource={[
-                {
-                    avatar: 'http://www.acaciocontabil.com.br/imagens/Noticias/quem-e-o-profissional-da-contabilidade-noticia-17050805.jpg',
-                    alt: 'Reactjs',
-                    title: 'Consultoria Contábil',
-                    subtitle: 'Só um momento. Estou enviando...',
-                    date: new Date(),
-                    unread: 0,
-                    statusText: 2,
-                    statusColor: 'blue',
-                    onClick: changeChat
-                }
-            ]} />
+            { companies.map(companie => {
+
+              let data;
+
+              if (companie.clients) {
+                data = companie.clients;
+              } else if (companie.advisories) {
+                data = companie.advisories;
+              }
+
+              return (
+                <a key={data.id} href="#" onClick={() => loadHistory(data.id)}>
+                  <ChatList
+                    className='chat-list'
+                    dataSource={[
+                      {
+                          avatar: 'http://www.acaciocontabil.com.br/imagens/Noticias/quem-e-o-profissional-da-contabilidade-noticia-17050805.jpg',
+                          alt: 'Reactjs',
+                          title: data.name,
+                          subtitle: 'Só um momento. Estou enviando...', 
+                          date: new Date(),
+                          unread: 0,
+                          statusText: 2,
+                          statusColor: 'blue'
+                      }
+                  ]} />
+                </a>
+              )
+            }) }            
           </Col>
           <Col lg="8">
             <div className="chatfeed-wrapper">
@@ -115,6 +193,7 @@ function Chat() {
                     <Button
                       color="info"
                       type="submit"
+                      onClick={handleSubmit}
                     >
                       Enviar
                     </Button>
