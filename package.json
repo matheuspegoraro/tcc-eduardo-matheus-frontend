@@ -44,7 +44,7 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "chart.js": "2.7.3",
     "classnames": "2.2.6",
     "dropzone": "^5.5.1",
