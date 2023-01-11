@@ -48,7 +48,7 @@
     "chart.js": "2.7.3",
     "classnames": "2.2.6",
     "dropzone": "^5.5.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash.uniqueid": "^4.0.1",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
